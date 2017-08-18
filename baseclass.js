@@ -9,14 +9,33 @@
 
 function MusicExercise(canvasId) {
 	this.canvas = document.getElementById(canvasId) ; // TODO: check, if set, if (typeof(canvas)  bla)
-	this.notes = []; // notenames and octaves in vextab format like "C/4"
-	this.vexFlowNotes = []; // including all parameters VF objects
-	this.vtNotesString = "notes :4 B/4"; // empty string later...
-	this.vtStartString = "\noptions space=20\n tabstave \n notation=true tablature=false \n    time=4/4\n";
-    this.vtEndString = "\noptions space=20\n";
-	this.parseString = ""
+	
+	// Notation elements
+	
+	this.notes = ""; // notenames, durations  and octaves in vextab format like ":4 C/4" -  and other parts of VT notation
+	//this.vexFlowNotes = []; // including all parameters VF objects
 	this.numberOfVoices = 1;
 	this.currentVoice = 0; // index of voice/stave?
+	
+	
+	this.key = "C";
+	this.time = "4/4";
+	this.clef = "treble";
+		
+    this.vtEndString = "\noptions space=20\n";
+	this.parseString = ""
+	
+	
+	
+	this.createVexTabString = function() {
+		var startString = "options space=20\n tabstave \n notation=true tablature=false \n";
+		var clefString = "clef="+this.clef+"\n";
+		var keyString = "key="+this.key+"\n";
+		var timeString = "time="+this.time+"\n";
+		var notesString = (this.notes==="") ? ""  : "\nnotes " + this.notes + "\n"
+		var endString = "\noptions space=20\n";
+		return startString + clefString + keyString + timeString + notesString + endString;
+	}
 	
 	this.clickOnCanvas = function(event) {
 		// TODO: test coordinates, offsets etc
@@ -58,12 +77,12 @@ function MusicExercise(canvasId) {
 	}
 	this.init();
 
-	this.generate = function() {console.log("Implement in derived class.");}
+	this.generate = function() {console.log("Implement in derived object.");}
 	this.draw = function () { // this should or could be overdriven in base calsses
 		try {
 			this.vextab.reset();
 			this.artist.reset();
-			this.vextab.parse(this.vtStartString + this.vtNotesString + this.vtEndString );
+			this.vextab.parse(this.createVexTabString());
 			this.artist.render(this.renderer);
 		} catch (e) {
 			console.log(e);
