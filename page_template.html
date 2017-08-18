@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!--player lehelt: https://github.com/surikov/webaudiofont  -->
+<html>
+  <head>
+    <title>Muusikaharjutused</title>
+    <meta content="">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1" />
+    <style></style>
+    
+    <script src="https://unpkg.com/vextab/releases/vextab-div.js"></script>    
+    <script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
+    <script src='https://surikov.github.io/webaudiofontdata/sound/0000_JCLive_sf2_file.js'> </script>
+	<script src="baseclass.js"></script>
+	
+	
+    <script>
+
+    
+	window.onload = function() {
+		exercise = new MusicExercise("mainCanvas");
+		exercise.draw();
+	}
+
+
+    
+    </script>
+
+    </head>
+  <body>
+  <h3>Muusikaharjutused algleht</h3>
+  <br>
+  <button onclick="exercise.generate();exercise.draw();exercise.hide();">Uuenda</button><br>
+  <canvas id="mainCanvas"></canvas>
+  <br>
+  <button onclick="exercise.playAll();">Mängi</button><br>
+  Mis on peidetud nöödi vältus (löökides)?
+  <select id="vastus">
+    <option value="0" selected>----</option>
+    <option value="2">2</option>
+    <option value="1">1</option>
+    <option value="0.5">0.5</option>
+    <option value="0.25">0.25</option>
+  </select><br>
+  <button onclick="exercise.checkResponse(vastus.value)">Vasta</button>  <span id="result"></span><br>
+  
+
+  </body>
+</html>
