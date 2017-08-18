@@ -77,7 +77,7 @@ function MusicExercise(canvasId) {
 	}
 	this.init();
 
-	this.generate = function() {console.log("Implement in derived object.");}
+	this.generate = function() {console.log("generate(). Implement in derived object.");}
 	this.draw = function () { // this should or could be overdriven in base calsses
 		try {
 			this.vextab.reset();
@@ -91,15 +91,18 @@ function MusicExercise(canvasId) {
 	
 	
 	this.getNotes = function(staff) {
+		if (typeof(staff)=="undefined") {
+			staff=0			
+		}
 		return this.artist.staves[staff].note_notes;		
 	}
 	
-	this.hide = function(noteIndex) {console.log("Implement in derived class.");}
+	this.hide = function(noteIndex) {console.log("hide(). Implement in derived object.");}
 
 	
 	//? this.hiddenRect = [];
 	this.answer = ""; // keep it string, convert in checkResponse()
-	this.checkResponse = function(response) {console.log("Implement in derived class.", response);}
+	this.checkResponse = function(response) {console.log("checkResponse. Implement in derived object.", response);}
 
 	//audio
 	this.volume = 0.5;
@@ -109,19 +112,26 @@ function MusicExercise(canvasId) {
 		this.selectedPreset, this.audioContext.currentTime+start, midiNote, duration, this.volume);
 	}
 
-	this.playAll = function() {
+	this.play = function() {
 		var _start = 0, _duration = 1;
 		for (let _note of this.artist.staves[0].note_notes) {
-			_duration = _note.getTicks().value()/4096.0 * 60.0/this.tempo; 
-			var key = _note.getPlayNote()[0];
-			[noteName, octave] = key.split("/");
-			noteName = noteName.trim().toLowerCase();
-			var note_value = Vex.Flow.Music.noteValues[noteName];
-			var midiNote = (24 + ((octave-1) * 12)) + note_value.int_val
+			 
+			if (_note.playNote!==null) {
+				_duration = _note.getTicks().value()/4096.0 * 60.0/this.tempo;
+				var key = _note.getPlayNote()[0];
+				[noteName, octave] = key.split("/");
+				noteName = noteName.trim().toLowerCase();
+				var note_value = Vex.Flow.Music.noteValues[noteName];
+				var midiNote = (24 + ((octave-1) * 12)) + note_value.int_val
+				// get start from note, maybe 
+				console.log(midiNote, _start, _duration); // no output in console???
+				this.playNote(midiNote, _start, _duration);
+				_start += _duration;  // TODO: what if rest?? see code of artist.coffee
 			
-			console.log(midiNote, _start, _duration); // no output in console???
-			this.playNote(midiNote, _start, _duration);
-			_start += _duration;  // TODO: what if rest?? see code of artist.coffee
+				
+			} else {
+				console.log("Not note. Maybe barline"); // TODO: why some notes return no playnote?
+			}
 		}
 	}
 	

@@ -28,21 +28,30 @@
 
     </head>
   <body>
-  <h3>Muusikaharjutused algleht</h3>
+  <h1 id="title">MUUSIKA KOMPOSITSIOONIÕPETUS. Harjutused</h1>
+  <h2 id="exercise_title">Harjutuse nimi</h2>
   <br>
-  <button onclick="exercise.generate();exercise.draw();exercise.hide();">Uuenda</button><br>
+  <p id="description">Ülesande kirjeldus.</p>
+  <br>
+  
   <canvas id="mainCanvas"></canvas>
   <br>
-  <button onclick="exercise.playAll();">Mängi</button><br>
-  Mis on peidetud nöödi vältus (löökides)?
-  <select id="vastus">
+  <button id="playButton" onclick="exercise.play();">Mängi</button><br>
+  <br>
+  <span id="question">Mis on peidetud nöödi vältus (löökides)?</span>
+  <select id="response"> <!--TODO: this must be more universal!-->
     <option value="0" selected>----</option>
     <option value="2">2</option>
     <option value="1">1</option>
     <option value="0.5">0.5</option>
     <option value="0.25">0.25</option>
   </select><br>
-  <button onclick="exercise.checkResponse(vastus.value)">Vasta</button>  <span id="result"></span><br>
+  <br>
+  <button id="replyButton" onclick="exercise.checkResponse(response.value)">Vasta</button>
+  <button id = "renewButton" onclick="exercise.generate();exercise.draw();exercise.hide();">Uuenda</button><br>
+  <p>Sinu tulemus:</p>
+  Katseid: <label id="tries">0</label>. Neist õigeid vastuseid: <label id="score">0</label><br>
+  <span id="feedback"></span> <!--Nt. oled tubli, kui üle 50% vms-->
   
 
   </body>
