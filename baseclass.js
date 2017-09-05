@@ -102,7 +102,7 @@ function MusicExercise(canvasId) {
 	
 	//? this.hiddenRect = [];
 	this.answer = ""; // keep it string, convert in checkResponse()
-	this.checkResponse = function(response) {console.log("checkResponse. Implement in derived object.", response);}
+	this.checkResponse = function() {console.log("checkResponse. Implement in derived object.");}
 
 	//audio
 	this.volume = 0.5;
