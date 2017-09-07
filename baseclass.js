@@ -25,6 +25,10 @@ function MusicExercise(canvasId) {
     this.vtEndString = "\noptions space=20\n";
 	this.parseString = ""
 	
+	//results and feedback
+	this.attempts = 0;
+	this.score = 0;
+	
 	
 	
 	this.createVexTabString = function() {
