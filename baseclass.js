@@ -7,10 +7,14 @@
 // <script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
 // <script src='https://surikov.github.io/webaudiofontdata/sound/0000_JCLive_sf2_file.js'></script> 
 
-function MusicExercise(canvasId) {
-	this.canvas = document.getElementById(canvasId) ; // TODO: check, if set, if (typeof(canvas)  bla)
+function MusicExercise(canvasId, width, x, y, scale) {
+	this.canvas = document.getElementById(canvasId) 
 	
 	// Notation elements
+	this.canvasWidth = width == undefined ? 600 : width;
+	this.canvasX = x == undefined ? 10 : x;
+	this.canvasY = y == undefined ? 10 : y;
+	this.canvasScale = scale == undefined ? 0.8 : scale;
 	
 	this.notes = ""; // notenames, durations  and octaves in vextab format like ":4 C/4" -  and other parts of VT notation
 	//this.vexFlowNotes = []; // including all parameters VF objects
@@ -23,7 +27,6 @@ function MusicExercise(canvasId) {
 	this.clef = "treble";
 		
     this.vtEndString = "\noptions space=20\n";
-	this.parseString = ""
 	
 	//results and feedback
 	this.attempts = 0;
@@ -43,7 +46,7 @@ function MusicExercise(canvasId) {
 	
 	this.clickOnCanvas = function(event) {
 		// TODO: test coordinates, offsets etc
-		// have alook at http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/
+		// have alook at http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/1
 		// and http://miloq.blogspot.in/2011/05/coordinates-mouse-click-canvas.html
 		// referenced from: https://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element
 		// event.clientX should be also OK
@@ -56,12 +59,11 @@ function MusicExercise(canvasId) {
 	this.init = function() {
 			// VexTab
 			var vt = VexTabDiv;
-			var VexTab = vt.VexTab;
+			var VexTab = vt.VexTab;// TODO: size from parameters, settings
 			var Artist = vt.Artist;
 			var Renderer = Vex.Flow.Renderer;
-			this.renderer = new Renderer(this.canvas, Renderer.Backends.CANVAS);
-			// Initialize VexTab artist and parser.
-			this.artist = new Artist(10, 10, 600, {scale: 0.8}); // TODO: size from parameters, settings
+			this.renderer = new Renderer(this.canvas, Renderer.Backends.CANVAS); // maybe SVG backend better for object manipulation?
+			this.artist = new Artist(this.canvasX, this.canvasY , this.canvasWidth, {scale: this.canvasScale}); 
 			this.vextab = new VexTab(this.artist);
 
 
