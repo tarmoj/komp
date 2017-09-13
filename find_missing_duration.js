@@ -28,6 +28,7 @@ function findMissingDuration() { // Harjutus 1.2.3 Lisa puuduv helivältus
 	// set necessary methods in exercise
 	exercise = new MusicExercise("mainCanvas");
 	exercise.attempts = 0; exercise.score = 0;
+	exercise.time = "";
 	document.getElementById("attempts").innerHTML = "0";
 	document.getElementById("score").innerHTML = "0";
 	

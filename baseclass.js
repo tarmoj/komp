@@ -33,9 +33,9 @@ function MusicExercise(canvasId) {
 	
 	this.createVexTabString = function() {
 		var startString = "options space=20\n tabstave \n notation=true tablature=false \n";
-		var clefString = "clef="+this.clef+"\n";
-		var keyString = "key="+this.key+"\n";
-		var timeString = "time="+this.time+"\n";
+		var clefString = (this.clef.length>0) ? "clef="+this.clef+"\n" : "";
+		var keyString = (this.key.length>0) ? "key="+this.key+"\n" : "";
+		var timeString = (this.time.length>0) ?  "time="+this.time+"\n" : "";
 		var notesString = (this.notes==="") ? ""  : "\nnotes " + this.notes + "\n"
 		var endString = "\noptions space=20\n";
 		return startString + clefString + keyString + timeString + notesString + endString;

@@ -19,7 +19,100 @@
 	var exercise; 
     
     // different exercises are defined as different functions in separate .js files
+    
+	// harjutus 1.2.2 "Helivältus. Kirjuta helivältuse nimetus. Antud on helivältus noodikirja märgina (noot või paus). Kirjuta helivältuse nimetus"
 
+function nameDuration() {
+		
+		// variables
+	var duration = -1;
+	var answered = false;
+	
+	// Create or set necessary HTML elements
+	document.getElementById("exerciseTitle").innerHTML = "Kirjuta/vasta/määra helivältuse nimetus";
+	document.getElementById("description").innerHTML = "Antud on helivältus noodikirja märgina (noot või paus). Kirjuta helivältuse nimetus"; 
+	document.getElementById("question").innerHTML =	"Mis vältus see on?";
+
+	var response = document.createElement("select");
+	response.id = "response";
+	response.innerHTML ='<option value="0" selected>----</option>' +
+		'<option value="2">Poolnoot/-paus</option>' +
+		'<option value="1">Veerandnoot/-paus</option>' +
+		'<option value="0.5">Kaheksandik</option>' +
+		'<option value="0.25">Kuueteistkümnendik</option>';		
+	document.getElementById("responseDiv").appendChild(response);
+	
+	// set necessary methods in exercise
+	exercise = new MusicExercise("mainCanvas"); // TODO: size
+	exercise.attempts = 0; exercise.score = 0;
+	exercise.time = ""; // no time signature
+
+	document.getElementById("attempts").innerHTML = "0";
+	document.getElementById("score").innerHTML = "0";
+	
+	
+	exercise.generate = function() {
+		var allowedDurations = [2, 1, 0.5, 0.25];
+		
+		duration = allowedDurations[Math.floor(Math.random()*allowedDurations.length)];
+		var flexDuration = (4/duration).toString();
+		var isRest = ( Math.random() >=0.5 ); // 50/50% if notr or rest
+		console.log("show rest: ", isRest);
+		
+		// create VexFlow string of notes
+		
+		var parseString = " :"+flexDuration ;
+		parseString += (isRest) ?  " ##" : " B/4"; // add rest or note (B) 
+		
+		console.log("Generated notes: ", parseString);
+		exercise.notes = parseString;
+		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
+	
+	}
+	
+	exercise.generate();		
+	exercise.draw();
+	
+	document.getElementById("renewButton").onclick = function() {
+		exercise.generate(); 
+		exercise.draw();
+	}
+	
+	exercise.checkResponse = function() { // TODO: - kas oleks võimalik tõsta baseclassi? Siis vist switch case peaks olema välditud ja õige vastus peaks olema juba loetava stringina nagu "poolnoot" - vist mõtekas. Samas, kuidas basclass tead html elementide ID-sid???
+		//TODO: kontrolli, kas uuendatud, muidu tõstab ainult skoori...
+		if (answered) {
+			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
+			return;
+		}
+		exercise.attempts += 1;
+		var feedback = "";
+		if (parseFloat(document.getElementById("response").value)===duration) {
+			feedback = "Õige!"
+			exercise.score += 1;
+		} else {
+			var durationString = "";
+			switch (duration) {
+				case 2:  durationString = "Poolnoot"; break;
+				case 1:  durationString = "Veerandnoot"; break;
+				case 0.5:  durationString = "Kaheksandiknoot"; break;
+				case 0.25:  durationString = "Kuueteistkümnendik"; break;
+				default: durationString = "?"; break;
+			}
+			feedback = "Vale! Õige oli: "+durationString; // TODO 0.25-> Kuueteistkümnendik jne
+		}
+		
+		
+		document.getElementById("attempts").innerHTML = exercise.attempts;
+		document.getElementById("score").innerHTML = exercise.score;
+		document.getElementById("feedback").innerHTML = feedback; 
+		exercise.draw(); // redraw without rectangle
+		answered = true;
+	
+	}
+		
+}
+    
+    
     
 	window.onload = function() {
 		// TODO: enable to load specific function by URL parameters
@@ -34,7 +127,9 @@
     </head>
     
 	<body>
-	<a onclick="findMissingDuration()" href="#">Leia puuduv vältus</a> Harjutus2 jne
+	<a onclick="findMissingDuration()" href="#">Leia puuduv vältus</a> 
+	<a onclick="nameDuration()" href="#">Mis vältus see on</a> 
+	jne
 	<hr>
 	<br>
 	<h1 id="title">MUUSIKA KOMPOSITSIOONIÕPETUS. Harjutused</h1>
