@@ -21,14 +21,27 @@
     // different exercises are defined as different functions in separate .js files
     
 
-    
-    
+    // TODO: create a hash of ecercsise names and numbers to link them to from URL
+    //var exercises = [  ]
     
 	window.onload = function() {
-		nameDuration();
-		// TODO: enable to load specific function by URL parameters
-		//exercise = new MusicExercise("mainCanvas") ;
-		//exercise.draw(); // dummy exercise -  just show empty staff
+		// get GET parameter to load specific exercise set in URL
+		// the link van be set as ?e=<exercise number> like e=1.2.3 The 'e' actually does not matter
+		var searchString = window.location.search;
+		if (searchString.length>0) {
+			var parameters = searchString.split("&"); // remove ?
+			var exerciseNumber = parameters[0].split("=")[1];
+			console.log("you want to open exercise", exerciseNumber)
+			switch (exerciseNumber) {
+				case "1.2.2" : nameDuration(); break;
+				case "1.2.3" : findMissingDuration(); break;
+				default: console.log("Exercise "+exerciseNumber+" is unkonwn or not defined yet");
+			}
+			
+		} else {		
+			exercise = new MusicExercise("mainCanvas") ;
+			exercise.draw(); // dummy exercise -  just show empty staff
+		}
 	}
 
 
