@@ -9,6 +9,10 @@
 
 function MusicExercise(canvasId, width, x, y, scale) {
 	this.canvas = document.getElementById(canvasId) 
+	// for SVG -  remove everything what is inside the div:
+	while (this.canvas.firstChild) {
+		this.canvas.removeChild(this.canvas.firstChild);
+	}
 	
 	// Notation elements
 	this.canvasWidth = width == undefined ? 600 : width;
@@ -62,7 +66,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 			var VexTab = vt.VexTab;// TODO: size from parameters, settings
 			var Artist = vt.Artist;
 			var Renderer = Vex.Flow.Renderer;
-			this.renderer = new Renderer(this.canvas, Renderer.Backends.CANVAS); // maybe SVG backend better for object manipulation?
+			this.renderer = new Renderer(this.canvas, Renderer.Backends.SVG); // was .CANVAS NB! SVG needs div element, not canvas to work
 			this.artist = new Artist(this.canvasX, this.canvasY , this.canvasWidth, {scale: this.canvasScale}); 
 			this.vextab = new VexTab(this.artist);
 

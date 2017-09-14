@@ -92,8 +92,9 @@ function findMissingDuration() { // Harjutus 1.2.3 Lisa puuduv helivältus
 		}
 		var note = exercise.artist.staves[0].note_notes[hiddenNote];
 		var context = exercise.renderer.getContext();
-		context.setFillStyle("darkgreen");
-		context.fillRect(note.getAbsoluteX()-10, note.stave.getYForTopText()-10, note.width+20, note.stave.height+10);
+		//context.setFillStyle("darkgreen"); // <- for canvas
+		//context.fillRect(note.getAbsoluteX()-10, note.stave.getYForTopText()-10, note.width+20, note.stave.height+10);
+		context.rect(note.getAbsoluteX()-10, note.stave.getYForTopText()-10, note.width+20, note.stave.height+10, { fill: 'darkgreen' });
 	}
 	
 	exercise.generate();		
