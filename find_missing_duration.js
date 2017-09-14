@@ -16,14 +16,24 @@ function findMissingDuration() { // Harjutus 1.2.3 Lisa puuduv helivältus
 	document.getElementById("description").innerHTML = "Antud on teatud taktimõõdus takt, milles on peidetud üks helivältus (noot või paus). Lisa puuduv helivältus (noot või paus) // VÕI: arva ära peidetud vältus."; 
 	//TODO: luba ka pause, mitte ainult noodid -  kas vaja?
 	document.getElementById("question").innerHTML =	"Mis on peidetud nöödi vältus?";
-	var response = document.createElement("select");
+	
+	var oldResponse = document.getElementById("response");
+	var response = document.createElement("select"); 
+	
 	response.id = "response";
 	response.innerHTML ='<option value="0" selected>----</option>' +
 		'<option value="2">Poolnoot</option>' +
 		'<option value="1">Veerandnoot</option>' +
 		'<option value="0.5">Kaheksandiknoot</option>' +
-		'<option value="0.25">Kuueteistkümnendik</option>';		
-	document.getElementById("responseDiv").appendChild(response);
+		'<option value="0.25">Kuueteistkümnendik</option>';
+		
+	if (oldResponse === null) {
+		console.log("Creating new response element");
+		document.getElementById("responseDiv"). appendChild(response)
+	} else {
+		console.log("Replacing response element");
+		document.getElementById("responseDiv").replaceChild(response, oldResponse);
+	}
 	
 	// set necessary methods in exercise
 	exercise = new MusicExercise("mainCanvas");

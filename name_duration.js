@@ -13,7 +13,8 @@ function nameDuration() {
 	document.getElementById("exerciseTitle").innerHTML = "Määra helivältus";
 	document.getElementById("description").innerHTML = "Antud on helivältus noodikirja märgina (noot või paus). Leia,  mis vältus see on"; 
 	document.getElementById("question").innerHTML =	"Mis vältus see on?";
-
+	
+	var oldResponse = document.getElementById("response");
 	var response = document.createElement("select");
 	response.id = "response";
 	response.innerHTML ='<option value="0" selected>----</option>' +
@@ -21,7 +22,13 @@ function nameDuration() {
 		'<option value="1">Veerandnoot/-paus</option>' +
 		'<option value="0.5">Kaheksandik</option>' +
 		'<option value="0.25">Kuueteistkümnendik</option>';		
-	document.getElementById("responseDiv").appendChild(response);
+	if (oldResponse === null) {
+		console.log("Creating new response element");
+		document.getElementById("responseDiv"). appendChild(response)
+	} else {
+		console.log("Replacing response element");
+		document.getElementById("responseDiv").replaceChild(response, oldResponse);
+	}
 	
 	// set necessary methods in exercise
 	exercise = new MusicExercise("mainCanvas", 100); // relatively narrow canvas // CAN THIS BE A MEMORY LEAK?
