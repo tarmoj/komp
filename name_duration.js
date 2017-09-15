@@ -5,7 +5,7 @@
 // harjutus 1.2.2 "Helivältus. Kirjuta helivältuse nimetus. Antud on helivältus noodikirja märgina (noot või paus). Kirjuta helivältuse nimetus"
 
 function nameDuration() {		
-		// variables
+	// variables
 	var duration = -1;
 	var answered = false;
 	
