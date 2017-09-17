@@ -43,7 +43,7 @@ function nameDuration() {
 		var allowedDurations = [2, 1, 0.5, 0.25];
 		var tryThis = allowedDurations[Math.floor(Math.random()*allowedDurations.length)];
 		while (tryThis === duration) { // to avoid getting the same duration twice in a row
-			console.log("Got the same, retrying");
+			//console.log("Got the same, retrying");
 			tryThis = allowedDurations[Math.floor(Math.random()*allowedDurations.length)];
 		}
 		duration = tryThis; 
