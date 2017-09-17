@@ -25,7 +25,7 @@ function findMissingDuration() { // Harjutus 1.2.3 Lisa puuduv helivältus
 		'<option value="2">Poolnoot</option>' +
 		'<option value="1">Veerandnoot</option>' +
 		'<option value="0.5">Kaheksandiknoot</option>' +
-		'<option value="0.25">Kuueteistkümnendik</option>';
+		'<option value="0.25">Kuueteistkümnendiknoot</option>';
 		
 	if (oldResponse === null) {
 		console.log("Creating new response element");
@@ -124,7 +124,7 @@ function findMissingDuration() { // Harjutus 1.2.3 Lisa puuduv helivältus
 				case 2:  durationString = "Poolnoot"; break;
 				case 1:  durationString = "Veerandnoot"; break;
 				case 0.5:  durationString = "Kaheksandiknoot"; break;
-				case 0.25:  durationString = "Kuueteistkümnendik"; break;
+				case 0.25:  durationString = "Kuueteistkümnendiknoot"; break;
 				default: durationString = "?"; break;
 			}
 			feedback = "Vale! Õige oli: "+durationString; // TODO 0.25-> Kuueteistkümnendik jne
