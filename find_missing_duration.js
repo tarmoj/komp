@@ -2,7 +2,7 @@
 // TODO: proper credits, copyright
 
 
-// Exercise: Helivältus. Harjutus 3 "Leia puuduv vältus"
+// Exercise: Helivältus. Harjutus. Lisa puuduv vältus
 
     //var exercise; should it be declared in the script part of main html?? 
 	
@@ -15,7 +15,7 @@ function findMissingDuration() { // Harjutus 1.2.3 Lisa puuduv helivältus
 	document.getElementById("exerciseTitle").innerHTML = "Lisa puuduv helivältus";
 	document.getElementById("description").innerHTML = "Antud on teatud taktimõõdus takt, milles on peidetud üks helivältus (noot või paus). Lisa puuduv helivältus (noot või paus) // VÕI: arva ära peidetud vältus."; 
 	//TODO: luba ka pause, mitte ainult noodid -  kas vaja?
-	document.getElementById("question").innerHTML =	"Mis on peidetud nöödi vältus?";
+	document.getElementById("question").innerHTML =	"Mis on peidetud noodi vältus?";
 	
 	var oldResponse = document.getElementById("response");
 	var response = document.createElement("select"); 
