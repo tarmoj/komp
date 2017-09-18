@@ -30,25 +30,25 @@ function describeNote() {
 		
 	];
 	var trebleClefNotes = [  // lineOrSpace: 1...5; position: 0 - on the line, 1 -in the space, -1 - under line, 2 - on the line (like g2), -10 - on lower ledger line, -11 under lower ledger line; 10 - on upper ledeger line, 11 - above upper ledger line
-		{vtNote:"A/3", name:"A", syllable:"La", lineOrSpace: 2, position:-10 },
-		{vtNote:"B/3", name:"H", syllable:"Si", lineOrSpace: 1, position:-11 },
-		{vtNote:"C/4", name:"C", syllable:"Do", lineOrSpace: 1, position:-10 },
-		//{vtNote:"C#/4", name:"Cis", syllable:"Do-diees", line: -1, position:-1 },
-		{vtNote:"D/4", name:"D", syllable:"Re", lineOrSpace: 1, position:-1 },
-		{vtNote:"E/4", name:"E", syllable:"Mi", lineOrSpace: 1, position:0 },
-		{vtNote:"F/4", name:"C", syllable:"Fa", lineOrSpace: 1, position:1 },
-		{vtNote:"G/4", name:"G", syllable:"Sol", lineOrSpace: 2, position:0 },
-		{vtNote:"A/4", name:"A", syllable:"La", lineOrSpace: 2, position:1 },
-		{vtNote:"B/4", name:"H", syllable:"Si", lineOrSpace: 3, position:0 },
+		{vtNote:"A/3", name:"a", syllable:"la", lineOrSpace: 2, position:-10 },
+		{vtNote:"B/3", name:"h", syllable:"si", lineOrSpace: 1, position:-11 },
+		{vtNote:"C/4", name:"c", syllable:"do", lineOrSpace: 1, position:-10 },
+		//{vtNote:"C#/4", name:"cis", syllable:"do-diees", line: -1, position:-1 },
+		{vtNote:"D/4", name:"d", syllable:"re", lineOrSpace: 1, position:-1 },
+		{vtNote:"E/4", name:"e", syllable:"mi", lineOrSpace: 1, position:0 },
+		{vtNote:"F/4", name:"f", syllable:"fa", lineOrSpace: 1, position:1 },
+		{vtNote:"G/4", name:"g", syllable:"sol", lineOrSpace: 2, position:0 },
+		{vtNote:"A/4", name:"a", syllable:"la", lineOrSpace: 2, position:1 },
+		{vtNote:"B/4", name:"h", syllable:"si", lineOrSpace: 3, position:0 },
 		
-		{vtNote:"C/5", name:"C", syllable:"Do", lineOrSpace: 3, position:1 },
-		{vtNote:"D/5", name:"D", syllable:"Re", lineOrSpace: 4, position:0 },
-		{vtNote:"E/5", name:"E", syllable:"Mi", lineOrSpace: 4, position:1 },
-		{vtNote:"F/5", name:"F", syllable:"Fa", lineOrSpace: 5, position:0 },
-		{vtNote:"G/5", name:"G", syllable:"Sol", lineOrSpace: 5, position:2 },
-		{vtNote:"A/5", name:"A", syllable:"La", lineOrSpace: 1, position:10 },
-		{vtNote:"B/5", name:"H", syllable:"Si", lineOrSpace: 1, position:11 },
-		{vtNote:"C/6", name:"C", syllable:"Do", lineOrSpace: 2, position:10 },
+		{vtNote:"C/5", name:"c", syllable:"do", lineOrSpace: 3, position:1 },
+		{vtNote:"D/5", name:"d", syllable:"re", lineOrSpace: 4, position:0 },
+		{vtNote:"E/5", name:"e", syllable:"mi", lineOrSpace: 4, position:1 },
+		{vtNote:"F/5", name:"f", syllable:"fa", lineOrSpace: 5, position:0 },
+		{vtNote:"G/5", name:"g", syllable:"sol", lineOrSpace: 5, position:2 },
+		{vtNote:"A/5", name:"a", syllable:"la", lineOrSpace: 1, position:10 },
+		{vtNote:"B/5", name:"h", syllable:"si", lineOrSpace: 1, position:11 },
+		{vtNote:"C/6", name:"c", syllable:"do", lineOrSpace: 2, position:10 },
 		
 	];
 	
