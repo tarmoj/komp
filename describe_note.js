@@ -85,8 +85,8 @@ function describeNote() {
 		'<option value="10">ülemisel abijoonel</option>' + // as a5,c6
 		'<option value="11">ülemise abijoone peal</option>' + // as b5
 	'</select>' + 	
-	'<br> Noodi nimi tähtnimetustena <input type="text" id="noteName" size=4></input>, ' +
-	'silpnimetusena (do, re,mi)<input type="text" id="syllable" size=4></input><br>';
+	'<br> Noodi nimi tähtnimetusega (kas c, d, e. f, g, a või h) <input type="text" id="noteName" size=4></input>, ' +
+	'silpnimetusena (kas do, re, mi, fa, sol, la või si)<input type="text" id="syllable" size=4></input><br>';
 
 	
 	if (oldResponse === null) {
