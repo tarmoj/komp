@@ -2,7 +2,7 @@
 // TODO: proper credits, copyright
 
 
-// Exercise: Helivältus. Harjutus 3 "Leia puuduv vältus"
+// Exercise: Helivältus. Harjutus. Lisa puuduv vältus
 
     //var exercise; should it be declared in the script part of main html?? 
 	
@@ -15,7 +15,7 @@ function findMissingDuration() { // Harjutus 1.2.3 Lisa puuduv helivältus
 	document.getElementById("exerciseTitle").innerHTML = "Lisa puuduv helivältus";
 	document.getElementById("description").innerHTML = "Antud on teatud taktimõõdus takt, milles on peidetud üks helivältus (noot või paus). Lisa puuduv helivältus (noot või paus) // VÕI: arva ära peidetud vältus."; 
 	//TODO: luba ka pause, mitte ainult noodid -  kas vaja?
-	document.getElementById("question").innerHTML =	"Mis on peidetud nöödi vältus?";
+	document.getElementById("question").innerHTML =	"Mis on peidetud noodi vältus?";
 	
 	var oldResponse = document.getElementById("response");
 	var response = document.createElement("select"); 
@@ -25,7 +25,7 @@ function findMissingDuration() { // Harjutus 1.2.3 Lisa puuduv helivältus
 		'<option value="2">Poolnoot</option>' +
 		'<option value="1">Veerandnoot</option>' +
 		'<option value="0.5">Kaheksandiknoot</option>' +
-		'<option value="0.25">Kuueteistkümnendik</option>';
+		'<option value="0.25">Kuueteistkümnendiknoot</option>';
 		
 	if (oldResponse === null) {
 		console.log("Creating new response element");
@@ -124,7 +124,7 @@ function findMissingDuration() { // Harjutus 1.2.3 Lisa puuduv helivältus
 				case 2:  durationString = "Poolnoot"; break;
 				case 1:  durationString = "Veerandnoot"; break;
 				case 0.5:  durationString = "Kaheksandiknoot"; break;
-				case 0.25:  durationString = "Kuueteistkümnendik"; break;
+				case 0.25:  durationString = "Kuueteistkümnendiknoot"; break;
 				default: durationString = "?"; break;
 			}
 			feedback = "Vale! Õige oli: "+durationString; // TODO 0.25-> Kuueteistkümnendik jne
