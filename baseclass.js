@@ -9,13 +9,10 @@
 
 function MusicExercise(canvasId, width, x, y, scale) {
 	this.canvas = document.getElementById(canvasId) 
-	// for SVG -  remove everything what is inside the div:
-	while (this.canvas.firstChild) {
-		this.canvas.removeChild(this.canvas.firstChild);
-	}
+	var _this = this;
 	
 	// Notation elements
-	this.canvasWidth = width == undefined ? 600 : width;
+	this.canvasWidth = width == undefined ? 600 : width; // NB! if set to 0, don't create notation
 	this.canvasX = x == undefined ? 10 : x;
 	this.canvasY = y == undefined ? 10 : y;
 	this.canvasScale = scale == undefined ? 0.8 : scale;
@@ -48,7 +45,9 @@ function MusicExercise(canvasId, width, x, y, scale) {
 		return startString + clefString + keyString + timeString + notesString + endString;
 	}
 	
-	this.clickOnCanvas = function(event) {
+	this.clickActions = function(){console.log("Boo")}; // you can define other things to be done connected to click event
+	
+	this.handleClick = function(event) {
 		// TODO: test coordinates, offsets etc
 		// have alook at http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/1
 		// and http://miloq.blogspot.in/2011/05/coordinates-mouse-click-canvas.html
@@ -57,32 +56,41 @@ function MusicExercise(canvasId, width, x, y, scale) {
 		var x = event.offsetX == undefined ? event.layerX : event.offsetX;
 		var y = event.offsetY == undefined ? event.layerY : event.offsetY;
 		console.log("Click coordinates: ",x,y);
+		_this.clickActions();
 		
 	}
 
 	this.init = function() {
+			// for SVG -  remove everything what is inside the div:
+			while (this.canvas.firstChild) {
+				this.canvas.removeChild(this.canvas.firstChild);
+			}
 			// VexTab
-			var vt = VexTabDiv;
-			var VexTab = vt.VexTab;// TODO: size from parameters, settings
-			var Artist = vt.Artist;
-			var Renderer = Vex.Flow.Renderer;
-			this.renderer = new Renderer(this.canvas, Renderer.Backends.SVG); // was .CANVAS NB! SVG needs div element, not canvas to work
-			this.artist = new Artist(this.canvasX, this.canvasY , this.canvasWidth, {scale: this.canvasScale}); 
-			this.vextab = new VexTab(this.artist);
+			if (this.canvasWidth>0) {
+				var vt = VexTabDiv;
+				var VexTab = vt.VexTab;// TODO: size from parameters, settings
+				var Artist = vt.Artist;
+				var Renderer = Vex.Flow.Renderer;
+				this.renderer = new Renderer(this.canvas, Renderer.Backends.SVG); // was .CANVAS NB! SVG needs div element, not canvas to work
+				this.artist = new Artist(this.canvasX, this.canvasY , this.canvasWidth, {scale: this.canvasScale}); 
+				this.vextab = new VexTab(this.artist);
 
 
-			//Audio renderer
-			this.selectedPreset=_tone_0000_JCLive_sf2_file;
-			var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
-			this.audioContext = new AudioContextFunc();
-			this.player=new WebAudioFontPlayer();
-			this.player.loader.decodeAfterLoading(this.audioContext, '_tone_0000_JCLive_sf2_file');
-			
-			
-			// add event listener for canvas clicks
-			this.canvas.addEventListener('click',this.clickOnCanvas, false);
-			this.canvas.addEventListener("click", this.clickOnCanvas, false);
-			//TODO: method for touchscreens
+				//Audio renderer
+				this.selectedPreset=_tone_0000_JCLive_sf2_file;
+				var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
+				this.audioContext = new AudioContextFunc();
+				this.player=new WebAudioFontPlayer();
+				this.player.loader.decodeAfterLoading(this.audioContext, '_tone_0000_JCLive_sf2_file');
+				
+				
+				// add event listener for canvas clicks //TODO: should be SVG now
+				this.renderer.getContext().svg.addEventListener('click',this.handleClick, false);
+				//this.canvas.addEventListener("click", this.clickOnCanvas, false);
+				//TODO: method for touchscreens, if necessary
+			} else {
+				console.log("Canvas width is 0, renderer and player not created.");
+			}
 
 	}
 	this.init();

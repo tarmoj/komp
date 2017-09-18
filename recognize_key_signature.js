@@ -3,56 +3,119 @@
     
 //    Harmoonia, harjutus 1.8.1  Antud on helistiku nimetus. Kirjuta võtmemärgid. Siin -  kuvatakse 6 märki, vali õige
 
+var subExercise = [];
+
+function testMe(index) {"I was called from ", index;};
+	
+
 function recognizeKeySignature() {
 	// variables
-	var key = "";
-	// make it maybe property of exercise?
+	var keysToShow = 4;
+	var maxAccidentals = 7; // for later use
+	
 	// TODO: add user control up to how many 
 	// maybe better array of objects {estMajor: "B duur", estMinor {"g moll"},  }
-	var possibleKeys = ["C","G","G","D","Bb", "A", "Eb", "E", "Ab", "H", "Db", "F#", "Gb", "C#", "Cb"];
+	var possibleKeys = ["C","G","G","D","Bb", "A", "Eb", "E", "Ab", "B", "Db", "F#", "Gb", "C#", "Cb"];
+	var selectedKey = "";
 	var maxAccidentals = 4;
 	var answered = false;
 	
 	// Create or set necessary HTML elements
 	document.getElementById("exerciseTitle").innerHTML = "Määra helistik. NB! POOLELI!";
 	document.getElementById("description").innerHTML = "Antud on helistik. Vali, millised on selle helistiku võtmemärgid."; 
-	document.getElementById("question").innerHTML =	"Millised on õiged võtmemärgid";
 	
 	
-	// TODO: vastus - click on bar
 	
 	
 	
 	// set necessary methods in exercise
-	exercise = new MusicExercise("mainCanvas"); // relatively narrow canvas // CAN THIS BE A MEMORY LEAK?
-	//exercise.attempts = 0; exercise.score = 0; // set in object create 
+	exercise = new MusicExercise("mainCanvas",0); // no width
 	exercise.time = ""; // no time signature
-
+	//exercise.
+	
+	function checkResponse() { // must be separate function here since must be placed int object as listener's callback
+		console.log(selectedKey);
+		console.log(this.key);
+			
+		if (answered) {
+			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
+			return;
+		}
+		exercise.attempts += 1;
+		var feedback = "";
+		
+		if (this.key == selectedKey) {
+			feedback = "Õige!";
+			exercise.score +=1;
+			// TODO taust punaseks vms?
+		} else {
+			feedback = "Vale! See on hoopis: " + this.key;
+		}
+		
+		// TODO vastamine hiireklikiga joonisel
+		
+		
+		document.getElementById("attempts").innerHTML = exercise.attempts;
+		document.getElementById("score").innerHTML = exercise.score;
+		document.getElementById("feedback").innerHTML = feedback; 
+		exercise.draw(); // redraw without rectangle
+		answered = true;
+	
+	
+	}
+	
+	//var subExercise = [];
+	var container = [];
+	for (var i=0;i<keysToShow;i++) {
+		container[i] = document.createElement("span");
+		var id = "key"+(i+1)
+		container[i].id = id;
+		exercise.canvas.appendChild(container[i]);
+		subExercise[i] = new MusicExercise(id, 150);
+		subExercise[i].index = i;
+		subExercise[i].time = "";
+		subExercise[i].clickActions = checkResponse;
+		//subExercise[i].handleClick = function() {console.log(this.canvas.id);};
+		//subExercise[i].renderer.getContext().svg.addEventListener('click', subExercise[i].handleClick;// renew the listener
+		
+	
+		
+	}
+	
 	document.getElementById("attempts").innerHTML = "0";
 	document.getElementById("score").innerHTML = "0";
 	
 	
+	
+	
 	exercise.generate = function() {
-		var allowedDurations = [2, 1, 0.5, 0.25];
-		var tryThis = allowedDurations[Math.floor(Math.random()*allowedDurations.length)];
-		while (tryThis === duration) { // to avoid getting the same duration twice in a row
-			console.log("Got the same, retrying");
-			tryThis = allowedDurations[Math.floor(Math.random()*allowedDurations.length)];
+		var possibleKeys = ["C","G","G","D","Bb", "A", "Eb", "E", "Ab", "B", "Db", "F#", "Gb", "C#", "Cb"];
+		
+		
+		/*var key  = possibleKeys[Math.floor(Math.random()*possibleKeys.length)];
+		while (key === selectedKey) { // to avoid getting the same duration twice in a row
+			//console.log("Got the same, retrying");
+			key = possibleKeys[Math.floor(Math.random()*possibleKeys.length)];
 		}
-		duration = tryThis; 
-		var flexDuration = (4/duration).toString();
-		var isRest = ( Math.random() >=0.5 ); // 50/50% if notr or rest
-		console.log("show rest: ", isRest);
+		selectedKey = key;*/ 
+		// TODO: kindlusta, et kõik oleks erinevad!
+		for (i=0; i<keysToShow; i++) {
+			subExercise[i].key = possibleKeys[Math.floor(Math.random()*possibleKeys.length)];
+		}
 		
-		// create VexFlow string of notes
+		selectedKey = subExercise[Math.floor(Math.random()*keysToShow)].key;
+		console.log("Selected: ",selectedKey);
 		
-		var parseString = " :"+flexDuration ;
-		parseString += (isRest) ?  " ##" : " B/4"; // add rest or note (B) 
+		// TODO: eesti keelde!
+		document.getElementById("question").innerHTML =	"Milline neist on: <b>" + selectedKey + "</b> (Klõpsa noodijoonestikul)";
 		
-		console.log("Generated notes: ", parseString);
-		exercise.notes = parseString;
+		
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
 	
+	}
+	
+	exercise.draw = function() {
+			subExercise.forEach(function(e) {e.draw()});
 	}
 	
 	exercise.generate();		
@@ -63,37 +126,8 @@ function recognizeKeySignature() {
 		exercise.draw();
 	}
 	
-	exercise.checkResponse = function() { // TODO: - kas oleks võimalik tõsta baseclassi? Siis vist switch case peaks olema välditud ja õige vastus peaks olema juba loetava stringina nagu "poolnoot" - vist mõtekas. Samas, kuidas basclass tead html elementide ID-sid???// Music exercises for "MUUSIKA KOMPOSITSIOONIÕPETUS"
-// TODO: proper credits, copyright
-
-		//TODO: kontrolli, kas uuendatud, muidu tõstab ainult skoori...
-		if (answered) {
-			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
-			return;
-		}
-		exercise.attempts += 1;
-		var feedback = "";
-		if (parseFloat(document.getElementById("response").value)===duration) {
-			feedback = "Õige!"
-			exercise.score += 1;
-		} else {
-			var durationString = "";
-			switch (duration) {
-				case 2:  durationString = "Poolnoot"; break;
-				case 1:  durationString = "Veerandnoot"; break;
-				case 0.5:  durationString = "Kaheksandik"; break;
-				case 0.25:  durationString = "Kuueteistkümnendiknoot"; break;
-				default: durationString = "?"; break;
-			}
-			feedback = "Vale! Õige oli: "+durationString; 
-		}
-		
-		
-		document.getElementById("attempts").innerHTML = exercise.attempts;
-		document.getElementById("score").innerHTML = exercise.score;
-		document.getElementById("feedback").innerHTML = feedback; 
-		exercise.draw(); // redraw without rectangle
-		answered = true;
-	
+	exercise.checkResponse = function() { // nothing here, real check by key clicks
+		alert("Klõpsa õigele noodikrjale."); 
 	}
+		
 }
