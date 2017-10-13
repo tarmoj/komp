@@ -49,7 +49,7 @@ function recognizeKeySignature() {
 	var answered = false;
 	
 	// Create or set necessary HTML elements
-	document.getElementById("exerciseTitle").innerHTML = "Määra helistik. NB! POOLELI!";
+	document.getElementById("exerciseTitle").innerHTML = "Määra helistik.";
 	document.getElementById("description").innerHTML = "Antud on helistik. Vali, millised on selle helistiku võtmemärgid."; 
 	
 	
@@ -74,7 +74,8 @@ function recognizeKeySignature() {
 		if (this.key == keys[selectedKeyIndex].vtKey) {
 			feedback = "Õige!";
 			exercise.score +=1;
-			this.artist.staves[0].note.context.attributes.fill = "green";
+			//this.artist.staves[0].note.context.attributes.fill = "green";
+			this.renderer.ctx.attributes.fill = "green";
 		} else {
 			console.log("Is major: ", selectedKeysIsMajor);
 			var keyName = getKeyName(this.key, selectedKeysIsMajor);
@@ -117,8 +118,12 @@ function recognizeKeySignature() {
 		// TODO: kindlusta, et kõik oleks erinevad!
 		for (i=0; i<keysToShow; i++) {
 			var index = Math.floor(Math.random()* keys.length)
+			while (keyIndexes.indexOf(index)>=0) { // avoid repeating of same key
+				console.log("We have this key already, taking new.");
+				index = Math.floor(Math.random()* keys.length);
+			}
 			subExercise[i].key = keys[index].vtKey;
-			//subExercise[i].artist.staves[0].note.context.attributes.fill = "black"; // delete green and red, if applies
+			subExercise[i].renderer.ctx.attributes.fill = "black"; // delete green and red, if applied
 			keyIndexes[i] = index;
 		}
 		

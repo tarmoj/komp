@@ -40,13 +40,14 @@
 			switch (exerciseNumber) {
 				case "1.2.2" : nameDuration(); break;
 				case "1.2.3" : findMissingDuration(); break;
+				case "1.8.1" : recognizeKeySignature(); break;
 				default: console.log("Exercise "+exerciseNumber+" is unkonwn or not defined yet");
 			}
 			
 		} else {		
-// 			exercise = new MusicExercise("mainCanvas") ;
-// 			exercise.draw(); // dummy exercise -  just show empty staff
-			recognizeKeySignature(); 
+ 			exercise = new MusicExercise("mainCanvas") ;
+ 			exercise.draw(); // dummy exercise -  just show empty staff
+			//recognizeKeySignature(); 
 		}
 	}
 
@@ -60,6 +61,7 @@
 	<a onclick="findMissingDuration()" href="#">Leia puuduv vältus</a> 
 	<a onclick="nameDuration()" href="#">Määra helivältus</a> 
 	<a onclick="describeNote()" href="#">Kirjelda helikõrguse asukohta</a>
+	<a onclick="recognizeKeySignature()" href="#">Määra helistik</a>
 	jne
 	<hr>
 	<br>
