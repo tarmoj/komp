@@ -102,6 +102,7 @@ function findMissingDuration() { // Harjutus 1.2.3 Lisa puuduv helivältus
 	exercise.hide();
 	
 	document.getElementById("renewButton").onclick = function() {
+		document.getElementById("feedback").innerHTML = "";
 		exercise.generate(); 
 		exercise.draw();
 		exercise.hide();

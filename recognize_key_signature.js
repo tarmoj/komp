@@ -149,6 +149,7 @@ function recognizeKeySignature() {
 	exercise.draw();
 	
 	document.getElementById("renewButton").onclick = function() {
+		document.getElementById("feedback").innerHTML = "";
 		exercise.generate(); 
 		exercise.draw();
 	}
