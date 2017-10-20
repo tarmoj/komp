@@ -8,14 +8,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1" />
     <style></style>
     
+    <!--dependencies-->
     <script src="https://unpkg.com/vextab/releases/vextab-div.js"></script>    
     <script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
     <script src='https://surikov.github.io/webaudiofontdata/sound/0000_JCLive_sf2_file.js'> </script>
+	
 	<script src="baseclass.js"></script>
+	
+	<!--exercises-->
 	<script src="find_missing_duration.js"></script>
 	<script src="name_duration.js"></script>
     <script src="describe_note.js"></script>
     <script src="recognize_key_signature.js"></script>
+    <script src="draw_barlines.js"></script>
+    
+    <!--main-->
     <script>
     
 	var exercise; 
@@ -23,10 +30,6 @@
     
     // different exercises are defined as different functions in separate .js files
 
-
-
-    // TODO: create a hash of ecercsise names and numbers to link them to from URL
-    //var exercises = [  ]
     
 	window.onload = function() {
 		
@@ -40,14 +43,15 @@
 			switch (exerciseNumber) {
 				case "1.2.2" : nameDuration(); break;
 				case "1.2.3" : findMissingDuration(); break;
+				case "1.3.5" : describeNote(); break;
 				case "1.8.1" : recognizeKeySignature(); break;
 				default: console.log("Exercise "+exerciseNumber+" is unkonwn or not defined yet");
 			}
 			
 		} else {		
- 			exercise = new MusicExercise("mainCanvas") ;
- 			exercise.draw(); // dummy exercise -  just show empty staff
-			//recognizeKeySignature(); 
+//  			exercise = new MusicExercise("mainCanvas") ;
+//  			exercise.draw(); // dummy exercise -  just show empty staff
+			drawBarlines(); 
 		}
 	}
 

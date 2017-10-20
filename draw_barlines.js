@@ -10,6 +10,8 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 	// variables
 	var answered = false;
 	var time = "3/4"; // later random or  set by user, better random
+	var previousX = 0, nextX = 0; // position of notes before and after barline
+	var barlineObject;
 	
 	// Create or set necessary HTML elements
 	document.getElementById("exerciseTitle").innerHTML = "Lisa taktijooned";
@@ -80,11 +82,13 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 	
 	exercise.generate = function() {
 	
-		// TODO: generate time signatur first
-		var time = "3/4"
+		// generate time signatur first
+		var beats = Math.floor(Math.random()*4 + 4); //3/4 .. 7/4
+		var time =  beats.toString() +  "/4"
 		exercise.time = time;
 		
-		exercise.notes = generateBar(3,4) + " | "  + generateBar(3,4);
+		//TODO: ühtlane paigutus 
+		exercise.notes = generateBar(beats,4) + " | "  + generateBar(beats,4);
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
 	
 	}
@@ -92,46 +96,66 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 	exercise.hide = function() {
 		var barLineIndex = -1;
 		var notes = exercise.getNotes(0); 
-		var previousX = 0, nextX = 0; // to main scope
-		var barlineObjects = []; // move to global
+		
 		for (var i=0; i<notes.length; i++) {
 			if (notes[i].duration==="b") {
-				console.log("fond barline on index", i)
-				var bl = exercise.renderer.ctx.svg.getElementsByClassName("vf-stavenote")[i-1].nextSibling; // next to previous vf-stavenote
-				console.log(bl);
-				barlineObjects.push(bl); // later work it through below, since there can be several barlines
+				console.log("found barline on index", i)
+				barlineObject = exercise.renderer.ctx.svg.getElementsByClassName("vf-stavenote")[i-1].nextSibling; // next to previous vf-stavenote
 				
-				bl.setAttribute("stroke","none"); // hide the barline
-				bl.setAttribute("fill","none");
-				// for hiding maybe: exercise.artist.staves[0].tab_notes[4].setGhost(true)
-				// but seems it is not valid for barlines... and does not work...
+				// hide:
+				barlineObject.setAttribute("stroke","none"); // NB! multiple barlines currently not supported!!!
+				barlineObject.setAttribute("fill","none");
 				
-				// TO HIDE: find the svg element exercise.renderer.ctx.svg.childNodes ->  findChildren vf-stavenote, peale seda rect mis eelneva ja järgneva vahel, muuda selle fill ja stroke -> none või transparent; taastamiseks "black"
 				
-				// CANNOT HIDE YET, vexflow seems to offer no way, look for SVG (find Chid vms)
-				// OR correct porperty of the notes[i] object // can be also tabnote, perhaps
+				// get positions of previous and next note
 				if (i>0 && i<notes.length-1 ) {
 					previousX = notes[i-1].getAbsoluteX();
 					nextX = notes[i+1].getAbsoluteX();
 				}
-				// go through svg elements, find the rect for barline and set it to invisible
-				//maybe: exercise.renderer.ctx.svg.getElementsByClassName("vf-stavenote")[barLineIndex-1].nextSibling
-		
 				
 			}
 			
+		}		
+	}
+	
+	exercise.clickActions = function(x,y) {
+		console.log(x,y);
+		if (answered) {
+			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
+			return;
 		}
 		
+		exercise.attempts += 1;
+		var feedback = "";
+		var color = "black";
 		
-// 		if (hiddenNote>notes.length) {
-// 			console.log("There is not that many notes!", hiddenNote)
-// 			return;
-// 		}
-// 		var note = exercise.artist.staves[0].note_notes[hiddenNote];
-// 		var context = exercise.renderer.getContext();
-// 		//context.setFillStyle("darkgreen"); // <- for canvas
-// 		//context.fillRect(note.getAbsoluteX()-10, note.stave.getYForTopText()-10, note.width+20, note.stave.height+10);
-// 		context.rect(note.getAbsoluteX()-10, note.stave.getYForTopText()-10, note.width+20, note.stave.height+10, { fill: 'darkgreen' });
+		if (x>= previousX && x<=nextX) {
+			feedback = "Õige!"
+			exercise.score += 1;
+			color = "green";
+		} else {
+			feedback = "Vale koht!";
+			color = "red";
+		}
+		
+		// draw barline where it was clicked with green or red color
+		var context = exercise.renderer.getContext();
+		var note = exercise.artist.staves[0].note;
+		var drawX = x- exercise.canvasX;
+		var drawY = barlineObject.y.baseVal.value;
+		var height = barlineObject.height.baseVal.value;
+		
+		context.rect(drawX, drawY, 2, height, { stroke: color,  fill: color});
+		
+		// and show original barline in blue
+		barlineObject.setAttribute("stroke","blue"); 
+		barlineObject.setAttribute("fill","blue");
+		
+		document.getElementById("attempts").innerHTML = exercise.attempts;
+		document.getElementById("score").innerHTML = exercise.score;
+		document.getElementById("feedback").innerHTML = feedback; 
+		//exercise.draw(); // redraw without rectangle
+		answered = true;
 	}
 	
 	exercise.generate();		
@@ -147,33 +171,7 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 	
 	exercise.checkResponse = function() {
 		//TODO: kontrolli, kas uuendatud, muidu tõstab ainult skoori...
-		if (answered) {
-			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
-			return;
-		}
-		exercise.attempts += 1;
-		var feedback = "";
-		if (parseFloat(document.getElementById("response").value)===hiddenDuration) {
-			feedback = "Õige!"
-			exercise.score += 1;
-		} else {
-			var durationString = "";
-			switch (hiddenDuration) {
-				case 2:  durationString = "Poolnoot"; break;
-				case 1:  durationString = "Veerandnoot"; break;
-				case 0.5:  durationString = "Kaheksandiknoot"; break;
-				case 0.25:  durationString = "Kuueteistkümnendiknoot"; break;
-				default: durationString = "?"; break;
-			}
-			feedback = "Vale! Õige oli: "+durationString; // TODO 0.25-> Kuueteistkümnendik jne
-		}
-		
-		
-		document.getElementById("attempts").innerHTML = exercise.attempts;
-		document.getElementById("score").innerHTML = exercise.score;
-		document.getElementById("feedback").innerHTML = feedback; 
-		exercise.draw(); // redraw without rectangle
-		answered = true;
+		alert("Kliki noodijoonestikul kohele, kus peaks olema taktijoon");
 	
 	}
 	

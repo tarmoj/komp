@@ -45,18 +45,15 @@ function MusicExercise(canvasId, width, x, y, scale) {
 		return startString + clefString + keyString + timeString + notesString + endString;
 	}
 	
-	this.clickActions = function(){console.log("Boo")}; // you can define other things to be done connected to click event
+	this.clickActions = function(x,y){ console.log("clickactions", x,y)}; // you can define other things to be done connected to click event
 	
 	this.handleClick = function(event) {
-		// TODO: test coordinates, offsets etc
-		// have alook at http://www.html5canvastutorials.com/advanced/html5-canvas-mouse-coordinates/1
-		// and http://miloq.blogspot.in/2011/05/coordinates-mouse-click-canvas.html
-		// referenced from: https://stackoverflow.com/questions/55677/how-do-i-get-the-coordinates-of-a-mouse-click-on-a-canvas-element
-		// event.clientX should be also OK
-		var x = event.offsetX == undefined ? event.layerX : event.offsetX;
-		var y = event.offsetY == undefined ? event.layerY : event.offsetY;
-		console.log("Click coordinates: ",x,y);
-		_this.clickActions();
+		//event.stopPropagation(); // not sure if this is necessary
+		
+		var _x = event.clientX / _this.canvasScale;
+		var _y =  event.clientY / _this.canvasScale;
+		//console.log("Click coordinates: ",_x,_y, event);
+		_this.clickActions(_x,_y); // this workaround is necessary to be able to overload clickActions to reach this properties
 		
 	}
 
@@ -87,7 +84,6 @@ function MusicExercise(canvasId, width, x, y, scale) {
 				// add event listener for canvas clicks //TODO: should be SVG now
 				this.renderer.getContext().svg.addEventListener('click',this.handleClick, false);
 				//this.canvas.addEventListener("click", this.clickOnCanvas, false);
-				//TODO: method for touchscreens, if necessary
 			} else {
 				console.log("Canvas width is 0, renderer and player not created.");
 			}
@@ -134,7 +130,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 		var _start = 0, _duration = 1;
 		for (let _note of this.artist.staves[0].note_notes) {
 			 
-			if (_note.playNote!==null) {
+			if (_note.duration!=="b") { // check if not barline
 				_duration = _note.getTicks().value()/4096.0 * 60.0/this.tempo;
 				var key = _note.getPlayNote()[0];
 				[noteName, octave] = key.split("/");
@@ -147,9 +143,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 				_start += _duration;  // TODO: what if rest?? see code of artist.coffee
 			
 				
-			} else {
-				console.log("Not note. Maybe barline"); // TODO: why some notes return no playnote?
-			}
+			} 
 		}
 	}
 	
