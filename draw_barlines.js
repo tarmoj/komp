@@ -10,8 +10,9 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 	// variables
 	var answered = false;
 	var time = "3/4"; // later random or  set by user, better random
-	var previousX = 0, nextX = 0; // position of notes before and after barline
+	//var previousX = 0, nextX = 0; // position of notes before and after barline
 	var barlineObject;
+	var bar1 = {}, bar2 = {};
 	
 	// Create or set necessary HTML elements
 	document.getElementById("exerciseTitle").innerHTML = "Lisa taktijooned";
@@ -75,7 +76,7 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 			
 		}
 		console.log("Generated notes: ", parseString);
-		return parseString; 
+		return {vtNotes: parseString, count: durations.length}; 
 		
 	}
 	
@@ -87,16 +88,25 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 		var time =  beats.toString() +  "/4"
 		exercise.time = time;
 		
+		
+		
 		//TODO: ühtlane paigutus 
-		exercise.notes = generateBar(beats,4) + " | "  + generateBar(beats,4);
+		//exercise.notes = generateBar(beats,4) + " | "  + generateBar(beats,4);
 		
+		bar1 = generateBar(beats,4);
+		bar2 = generateBar(beats,4);
 		
-		exercise.notes = generateBar(beats,4) +  generateBar(beats,4);
+		exercise.notes =  bar1.vtNotes +  bar2.vtNotes;
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
 	
 	}
 	
 	exercise.hide = function() {
+		
+		// in fact not need to hide anything if no barline drawn
+		console.log("hide()");
+		// keep the code as example how to access svg objects
+		/*
 		var barLineIndex = -1;
 		var notes = exercise.getNotes(0); 
 		
@@ -118,7 +128,8 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 				
 			}
 			
-		}		
+		}	
+		*/
 	}
 	
 	exercise.clickActions = function(x,y) {
@@ -132,10 +143,13 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 		var feedback = "";
 		var color = "black";
 		
+		var notes = exercise.getNotes(0);
+		previousX = notes[bar1.count-1].getAbsoluteX() + notes[bar1.count-1].width; // last note of first bar
+		nextX = notes[bar1.count].getAbsoluteX() + notes[bar1.count].width;
 		//var comparableX = x*exercise.canvasScale + exercise.canvasX;
 		var drawX = x- exercise.canvasX;
 		console.log(drawX, previousX, "next: ", nextX)
-		if (drawX>= previousX + 10 && drawX<=nextX +10) { // +10 note width
+		if (drawX>= previousX && drawX<=nextX) { // +10 note width
 			feedback = "Õige!"
 			exercise.score += 1;
 			color = "green";
@@ -147,14 +161,19 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 		// draw barline where it was clicked with green or red color
 		var context = exercise.renderer.getContext();
 		var note = exercise.artist.staves[0].note;
-		var drawY = barlineObject.y.baseVal.value;
-		var height = barlineObject.height.baseVal.value;
+		var drawY = 10 //barlineObject.y.baseVal.value;
+		var height = 80 //barlineObject.height.baseVal.value;
+		
+		
+		// TODO -  redraw bar with barline, then add user inserted position
+		exercise.notes = bar1.vtNotes + " | " + bar1.vtNotes;
+		exercise.draw()
 		
 		context.rect(drawX, drawY, 2, height, { stroke: color,  fill: color});
 		
 		// and show original barline in blue
-		barlineObject.setAttribute("stroke","blue"); 
-		barlineObject.setAttribute("fill","blue");
+		//barlineObject.setAttribute("stroke","blue"); 
+		//barlineObject.setAttribute("fill","blue");
 		
 		document.getElementById("attempts").innerHTML = exercise.attempts;
 		document.getElementById("score").innerHTML = exercise.score;
