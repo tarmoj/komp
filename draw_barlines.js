@@ -89,6 +89,9 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 		
 		//TODO: ühtlane paigutus 
 		exercise.notes = generateBar(beats,4) + " | "  + generateBar(beats,4);
+		
+		
+		exercise.notes = generateBar(beats,4) +  generateBar(beats,4);
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
 	
 	}
@@ -129,7 +132,10 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 		var feedback = "";
 		var color = "black";
 		
-		if (x>= previousX && x<=nextX) {
+		//var comparableX = x*exercise.canvasScale + exercise.canvasX;
+		var drawX = x- exercise.canvasX;
+		console.log(drawX, previousX, "next: ", nextX)
+		if (drawX>= previousX + 10 && drawX<=nextX +10) { // +10 note width
 			feedback = "Õige!"
 			exercise.score += 1;
 			color = "green";
@@ -141,7 +147,6 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 		// draw barline where it was clicked with green or red color
 		var context = exercise.renderer.getContext();
 		var note = exercise.artist.staves[0].note;
-		var drawX = x- exercise.canvasX;
 		var drawY = barlineObject.y.baseVal.value;
 		var height = barlineObject.height.baseVal.value;
 		
