@@ -15,24 +15,10 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 	var bar1 = {}, bar2 = {};
 	
 	// Create or set necessary HTML elements
-	document.getElementById("exerciseTitle").innerHTML = "Lisa taktijooned";
-	document.getElementById("description").innerHTML = "Antud taktimõõt, taktijooned on peidetud. Kus need peaks asuma?"; 
+	document.getElementById("exerciseTitle").innerHTML = "Lisa taktijoon";
+	document.getElementById("description").innerHTML = "Antud taktimõõt, taktijoon on peidetud. Kus see peaks asuma?"; 
 	//TODO: luba ka pause, mitte ainult noodid -  kas vaja?
 	document.getElementById("question").innerHTML =	"Kliki noodijoonestukul kohale, kus peaks asuma taktijoon.";
-	
-// 	var oldResponse = document.getElementById("response");
-// 	var response = document.createElement("select"); 
-// 	
-// 	response.id = "response";
-// 	response.innerHTML =''; 
-// 		
-// 	if (oldResponse === null) {
-// 		console.log("Creating new response element");
-// 		document.getElementById("responseDiv"). appendChild(response)
-// 	} else {
-// 		console.log("Replacing response element");
-// 		document.getElementById("responseDiv").replaceChild(response, oldResponse);
-// 	}
 	
 	// set necessary methods in exercise
 	exercise = new MusicExercise("mainCanvas");
@@ -158,39 +144,35 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 			color = "red";
 		}
 		
+		
+		// add other staff with rendered barline
+		var vt1 = exercise.createVexTabString();
+		exercise.notes = bar1.vtNotes + " | " + bar2.vtNotes;
+		var vt2 = exercise.createVexTabString(); // second staff
+		exercise.draw(vt1 + "\n" + vt2)
+		
+		
 		// draw barline where it was clicked with green or red color
 		var context = exercise.renderer.getContext();
 		var note = exercise.artist.staves[0].note;
-		var drawY = 10 //barlineObject.y.baseVal.value;
-		var height = 80 //barlineObject.height.baseVal.value;
-		
-		
-		// TODO -  redraw bar with barline, then add user inserted position
-		exercise.notes = bar1.vtNotes + " | " + bar1.vtNotes;
-		exercise.draw()
-		
+		var drawY = note.getYForLine(0); 
+		var height = note.getYForLine(4) - note.getYForLine(0)  
 		context.rect(drawX, drawY, 2, height, { stroke: color,  fill: color});
-		
-		// and show original barline in blue
-		//barlineObject.setAttribute("stroke","blue"); 
-		//barlineObject.setAttribute("fill","blue");
 		
 		document.getElementById("attempts").innerHTML = exercise.attempts;
 		document.getElementById("score").innerHTML = exercise.score;
 		document.getElementById("feedback").innerHTML = feedback; 
-		//exercise.draw(); // redraw without rectangle
+
 		answered = true;
 	}
 	
 	exercise.generate();		
 	exercise.draw();
-	exercise.hide();
 	
 	document.getElementById("renewButton").onclick = function() {
 		document.getElementById("feedback").innerHTML = "";
 		exercise.generate(); 
 		exercise.draw();
-		exercise.hide();
 	}
 	
 	exercise.checkResponse = function() {

@@ -36,7 +36,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 	
 	
 	this.createVexTabString = function() {
-		var startString = "options space=20\n tabstave \n notation=true tablature=false \n";
+		var startString = "options space=20\n stave \n "; // was tabstave before but this is not needed
 		var clefString = (this.clef.length>0) ? "clef="+this.clef+"\n" : "";
 		var keyString = (this.key.length>0) ? "key="+this.key+"\n" : "";
 		var timeString = (this.time.length>0) ?  "time="+this.time+"\n" : "";
@@ -44,6 +44,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 		var endString = "\noptions space=20\n";
 		return startString + clefString + keyString + timeString + notesString + endString;
 	}
+	
 	
 	this.clickActions = function(x,y){ console.log("clickactions", x,y)}; // you can define other things to be done connected to click event
 	
@@ -92,11 +93,13 @@ function MusicExercise(canvasId, width, x, y, scale) {
 	this.init();
 
 	this.generate = function() {console.log("generate(). Implement in derived object.");}
-	this.draw = function () { // this should or could be overdriven in base calsses
+	
+	this.draw = function (string) { // this should or could be overdriven in base calsses
 		try {
 			this.vextab.reset();
 			this.artist.reset();
-			this.vextab.parse(this.createVexTabString());
+			var parseString = (string==undefined) ? this.createVexTabString() : string; // allow to set the string by user;
+			this.vextab.parse(parseString);
 			this.artist.render(this.renderer);
 		} catch (e) {
 			console.log(e);
