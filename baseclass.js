@@ -51,9 +51,9 @@ function MusicExercise(canvasId, width, x, y, scale) {
 	this.handleClick = function(event) {
 		//event.stopPropagation(); // not sure if this is necessary
 		
-		var _x = event.clientX / _this.canvasScale;
-		var _y =  event.clientY / _this.canvasScale;
-		//console.log("Click coordinates: ",_x,_y, event);
+		var _x = event.layerX / _this.canvasScale; // should we use - this.canvas.offsetLeft? Then fix in drawBarline 
+		var _y =  (event.layerY - _this.canvas.offsetTop) / _this.canvasScale; // was: clientX, clientY // TODO: test other browsers
+		console.log("Click coordinates: ",_x,_y, event);
 		_this.clickActions(_x,_y); // this workaround is necessary to be able to overload clickActions to reach this properties
 		
 	}

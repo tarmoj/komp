@@ -21,6 +21,7 @@
     <script src="describe_note.js"></script>
     <script src="recognize_key_signature.js"></script>
     <script src="draw_barlines.js"></script>
+    <script src="draw_note.js"></script>
     
     <!--main-->
     <script>
@@ -50,8 +51,9 @@
 			}
 			
 		} else {		
- 			exercise = new MusicExercise("mainCanvas") ;
- 			exercise.draw(); // dummy exercise -  just show empty staff
+ 			//exercise = new MusicExercise("mainCanvas") ;
+ 			//exercise.draw(); // dummy exercise -  just show empty staff
+ 			drawNote();
 		}
 	}
 

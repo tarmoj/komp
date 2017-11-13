@@ -133,7 +133,7 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 		previousX = notes[bar1.count-1].getAbsoluteX() + notes[bar1.count-1].width; // last note of first bar
 		nextX = notes[bar1.count].getAbsoluteX() + notes[bar1.count].width;
 		//var comparableX = x*exercise.canvasScale + exercise.canvasX;
-		var drawX = x- exercise.canvasX;
+		var drawX = x - exercise.canvasX; // <- fixed in baseclass
 		console.log(drawX, previousX, "next: ", nextX)
 		if (drawX>= previousX && drawX<=nextX) { // +10 note width
 			feedback = "Õige!"
