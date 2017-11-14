@@ -197,7 +197,7 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 		
 		// TODO: eemalda silbilt oktavinumber
 		
-		if (document.getElementById("syllable").value === possibleNotes[noteIndex].syllable{ 
+		if (document.getElementById("syllable").value === possibleNotes[noteIndex].syllable) { 
 			feedback += "Silpnimetus õige! "
 			correct = true;
 		} else {
