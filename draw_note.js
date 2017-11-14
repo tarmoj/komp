@@ -128,6 +128,15 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 		
 		document.getElementById("question").innerHTML =	"Noot <b><big>" + possibleNotes[noteIndex].name + '</b></big> on silpnimetusega: <select id="syllable"></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
+		var select = document.getElementById('syllable');
+		for(var i = 0; i < 7*3; i++) {
+			var option = document.createElement('option');
+			var syllable = possibleNotes[i].syllable;
+			option.innerHTML = syllable;
+			option.value = syllable;
+			select.appendChild(option);
+		}
+		
 		
 		
 		exercise.notes = ""; // nothing drawn	
@@ -139,20 +148,8 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 	
 	
 	exercise.clickActions = function(x,y) {
-		console.log(x,y);
-// 		if (answered) {
-// 			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
-// 			return;
-// 		}
-// 		
-// 		exercise.attempts += 1;
-// 		var feedback = "";
-		
+		// console.log(x,y);		
 
-		var options = exercise.artist.staves[0].note.getOptions();
-		
-		var spacing = options.spacing_between_lines_px;
-		var headroom = options.space_above_staff_ln;
 		var line = exercise.artist.staves[0].note.getLineForY(y);
 		
 		// find note by line
@@ -172,24 +169,6 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 			}
 			
 		}
-		
-		
-// 		if (drawX>= previousX && drawX<=nextX) { // +10 note width
-// 			feedback = "Õige!"
-// 			exercise.score += 1;
-// 			color = "green";
-// 		} else {
-// 			feedback = "Vale koht!";
-// 			color = "red";
-// 		}
-		
-		
-		
-		document.getElementById("attempts").innerHTML = exercise.attempts;
-		document.getElementById("score").innerHTML = exercise.score;
-		document.getElementById("feedback").innerHTML = feedback; 
-
-		answered = true;
 	}
 	
 	exercise.generate();		
@@ -202,9 +181,49 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 	}
 	
 	exercise.checkResponse = function() {
-		//TODO: kontrolli, kas uuendatud, muidu tõstab ainult skoori...
-		alert("Loomisel");
-	
+		if (currentNoteIndex < 0) {
+			alert("Sisesta noot noodijoonestikule!")
+			return;
+		}
+		
+		if (answered) {
+			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
+			return;
+		}
+		
+		exercise.attempts += 1;
+		var feedback = "";
+		var correct = false;
+		
+		// TODO: eemalda silbilt oktavinumber
+		
+		if (document.getElementById("syllable").value === possibleNotes[noteIndex].syllable{ 
+			feedback += "Silpnimetus õige! "
+			correct = true;
+		} else {
+			feedback += "Silpnimetus vale! See on hoopis " + possibleNotes[noteIndex].syllable + ". ";			
+			correct = false;
+		}
+		
+		if (currentNoteIndex === noteIndex) {
+			feedback += "Noot noodijoonestikul on õige!"
+			correct = correct && true;;
+		} else {
+			feedback += "Noot noodijoonestikul valesti!"; 
+			exercise.notes += " " + possibleNotes[noteIndex].vtNote;
+			exercise.draw(); // redraw with right note
+			correct = correct && false;
+		}
+		
+		if (correct) {
+			exercise.score += 1;
+		}
+		
+		document.getElementById("attempts").innerHTML = exercise.attempts;
+		document.getElementById("score").innerHTML = exercise.score;
+		document.getElementById("feedback").innerHTML = feedback; 		
+		answered = true;
+		
 	}
 	
 
