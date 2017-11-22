@@ -56,8 +56,7 @@
  			drawNote();
 		}
 	}
-
-
+	
     
     </script>
 
@@ -93,7 +92,15 @@
 	Katseid: <label id="attempts">0</label>. Neist õigeid vastuseid: <label id="score">0</label> 
 	<button id="resetButton" onclick='exercise.attempts=0;exercise.score=0;attempts.innerHTML="0"; score.innerHTML = "0" '>Nulli</button>
 	<br>
+	<b>POOLELI, EI TÖÖTA VEEL:</b> Kui tunned, et oled valmis testi sooritama, vajuta: <button id="showTestButton" onclick='testDiv.style.visibility="visible"; alert("Teile esitatkse 5 küsimut, mis tuleb ettemääratud aja jooksul vastata. Kui antud aja jooksul vastata ei oska, siis loetakse vastus vääraks. Uus küsimus kuvatakse peale eelmise vastamist või aja täitumisel.")'>Test</button> <br>
+	<div id="testDiv" style="visibility:hidden">
+	<button id="startTest" onclick="exercise.startTest()">Alusta</button> 
+	Küsimus nr <b><label id="questionNumber">0</label></b>. Aega on: <b><label id="timer">0</label></b> sekundit.
+	<button id="stopTest" onclick="exercise.stopTest()">Peata</button>
+	<br>
 	
+	
+	</div>
 
 	</body>
 </html>

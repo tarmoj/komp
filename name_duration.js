@@ -75,7 +75,8 @@ function nameDuration() {
 // TODO: proper credits, copyright
 
 		//TODO: kontrolli, kas uuendatud, muidu tõstab ainult skoori...
-		if (answered) {
+        console.log("Test running: ", exercise.testIsRunning());
+		if (answered && !exercise.testIsRunning()) {
 			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
 			return;
 		}
@@ -102,6 +103,13 @@ function nameDuration() {
 		document.getElementById("feedback").innerHTML = feedback; 
 		exercise.draw(); // redraw without rectangle
 		answered = true;
+        
+		// Think how to integrate into baseclass; maybe need to have two functions - BaseClass::checkResponse && exercise.responseFunction()
+		if (exercise.testIsRunning())   {
+			exercise.timer = exercise.timeToThink;
+			exercise.currentQuestion++;
+			//TODO function nextTestQuestion()
+        }
 	
 	}
 		

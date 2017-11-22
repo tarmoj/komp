@@ -32,7 +32,63 @@ function MusicExercise(canvasId, width, x, y, scale) {
 	//results and feedback
 	this.attempts = 0;
 	this.score = 0;
+
+    
+    // for test
+    this.timer = -1;
+	this.timeToThink = 15; // Could be also il levels:  slow/medium/fast
+	this.maxQuestions = 5, this.currentQuestion = 0; // should be local variables defined with var but this not reachable from countdown if it is executed from setTimeout callbaclk. javascript.....
+
+	function countdown() {		
+        console.log(_this.timer);
+        document.getElementById("timer").innerHTML = _this.timer.toString();
+		if (_this.timer>0) { 
+            _this.timer--;
+            setTimeout(function(){countdown();}, 1000); // recursive
+            return;
+		}
+		
+		if (_this.timer==0) {
+			//timer = -999 ; // signal that time ran out			
+			_this.currentQuestion++;
+			if (_this.currentQuestion<_this.maxQuestions) {
+                _this.checkResponse();
+                _this.renew();
+                _this.timer = _this.timeToThink;
+                document.getElementById("questionNumber").innerHTML = _this.currentQuestion.toString();
+                setTimeout(function(){countdown();}, 1000);
+			} else {
+                console.log("Test läbi");
+			}
+		}		
+	}
 	
+	
+	
+	this.startTest = function() {
+	
+        this.attempts=0; this.score=0;
+        document.getElementById("attempts").innerHTML="0"; document.getElementById("score").innerHTML = "0";
+        
+		this.currentQuestion = 1; 
+		document.getElementById("questionNumber").innerHTML = this.currentQuestion.toString();
+
+		exercise.renew();
+		this.timer = this.timeToThink; 
+		
+		countdown();
+		
+	}
+	
+	this.testIsRunning = function() {
+        return (this.timer>0)
+    }
+    
+    this.stopTest= function() {
+        console.log("Stop");
+        this.timer = -1;
+        this.currentQuestion = 0;
+    }
 	
 	
 	this.createVexTabString = function() {
@@ -105,6 +161,11 @@ function MusicExercise(canvasId, width, x, y, scale) {
 			console.log(e);
 		}
 	}
+	
+	this.renew = function() { // in some exercise you may need to ad more, like hide() or similar
+        this.generate();
+        this.draw();
+    }
 	
 	
 	this.getNotes = function(staff) {
