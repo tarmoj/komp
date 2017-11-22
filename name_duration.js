@@ -71,12 +71,11 @@ function nameDuration() {
 		exercise.draw();
 	}
 	
-	exercise.checkResponse = function() { // TODO: - kas oleks võimalik tõsta baseclassi? Siis vist switch case peaks olema välditud ja õige vastus peaks olema juba loetava stringina nagu "poolnoot" - vist mõtekas. Samas, kuidas basclass tead html elementide ID-sid???// Music exercises for "MUUSIKA KOMPOSITSIOONIÕPETUS"
-// TODO: proper credits, copyright
+	exercise.responseFunction = function() {
 
 		//TODO: kontrolli, kas uuendatud, muidu tõstab ainult skoori...
-        console.log("Test running: ", exercise.testIsRunning());
-		if (answered && !exercise.testIsRunning()) {
+        //console.log("Test running: ", exercise.testIsRunning());
+		if (answered) {
 			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
 			return;
 		}
@@ -97,20 +96,11 @@ function nameDuration() {
 			feedback = "Vale! Õige oli: "+durationString; 
 		}
 		
-		
 		document.getElementById("attempts").innerHTML = exercise.attempts;
 		document.getElementById("score").innerHTML = exercise.score;
 		document.getElementById("feedback").innerHTML = feedback; 
 		exercise.draw(); // redraw without rectangle
-		answered = true;
-        
-		// Think how to integrate into baseclass; maybe need to have two functions - BaseClass::checkResponse && exercise.responseFunction()
-		if (exercise.testIsRunning())   {
-			exercise.timer = exercise.timeToThink;
-			exercise.currentQuestion++;
-			//TODO function nextTestQuestion()
-        }
-	
+		answered = true;	
 	}
 		
 }

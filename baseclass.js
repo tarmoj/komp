@@ -34,31 +34,28 @@ function MusicExercise(canvasId, width, x, y, scale) {
 	this.score = 0;
 
     
-    // for test
+    // for test -------------
     this.timer = -1;
 	this.timeToThink = 15; // Could be also il levels:  slow/medium/fast
-	this.maxQuestions = 5, this.currentQuestion = 0; // should be local variables defined with var but this not reachable from countdown if it is executed from setTimeout callbaclk. javascript.....
-
+	this.maxQuestions = 5, this.currentQuestion = 0; // should be local variables defined with var but this is not reachable from countdown() if it is executed from setTimeout callbaclk. javascript.....
+	this.countdownReference = NaN;
+	
 	function countdown() {		
         console.log(_this.timer);
         document.getElementById("timer").innerHTML = _this.timer.toString();
 		if (_this.timer>0) { 
             _this.timer--;
-            setTimeout(function(){countdown();}, 1000); // recursive
+			console.log("About to call countdown again");
+            _this.countdownReference = setTimeout(function(){countdown();}, 1000); // recursive
             return;
 		}
 		
-		if (_this.timer==0) {
-			//timer = -999 ; // signal that time ran out			
-			_this.currentQuestion++;
+		if (_this.timer==0) {						
 			if (_this.currentQuestion<_this.maxQuestions) {
-                _this.checkResponse();
-                _this.renew();
-                _this.timer = _this.timeToThink;
-                document.getElementById("questionNumber").innerHTML = _this.currentQuestion.toString();
-                setTimeout(function(){countdown();}, 1000);
+                _this.checkResponse(); // checkResponse calls nextQuestion(), renew() and resets the timer, and 
 			} else {
                 console.log("Test läbi");
+				clearTimeout(_this.countdownReference);
 			}
 		}		
 	}
@@ -70,23 +67,37 @@ function MusicExercise(canvasId, width, x, y, scale) {
         this.attempts=0; this.score=0;
         document.getElementById("attempts").innerHTML="0"; document.getElementById("score").innerHTML = "0";
         
-		this.currentQuestion = 1; 
-		document.getElementById("questionNumber").innerHTML = this.currentQuestion.toString();
-
-		exercise.renew();
-		this.timer = this.timeToThink; 
-		
-		countdown();
+		this.currentQuestion = 0;
+		this.nextQuestion();
 		
 	}
 	
 	this.testIsRunning = function() {
-        return (this.timer>0)
+        return (this.timer>=0)
     }
+    
+    this.nextQuestion = function() {
+		clearTimeout(_this.countdownReference); // stop timer
+		if (this.currentQuestion<this.maxQuestions) {
+			this.currentQuestion++; 
+			document.getElementById("questionNumber").innerHTML = this.currentQuestion.toString();
+			
+			exercise.renew();
+			
+			setTimeout(function(){
+				_this.timer = _this.timeToThink; 
+				countdown();
+			}, 1100); // restart after 1 seconds to make sure that the timer cycle has ended (no't set it >0 before that time.
+		} else {
+			console.log("Test läbi. Rohkem küsimusi ei saa esitada;")
+		}
+		
+	}
     
     this.stopTest= function() {
         console.log("Stop");
-        this.timer = -1;
+        clearTimeout(_this.countdownReference);
+		this.timer = -1;
         this.currentQuestion = 0;
     }
 	
@@ -177,10 +188,17 @@ function MusicExercise(canvasId, width, x, y, scale) {
 	
 	this.hide = function(noteIndex) {console.log("hide(). Implement in derived object.");}
 
-	
-	//? this.hiddenRect = [];
 	this.answer = ""; // keep it string, convert in checkResponse()
-	this.checkResponse = function() {console.log("checkResponse. Implement in derived object.");}
+	
+	this.responseFunction = function()  {console.log("Implement in derived object;")}
+	
+	this.checkResponse = function() {
+		
+		this.responseFunction();
+		if (this.testIsRunning() ) {
+			this.nextQuestion(); // this also stops the countdown
+		}
+	}
 
 	//audio
 	this.volume = 0.5;
