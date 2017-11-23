@@ -80,7 +80,7 @@
 	<!-- for CANVAS backend: <canvas id="mainCanvas"></canvas>-->
 	<div id="mainCanvas"></div>
 	<br>
-	<button id = "renewButton" onclick='console.log("Set the actions in your exercise definition.")'>Uuenda</button><br>
+	<button id = "renewButton" onclick='exercise.renew()'>Uuenda</button><br>
 	<br>
 	<span id="question">Küsimus</span>
 	
@@ -92,13 +92,17 @@
 	Katseid: <label id="attempts">0</label>. Neist õigeid vastuseid: <label id="score">0</label> 
 	<button id="resetButton" onclick='exercise.attempts=0;exercise.score=0;attempts.innerHTML="0"; score.innerHTML = "0" '>Nulli</button>
 	<br>
-	<b>POOLELI, EI TÖÖTA VEEL:</b> Kui tunned, et oled valmis testi sooritama, vajuta: <button id="showTestButton" onclick='testDiv.style.visibility="visible"; alert("Teile esitatkse 5 küsimut, mis tuleb ettemääratud aja jooksul vastata. Kui antud aja jooksul vastata ei oska, siis loetakse vastus vääraks. Uus küsimus kuvatakse peale eelmise vastamist või aja täitumisel.")'>Test</button> <br>
+	<br>
+	Kui tunned, et oled valmis <b>testi sooritama</b>, vajuta: <button id="showTestButton" onclick='testDiv.style.visibility="visible";'> Test</button> <br>
+	
 	<div id="testDiv" style="visibility:hidden">
-	<button id="startTest" onclick="exercise.startTest()">Alusta</button> 
 	Küsimus nr <b><label id="questionNumber">0</label></b>. Aega on: <b><label id="timer">0</label></b> sekundit.
+	<button id="startTest" onclick="exercise.startTest()">Alusta</button>
 	<button id="stopTest" onclick="exercise.stopTest()">Peata</button>
 	<br>
-	
+	<p><small>
+	Teile esitatkse 5 küsimust, mis tuleb ettemääratud aja jooksul vastata. Kui jõuate varem valmis, vajutage lihtsalt "Vasta". Uus küsimus kuvatakse peale eelmise vastamist või aja täitumisel.
+	</small></p>
 	
 	</div>
 

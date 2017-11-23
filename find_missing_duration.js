@@ -97,18 +97,16 @@ function findMissingDuration() { // Harjutus 1.2.3 Lisa puuduv helivältus
 		context.rect(note.getAbsoluteX()-10, note.stave.getYForTopText()-10, note.width+20, note.stave.height+10, { fill: 'darkgreen' });
 	}
 	
-	exercise.generate();		
-	exercise.draw();
-	exercise.hide();
-	
-	document.getElementById("renewButton").onclick = function() {
+	exercise.renew = function() {
 		document.getElementById("feedback").innerHTML = "";
-		exercise.generate(); 
+		exercise.generate();		
 		exercise.draw();
 		exercise.hide();
 	}
 	
-	exercise.checkResponse = function() {
+	exercise.renew();
+	
+	exercise.responseFunction = function() {
 		//TODO: kontrolli, kas uuendatud, muidu tõstab ainult skoori...
 		if (answered) {
 			alert('Sa oled juba vastanud. Vajuta "Uuenda"');

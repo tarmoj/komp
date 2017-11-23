@@ -31,12 +31,8 @@ function nameDuration() {
 	}
 	
 	// set necessary methods in exercise
-	exercise = new MusicExercise("mainCanvas", 100); // relatively narrow canvas // CAN THIS BE A MEMORY LEAK?
-	//exercise.attempts = 0; exercise.score = 0; // set in object create 
+	exercise = new MusicExercise("mainCanvas", 100); // relatively narrow canvas 
 	exercise.time = ""; // no time signature
-
-	document.getElementById("attempts").innerHTML = "0";
-	document.getElementById("score").innerHTML = "0";
 	
 	
 	exercise.generate = function() {
@@ -62,19 +58,9 @@ function nameDuration() {
 	
 	}
 	
-	exercise.generate();		
-	exercise.draw();
+	exercise.renew();		
 	
-	document.getElementById("renewButton").onclick = function() {
-		document.getElementById("feedback").innerHTML = "";
-		exercise.generate(); 
-		exercise.draw();
-	}
-	
-	exercise.responseFunction = function() {
-
-		//TODO: kontrolli, kas uuendatud, muidu tõstab ainult skoori...
-        //console.log("Test running: ", exercise.testIsRunning());
+	exercise.responseFunction = function() {		
 		if (answered) {
 			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
 			return;

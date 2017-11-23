@@ -12,33 +12,33 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 	var noteIndex = -1, currentNoteIndex = -1;
 	
 	var possibleNotes = [   // line - line number in staff: 0 upper, 4 - lower, 5 - lower ledger line. Used to draw the note
-		{vtNote:"C@/4", name:"ces", syllable:"do-bemoll"},
-		{vtNote:"C/4", name:"c", syllable:"do", line: 5},
-		{vtNote:"C#/4", name:"cis", syllable:"do-diees"},
+		{vtNote:"C@/4", name:"ces1", syllable:"do-bemoll1"},
+		{vtNote:"C/4", name:"c1", syllable:"do1", line: 5},
+		{vtNote:"C#/4", name:"cis1", syllable:"do-diees1"},
 		
-		{vtNote:"D@/4", name:"des", syllable:"re-bemoll"},
-		{vtNote:"D/4", name:"d", syllable:"re", line: 4.5},
-		{vtNote:"D#/4", name:"dis", syllable:"re-diees"},
+		{vtNote:"D@/4", name:"des1", syllable:"re-bemoll1"},
+		{vtNote:"D/4", name:"d1", syllable:"re1", line: 4.5},
+		{vtNote:"D#/4", name:"dis1", syllable:"re-diees1"},
 		
-		{vtNote:"E@/4", name:"es", syllable:"mi-bemoll"},
-		{vtNote:"E/4", name:"e", syllable:"mi", line: 4},
-		{vtNote:"E#/4", name:"eis", syllable:"mi-diees"},
+		{vtNote:"E@/4", name:"es1", syllable:"mi-bemoll1"},
+		{vtNote:"E/4", name:"e1", syllable:"mi1", line: 4},
+		{vtNote:"E#/4", name:"eis1", syllable:"mi-diees1"},
 		
-		{vtNote:"F@/4", name:"fes", syllable:"fa-bemoll"},
-		{vtNote:"F/4", name:"f", syllable:"fa", line: 3.5},
-		{vtNote:"F#/4", name:"fis", syllable:"fa-diees"},
+		{vtNote:"F@/4", name:"fes1", syllable:"fa-bemoll1"},
+		{vtNote:"F/4", name:"f1", syllable:"fa1", line: 3.5},
+		{vtNote:"F#/4", name:"fis1", syllable:"fa-diees1"},
 		
-		{vtNote:"G@/4", name:"ges", syllable:"sol-bemoll"},
-		{vtNote:"G/4", name:"g", syllable:"sol", line: 3},
-		{vtNote:"G#/4", name:"gis", syllable:"sol-bemoll"},
+		{vtNote:"G@/4", name:"ges1", syllable:"sol-bemoll1"},
+		{vtNote:"G/4", name:"g1", syllable:"sol1", line: 3},
+		{vtNote:"G#/4", name:"gis1", syllable:"sol-bemoll1"},
 		
-		{vtNote:"A@/4", name:"as", syllable:"la-bemoll"},
-		{vtNote:"A/4", name:"a", syllable:"la", line: 2.5},
-		{vtNote:"A#/4", name:"ais", syllable:"la-diees"},
+		{vtNote:"A@/4", name:"as1", syllable:"la-bemoll1"},
+		{vtNote:"A/4", name:"a1", syllable:"la1", line: 2.5},
+		{vtNote:"A#/4", name:"ais1", syllable:"la-diees1"},
 		
-		{vtNote:"B@/4", name:"b", syllable:"si-bemoll"},
-		{vtNote:"B/4", name:"h", syllable:"si", line: 2},
-		{vtNote:"B#/4", name:"his", syllable:"si-diees"},
+		{vtNote:"B@/4", name:"b1", syllable:"si-bemoll1"},
+		{vtNote:"B/4", name:"h1", syllable:"si1", line: 2},
+		{vtNote:"B#/4", name:"his1", syllable:"si-diees1"},
 		
 		
 		{vtNote:"C@/5", name:"ces2", syllable:"do-bemoll2"},
@@ -78,7 +78,7 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 	
 	// Create or set necessary HTML elements
 	document.getElementById("exerciseTitle").innerHTML = "Kirjuta helikõrgus";
-	document.getElementById("description").innerHTML = "Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul, klaviatuuril."; 
+	document.getElementById("description").innerHTML = "Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul, klaviatuuril.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
 	//TODO: luba ka pause, mitte ainult noodid -  kas vaja?
 	document.getElementById("question").innerHTML =	"See noot on silpnimetusega: / Kliki noodijoonestukul kohale, kus peaks asuma noot. Kasuta +/- nuppe, et lisada diees või bemoll";
 	
@@ -86,15 +86,14 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 	exercise = new MusicExercise("mainCanvas",150,10,10,1.5); // bigger scale for note input
  	exercise.time = "";
  	exercise.key = "";
-	exercise.attempts = 0; exercise.score = 0;
-	document.getElementById("attempts").innerHTML = "0";
-	document.getElementById("score").innerHTML = "0";
+	exercise.timeToThink = 30; // more time for doing the test
 	
 	// add diesis and bemoll button to mainCanvas
 	
-	function handleAccidental(plussMinus) {  // -1 to lower half tone, +1 to raise halftone
+	function handleAccidental(plusMinus) {  // -1 to lower half tone, +1 to raise halftone
+		console.log("handleAccidental", plusMinus, );
 		if (currentNoteIndex > 0) {
-			currentNoteIndex += plussMinus;
+			currentNoteIndex += plusMinus;
 			if (currentNoteIndex>=possibleNotes.length)
 				currentNoteIndex = possibleNotes.length;
 			if (currentNoteIndex<0)
@@ -108,6 +107,15 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 		
 	}
 	
+	document.body.addEventListener('keydown', function (e) {
+		if (e.keyCode==173 || e.keyCode==109) { // minus key, also on nupad
+			handleAccidental(-1);
+		}
+		if (e.keyCode==171 || e.keyCode==107) { // plus key, also on nupad
+			handleAccidental(1);
+		}
+		
+	}, false);
 	
 	var diesisButton = document.createElement("button");
     diesisButton.innerHTML = "+";
@@ -126,12 +134,12 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 		noteIndex = Math.floor(Math.random()*possibleNotes.length); 
 		console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable);
 		
-		document.getElementById("question").innerHTML =	"Noot <b><big>" + possibleNotes[noteIndex].name + '</b></big> on silpnimetusega: <select id="syllable"></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
+		document.getElementById("question").innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleNotes[noteIndex].name + '</b><br>Noot <b><big>' + possibleNotes[noteIndex].name.slice(0, -1)  + '</b></big> on silpnimetusega: <select id="syllable"></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
 		var select = document.getElementById('syllable');
 		for(var i = 0; i < 7*3; i++) {
 			var option = document.createElement('option');
-			var syllable = possibleNotes[i].syllable;
+			var syllable = possibleNotes[i].syllable.slice(0,-1); // remove octave (1 or 2)
 			option.innerHTML = syllable;
 			option.value = syllable;
 			select.appendChild(option);
@@ -171,16 +179,9 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 		}
 	}
 	
-	exercise.generate();		
-	exercise.draw();
+	exercise.renew();		
 	
-	document.getElementById("renewButton").onclick = function() {
-		document.getElementById("feedback").innerHTML = "";
-		exercise.generate(); 
-		exercise.draw();
-	}
-	
-	exercise.checkResponse = function() {
+	exercise.responseFunction = function() {
 		if (currentNoteIndex < 0) {
 			alert("Sisesta noot noodijoonestikule!")
 			return;
@@ -197,11 +198,11 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 		
 		// TODO: eemalda silbilt oktavinumber
 		
-		if (document.getElementById("syllable").value === possibleNotes[noteIndex].syllable) { 
+		if (document.getElementById("syllable").value === possibleNotes[noteIndex].syllable.slice(0,-1) ) { 
 			feedback += "Silpnimetus õige! "
 			correct = true;
 		} else {
-			feedback += "Silpnimetus vale! See on hoopis " + possibleNotes[noteIndex].syllable + ". ";			
+			feedback += "Silpnimetus vale! See on hoopis " + possibleNotes[noteIndex].syllable.slice(0,-1) + ". ";			
 			correct = false;
 		}
 		

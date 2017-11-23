@@ -56,6 +56,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 			} else {
                 console.log("Test läbi");
 				clearTimeout(_this.countdownReference);
+				_this.stopTest();
 			}
 		}		
 	}
@@ -90,6 +91,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 			}, 1100); // restart after 1 seconds to make sure that the timer cycle has ended (no't set it >0 before that time.
 		} else {
 			console.log("Test läbi. Rohkem küsimusi ei saa esitada;")
+			this.stopTest();
 		}
 		
 	}
@@ -99,6 +101,8 @@ function MusicExercise(canvasId, width, x, y, scale) {
         clearTimeout(_this.countdownReference);
 		this.timer = -1;
         this.currentQuestion = 0;
+		document.getElementById("questionNumber").innerHTML = "0";
+		document.getElementById("timer").innerHTML = "0";
     }
 	
 	
@@ -130,6 +134,10 @@ function MusicExercise(canvasId, width, x, y, scale) {
 			while (this.canvas.firstChild) {
 				this.canvas.removeChild(this.canvas.firstChild);
 			}
+			// Feedback and results
+			document.getElementById("attempts").innerHTML = "0";
+			document.getElementById("score").innerHTML = "0";
+	
 			// VexTab
 			if (this.canvasWidth>0) {
 				var vt = VexTabDiv;
@@ -174,6 +182,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 	}
 	
 	this.renew = function() { // in some exercise you may need to ad more, like hide() or similar
+		document.getElementById("feedback").innerHTML = "";
         this.generate();
         this.draw();
     }
