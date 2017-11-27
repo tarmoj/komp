@@ -2,7 +2,7 @@
 // TODO: proper credits, copyright
 
 
-// harjutus  1.2.7. Helikõrgus. Viiulivõti. Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul, klaviatuuril. 
+// harjutus  1.3.7. Helikõrgus. Viiulivõti. Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul, klaviatuuril. 
 
 //var exercise; should it be declared in the script part of main html?? 
 	
@@ -78,7 +78,7 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 	
 	// Create or set necessary HTML elements
 	document.getElementById("exerciseTitle").innerHTML = "Kirjuta helikõrgus";
-	document.getElementById("description").innerHTML = "Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul, klaviatuuril.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
+	document.getElementById("description").innerHTML = "Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul [, klaviatuuril].<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
 	//TODO: luba ka pause, mitte ainult noodid -  kas vaja?
 	document.getElementById("question").innerHTML =	"See noot on silpnimetusega: / Kliki noodijoonestukul kohale, kus peaks asuma noot. Kasuta +/- nuppe, et lisada diees või bemoll";
 	

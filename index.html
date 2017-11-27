@@ -46,14 +46,14 @@
 				case "1.2.3" : findMissingDuration(); break;
 				case "1.2.4" : drawBarlines(); break;
 				case "1.3.5" : describeNote(); break;
+				case "1.3.7" : drawNote(); break;
 				case "1.8.1" : recognizeKeySignature(); break;
 				default: console.log("Exercise "+exerciseNumber+" is unkonwn or not defined yet");
 			}
 			
 		} else {		
- 			//exercise = new MusicExercise("mainCanvas") ;
- 			//exercise.draw(); // dummy exercise -  just show empty staff
- 			drawNote();
+ 			exercise = new MusicExercise("mainCanvas") ;
+ 			exercise.draw(); // dummy exercise -  just show empty staff
 		}
 	}
 	
@@ -68,6 +68,7 @@
 	<a onclick="describeNote()" href="#">Kirjelda helikõrguse asukohta</a>
 	<a onclick="recognizeKeySignature()" href="#">Määra helistik</a>
 	<a onclick="drawBarlines()" href="#">Lisa taktijoon</a>
+	<a onclick="drawNote()" href="#">Kirjuta helikõrgus</a>
 	jne
 	<hr>
 	<br>
