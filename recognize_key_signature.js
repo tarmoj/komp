@@ -88,6 +88,10 @@ function recognizeKeySignature() {
 		document.getElementById("feedback").innerHTML = feedback; 
 		exercise.draw(); // redraw with colours
 		answered = true;
+		
+		if (exercise.testIsRunning() ) {
+			exercise.nextQuestion(); 
+		}
 	
 	
 	}
@@ -145,16 +149,10 @@ function recognizeKeySignature() {
 			subExercise.forEach(function(e) {e.draw()});
 	}
 	
-	exercise.generate();		
-	exercise.draw();
+	exercise.renew();		
 	
-	document.getElementById("renewButton").onclick = function() {
-		document.getElementById("feedback").innerHTML = "";
-		exercise.generate(); 
-		exercise.draw();
-	}
 	
-	exercise.checkResponse = function() { // nothing here, real check by key clicks
+	exercise.checkResponse = function() { // nothing here, real check in checkResponse()
 		alert("Klõpsa õigele noodikrjale."); 
 	}
 		

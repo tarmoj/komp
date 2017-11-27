@@ -94,8 +94,8 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 		console.log("handleAccidental", plusMinus, );
 		if (currentNoteIndex > 0) {
 			currentNoteIndex += plusMinus;
-			if (currentNoteIndex>=possibleNotes.length)
-				currentNoteIndex = possibleNotes.length;
+			if (currentNoteIndex>=possibleNotes.length-1)
+				currentNoteIndex = possibleNotes.length-1;
 			if (currentNoteIndex<0)
 				currentNoteIndex = 0;
 			console.log(currentNoteIndex, possibleNotes[currentNoteIndex].vtNote)
@@ -107,11 +107,11 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 		
 	}
 	
-	document.body.addEventListener('keydown', function (e) {
-		if (e.keyCode==173 || e.keyCode==109) { // minus key, also on nupad
+	document.body.addEventListener('keydown', function (e) { // TODO: how to remove when this function is not used?
+		if ((e.keyCode==173 || e.keyCode==109) && currentNoteIndex >= 0) { // minus key, also on nupad
 			handleAccidental(-1);
 		}
-		if (e.keyCode==171 || e.keyCode==107) { // plus key, also on nupad
+		if ((e.keyCode==171 || e.keyCode==107) && currentNoteIndex >= 0 ) { // plus key, also on nupad
 			handleAccidental(1);
 		}
 		

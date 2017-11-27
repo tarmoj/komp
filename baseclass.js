@@ -40,68 +40,6 @@ function MusicExercise(canvasId, width, x, y, scale) {
 	this.maxQuestions = 5, this.currentQuestion = 0; // should be local variables defined with var but this is not reachable from countdown() if it is executed from setTimeout callbaclk. javascript.....
 	this.countdownReference = NaN;
 	
-	function countdown() {		
-        console.log(_this.timer);
-        document.getElementById("timer").innerHTML = _this.timer.toString();
-		if (_this.timer>0) { 
-            _this.timer--;
-			console.log("About to call countdown again");
-            _this.countdownReference = setTimeout(function(){countdown();}, 1000); // recursive
-            return;
-		}
-		
-		if (_this.timer==0) {						
-			if (_this.currentQuestion<_this.maxQuestions) {
-                _this.checkResponse(); // checkResponse calls nextQuestion(), renew() and resets the timer, and 
-			} else {
-                console.log("Test läbi");
-				clearTimeout(_this.countdownReference);
-				_this.stopTest();
-			}
-		}		
-	}
-	
-	
-	
-	this.startTest = function() {
-	
-        this.attempts=0; this.score=0;
-        document.getElementById("attempts").innerHTML="0"; document.getElementById("score").innerHTML = "0";
-        this.timer = this.timeToThink;
-		this.currentQuestion = 0;
-		this.nextQuestion();
-		
-	}
-	
-	this.testIsRunning = function() {
-        return (this.timer>=0)
-    }
-    
-    this.nextQuestion = function() {
-		clearTimeout(_this.countdownReference); // stop timer
-		if (this.currentQuestion<this.maxQuestions) {
-			this.currentQuestion++; 
-			document.getElementById("questionNumber").innerHTML = this.currentQuestion.toString();
-			exercise.renew();
-			this.timer = this.timeToThink
-			countdown();
-		} else {
-			console.log("Test läbi. Rohkem küsimusi ei saa esitada;")
-			this.stopTest();
-		}
-		
-	}
-    
-    this.stopTest= function() {
-        console.log("Stop");
-        clearTimeout(_this.countdownReference);
-		this.timer = -1;
-        this.currentQuestion = 0;
-		document.getElementById("questionNumber").innerHTML = "0";
-		document.getElementById("timer").innerHTML = "0";
-    }
-	
-	
 	this.createVexTabString = function() {
 		var startString = "options space=20\n stave \n "; // was tabstave before but this is not needed
 		var clefString = (this.clef.length>0) ? "clef="+this.clef+"\n" : "";
@@ -193,20 +131,81 @@ function MusicExercise(canvasId, width, x, y, scale) {
 		return this.artist.staves[staff].note_notes;		
 	}
 	
-	this.hide = function(noteIndex) {console.log("hide(). Implement in derived object.");}
+	//this.hide = function(noteIndex) {console.log("hide(). Implement in derived object.");}
 
 	this.answer = ""; // keep it string, convert in checkResponse()
 	
 	this.responseFunction = function()  {console.log("Implement in derived object;")}
 	
 	this.checkResponse = function() {
-		
 		this.responseFunction();
 		if (this.testIsRunning() ) {
 			this.nextQuestion(); // this also stops the countdown
 		}
 	}
 
+	
+	// methods for making tests ----------------
+	
+	function countdown() {		
+        //console.log(_this.timer);
+        document.getElementById("timer").innerHTML = _this.timer.toString();
+		if (_this.timer>0) { 
+            _this.timer--;
+            _this.countdownReference = setTimeout(function(){countdown();}, 1000); // recursive
+            return;
+		}
+		
+		if (_this.timer==0) {						
+			if (_this.currentQuestion<_this.maxQuestions) {
+                _this.checkResponse(); // checkResponse calls nextQuestion(), renew() and resets the timer 
+			} else {
+                console.log("Test ended");
+				clearTimeout(_this.countdownReference);
+				_this.stopTest();
+			}
+		}		
+	}
+	
+	
+	
+	this.startTest = function() {	
+        this.attempts=0; this.score=0;
+        document.getElementById("attempts").innerHTML="0"; document.getElementById("score").innerHTML = "0";
+        this.timer = this.timeToThink;
+		this.currentQuestion = 0;
+		this.nextQuestion();		
+	}
+	
+	this.testIsRunning = function() {
+        return (this.timer>=0)
+    }
+    
+    this.nextQuestion = function() {
+		clearTimeout(_this.countdownReference); // stop timer
+		if (this.currentQuestion<this.maxQuestions) {
+			this.currentQuestion++; 
+			document.getElementById("questionNumber").innerHTML = this.currentQuestion.toString();
+			exercise.renew();
+			this.timer = this.timeToThink
+			countdown();
+		} else {
+			console.log("Test läbi. Rohkem küsimusi ei saa esitada;")
+			this.stopTest();
+		}
+		
+	}
+    
+    this.stopTest= function() {
+        console.log("Stop");
+        clearTimeout(_this.countdownReference);
+		this.timer = -1;
+        this.currentQuestion = 0;
+		document.getElementById("questionNumber").innerHTML = "0";
+		document.getElementById("timer").innerHTML = "0";
+    }
+	
+	
 	//audio
 	this.volume = 0.5;
 	this.tempo = 60.0;
