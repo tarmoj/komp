@@ -65,6 +65,12 @@ function describeNote() {
 		return result;
 	}
 	
+	// set necessary methods in exercise
+	exercise = new MusicExercise("mainCanvas", 100); // relatively narrow canvas
+	exercise.time = ""; // no time signature
+	exercise.timeToThink = 25
+	
+	
 	var oldResponse = document.getElementById("response");
 	var response = document.createElement("div");
 	response.id = "response";
@@ -97,13 +103,6 @@ function describeNote() {
 		document.getElementById("responseDiv").replaceChild(response, oldResponse);
 	}
 	
-	// set necessary methods in exercise
-	exercise = new MusicExercise("mainCanvas", 100); // relatively narrow canvas
-	exercise.time = ""; // no time signature
-
-	document.getElementById("attempts").innerHTML = "0";
-	document.getElementById("score").innerHTML = "0";
-	
 	
 	exercise.generate = function() {
 		
@@ -131,7 +130,7 @@ function describeNote() {
 		exercise.draw();
 	}
 	
-	exercise.checkResponse = function() { // TODO: - kas oleks võimalik tõsta baseclassi? Siis vist switch case peaks olema välditud ja õige vastus peaks olema juba loetava stringina nagu "poolnoot" - vist mõtekas. Samas, kuidas basclass tead html elementide ID-sid???
+	exercise.responseFunction = function() { // TODO: - kas oleks võimalik tõsta baseclassi? Siis vist switch case peaks olema välditud ja õige vastus peaks olema juba loetava stringina nagu "poolnoot" - vist mõtekas. Samas, kuidas basclass tead html elementide ID-sid???
 
 		//TODO: kontrolli, kas uuendatud, muidu tõstab ainult skoori...
 		if (answered) {

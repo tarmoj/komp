@@ -67,7 +67,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 	
         this.attempts=0; this.score=0;
         document.getElementById("attempts").innerHTML="0"; document.getElementById("score").innerHTML = "0";
-        
+        this.timer = this.timeToThink;
 		this.currentQuestion = 0;
 		this.nextQuestion();
 		
@@ -82,13 +82,9 @@ function MusicExercise(canvasId, width, x, y, scale) {
 		if (this.currentQuestion<this.maxQuestions) {
 			this.currentQuestion++; 
 			document.getElementById("questionNumber").innerHTML = this.currentQuestion.toString();
-			
 			exercise.renew();
-			
-			setTimeout(function(){
-				_this.timer = _this.timeToThink; 
-				countdown();
-			}, 1100); // restart after 1 seconds to make sure that the timer cycle has ended (no't set it >0 before that time.
+			this.timer = this.timeToThink
+			countdown();
 		} else {
 			console.log("Test läbi. Rohkem küsimusi ei saa esitada;")
 			this.stopTest();
@@ -134,10 +130,12 @@ function MusicExercise(canvasId, width, x, y, scale) {
 			while (this.canvas.firstChild) {
 				this.canvas.removeChild(this.canvas.firstChild);
 			}
-			// Feedback and results
+			// Feedback and results, hide test div
 			document.getElementById("attempts").innerHTML = "0";
 			document.getElementById("score").innerHTML = "0";
-	
+			document.getElementById("testDiv").style.visibility="hidden";
+			document.getElementById("responseDiv").innerHTML = ""; // take care that not elements inserted to tesDiv before creating the exercise object 
+			
 			// VexTab
 			if (this.canvasWidth>0) {
 				var vt = VexTabDiv;

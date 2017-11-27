@@ -14,6 +14,8 @@ function nameDuration() {
 	document.getElementById("description").innerHTML = "Antud on helivältus noodikirja märgina (noot või paus). Leia,  mis vältus see on"; 
 	document.getElementById("question").innerHTML =	"Mis vältus see on?";
 	
+	exercise = new MusicExercise("mainCanvas", 100); // relatively narrow canvas 
+	
 	var oldResponse = document.getElementById("response");
 	var response = document.createElement("select");
 	response.id = "response";
@@ -30,10 +32,8 @@ function nameDuration() {
 		document.getElementById("responseDiv").replaceChild(response, oldResponse);
 	}
 	
-	// set necessary methods in exercise
-	exercise = new MusicExercise("mainCanvas", 100); // relatively narrow canvas 
-	exercise.time = ""; // no time signature
-	
+	// set necessary methods in exercise	
+	exercise.time = ""; // no time signature	
 	
 	exercise.generate = function() {
 		var allowedDurations = [2, 1, 0.5, 0.25];
