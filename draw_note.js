@@ -160,7 +160,7 @@ function drawNote(clef) { // generates 2 bars in given time, hides barlines, on 
 	}
 	
 	// Create or set necessary HTML elements
-	document.getElementById("exerciseTitle").innerHTML = "Kirjuta helikõrgus. " + (clef==="bass") ? "Bassivõti." : " Viiulivõti.";
+	document.getElementById("exerciseTitle").innerHTML = "Kirjuta helikõrgus. " + ( (clef==="bass") ? "Bassivõti." : " Viiulivõti." );
 	document.getElementById("description").innerHTML = "Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul [, klaviatuuril].<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
 	//TODO: luba ka pause, mitte ainult noodid -  kas vaja?
 	document.getElementById("question").innerHTML =	"See noot on silpnimetusega: / Kliki noodijoonestukul kohale, kus peaks asuma noot. Kasuta +/- nuppe, et lisada diees või bemoll";
