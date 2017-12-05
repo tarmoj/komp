@@ -5,13 +5,21 @@
 // harjutus  1.3.7. Helikõrgus. Viiulivõti. Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul, klaviatuuril. 
 
 //var exercise; should it be declared in the script part of main html?? 
+
+function removeLastDigit(word) {
+		if (!isNaN(parseInt(word[word.length-1]))) { // last character is number
+			word = word.slice(0, -1); // remove last character
+		}
+		return word; 
+	}
 	
-function drawNote() { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
-	// variables
+
+function drawNote(clef) { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
+	
 	var answered = false;
 	var noteIndex = -1, currentNoteIndex = -1;
 	
-	var possibleNotes = [   // line - line number in staff: 0 upper, 4 - lower, 5 - lower ledger line. Used to draw the note
+	var violinClefNotes = [   // line - line number in staff: 0 upper, 4 - lower, 5 - lower ledger line. Used to draw the note
 		{vtNote:"C@/4", name:"ces1", syllable:"do-bemoll1", midiNote: 59},
 		{vtNote:"C/4", name:"c1", syllable:"do1", line: 5, midiNote: 60},
 		{vtNote:"C#/4", name:"cis1", syllable:"do-diees1", midiNote: 61},
@@ -76,17 +84,95 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 		
 	];
 	
-	// Create or set necessary HTML elements
-	document.getElementById("exerciseTitle").innerHTML = "Kirjuta helikõrgus";
-	document.getElementById("description").innerHTML = "Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul [, klaviatuuril].<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
-	//TODO: luba ka pause, mitte ainult noodid -  kas vaja?
-	document.getElementById("question").innerHTML =	"See noot on silpnimetusega: / Kliki noodijoonestukul kohale, kus peaks asuma noot. Kasuta +/- nuppe, et lisada diees või bemoll";
+	var bassClefNotes = [   // line - line number in staff: 0 upper, 4 - lower, 5 - lower ledger line. Used to draw the note
+		{vtNote:"C@/2", name:"Ces", syllable:"Do-bemoll", midiNote: 35},
+		{vtNote:"C/2", name:"C", syllable:"Do", line: 6, midiNote: 36},
+		{vtNote:"C#/2", name:"C", syllable:"Do-diees", midiNote: 37},
+		
+		{vtNote:"D@/2", name:"Des", syllable:"Re-bemoll", midiNote: 37},
+		{vtNote:"D/2", name:"D", syllable:"Re", line: 5.5, midiNote: 38},
+		{vtNote:"D#/2", name:"Dis", syllable:"Re-diees", midiNote: 39},
+		
+		{vtNote:"E@/2", name:"Es", syllable:"Mi-bemoll1", midiNote: 39},
+		{vtNote:"E/2", name:"E", syllable:"Mi", line: 5, midiNote: 40},
+		{vtNote:"E#/2", name:"Eis", syllable:"Mi-diees", midiNote: 41},
+		
+		{vtNote:"F@/2", name:"Fes", syllable:"Fa-bemoll", midiNote:40},
+		{vtNote:"F/2", name:"F", syllable:"Fa", line: 4.5, midiNote:41},
+		{vtNote:"F#/2", name:"Fis", syllable:"Fa-diees", midiNote:42},
+		
+		{vtNote:"G@/2", name:"Ges", syllable:"Sol-bemoll", midiNote: 42},
+		{vtNote:"G/2", name:"G", syllable:"Sol", line: 4, midiNote: 43},
+		{vtNote:"G#/2", name:"Gis", syllable:"Sol-diees", midiNote: 44},
+		
+		{vtNote:"A@/2", name:"As", syllable:"La-bemoll", midiNote: 44},
+		{vtNote:"A/2", name:"A", syllable:"La", line: 3.5, midiNote: 45},
+		{vtNote:"A#/2", name:"Ais", syllable:"La-diees", midiNote: 46},
+		
+		{vtNote:"B@/2", name:"B", syllable:"Si-bemoll1", midiNote: 46},
+		{vtNote:"B/2", name:"H", syllable:"Si", line: 3, midiNote: 47},
+		{vtNote:"B#/2", name:"His", syllable:"Si-diees", midiNote: 48},
+		
+		
+		{vtNote:"C@/3", name:"ces", syllable:"do-bemoll", midiNote: 47},
+		{vtNote:"C/3", name:"c", syllable:"do", line: 2.5, midiNote: 48},
+		{vtNote:"C#/3", name:"cis", syllable:"do-diees", midiNote: 49},
+		
+		{vtNote:"D@/3", name:"des", syllable:"re-bemoll", midiNote: 49},
+		{vtNote:"D/3", name:"d", syllable:"re", line: 2, midiNote: 50},
+		{vtNote:"D#/3", name:"dis", syllable:"re-diees", midiNote: 51},
+		
+		{vtNote:"E@/3", name:"es", syllable:"mi-bemoll", midiNote: 51},
+		{vtNote:"E/3", name:"e", syllable:"mi", line: 1.5, midiNote: 52},
+		{vtNote:"E#/3", name:"eis", syllable:"mi-diees", midiNote: 53},
+		
+		{vtNote:"F@/3", name:"fes", syllable:"fa-bemoll", midiNote: 52},
+		{vtNote:"F/3", name:"f", syllable:"fa", line: 1, midiNote: 53},
+		{vtNote:"F#/3", name:"fis", syllable:"fa-diees", midiNote: 54},
+		
+		{vtNote:"G@/3", name:"ges", syllable:"sol-bemoll", midiNote: 54},
+		{vtNote:"G/3", name:"g", syllable:"sol", line: 0.5, midiNote: 55},
+		{vtNote:"G#/3", name:"gis", syllable:"sol-diees", midiNote: 56},
+		
+		{vtNote:"A@/3", name:"as", syllable:"la-bemoll", midiNote: 56},
+		{vtNote:"A/3", name:"a", syllable:"la", line: 0, midiNote: 57},
+		{vtNote:"A#/3", name:"ais", syllable:"la-diees", midiNote: 58},
+		
+		{vtNote:"B@/3", name:"b", syllable:"si-bemoll", midiNote: 58},
+		{vtNote:"B/3", name:"h", syllable:"si", line: -0.5, midiNote: 59},
+		{vtNote:"B#/3", name:"his", syllable:"si-diees", midiNote: 60},
+		
+		{vtNote:"C@/4", name:"ces1", syllable:"do-bemoll1", midiNote: 59},
+		{vtNote:"C/4", name:"c1", syllable:"do1", line: -1, midiNote: 60},
+		{vtNote:"C#/4", name:"cis1", syllable:"do-diees1", midiNote: 61},
+		
+		
+	];
 	
 	// set necessary methods in exercise
 	exercise = new MusicExercise("mainCanvas",150,10,10,1.5); // bigger scale for note input
  	exercise.time = "";
  	exercise.key = "";
 	exercise.timeToThink = 30; // more time for doing the test
+	
+	
+	// set clef
+	var possibleNotes;
+	if (clef==="bass") {
+		exercise.clef ="bass"
+		possibleNotes = bassClefNotes;
+	} else {
+		exercise.clef = "treble"
+		possibleNotes = violinClefNotes;
+	}
+	
+	// Create or set necessary HTML elements
+	document.getElementById("exerciseTitle").innerHTML = "Kirjuta helikõrgus. " + (clef==="bass") ? "Bassivõti." : " Viiulivõti.";
+	document.getElementById("description").innerHTML = "Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul [, klaviatuuril].<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
+	//TODO: luba ka pause, mitte ainult noodid -  kas vaja?
+	document.getElementById("question").innerHTML =	"See noot on silpnimetusega: / Kliki noodijoonestukul kohale, kus peaks asuma noot. Kasuta +/- nuppe, et lisada diees või bemoll";
+	
+	
 	
 	// add diesis and bemoll button to mainCanvas
 	
@@ -145,6 +231,7 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 		noteIndex = Math.floor(Math.random()*possibleNotes.length); 
 		console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable);
 		
+		var noteName = removeLastDigit(possibleNotes[noteIndex].name);
 		document.getElementById("question").innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleNotes[noteIndex].name + '</b><br>Noot <b><big>' + possibleNotes[noteIndex].name.slice(0, -1)  + '</b></big> on silpnimetusega: <select id="syllable"></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
 		var select = document.getElementById('syllable');
