@@ -12,66 +12,66 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 	var noteIndex = -1, currentNoteIndex = -1;
 	
 	var possibleNotes = [   // line - line number in staff: 0 upper, 4 - lower, 5 - lower ledger line. Used to draw the note
-		{vtNote:"C@/4", name:"ces1", syllable:"do-bemoll1"},
-		{vtNote:"C/4", name:"c1", syllable:"do1", line: 5},
-		{vtNote:"C#/4", name:"cis1", syllable:"do-diees1"},
+		{vtNote:"C@/4", name:"ces1", syllable:"do-bemoll1", midiNote: 59},
+		{vtNote:"C/4", name:"c1", syllable:"do1", line: 5, midiNote: 60},
+		{vtNote:"C#/4", name:"cis1", syllable:"do-diees1", midiNote: 61},
 		
-		{vtNote:"D@/4", name:"des1", syllable:"re-bemoll1"},
-		{vtNote:"D/4", name:"d1", syllable:"re1", line: 4.5},
-		{vtNote:"D#/4", name:"dis1", syllable:"re-diees1"},
+		{vtNote:"D@/4", name:"des1", syllable:"re-bemoll1", midiNote: 61},
+		{vtNote:"D/4", name:"d1", syllable:"re1", line: 4.5, midiNote: 62},
+		{vtNote:"D#/4", name:"dis1", syllable:"re-diees1", midiNote: 63},
 		
-		{vtNote:"E@/4", name:"es1", syllable:"mi-bemoll1"},
-		{vtNote:"E/4", name:"e1", syllable:"mi1", line: 4},
-		{vtNote:"E#/4", name:"eis1", syllable:"mi-diees1"},
+		{vtNote:"E@/4", name:"es1", syllable:"mi-bemoll1", midiNote: 63},
+		{vtNote:"E/4", name:"e1", syllable:"mi1", line: 4, midiNote: 64},
+		{vtNote:"E#/4", name:"eis1", syllable:"mi-diees1", midiNote: 65},
 		
-		{vtNote:"F@/4", name:"fes1", syllable:"fa-bemoll1"},
-		{vtNote:"F/4", name:"f1", syllable:"fa1", line: 3.5},
-		{vtNote:"F#/4", name:"fis1", syllable:"fa-diees1"},
+		{vtNote:"F@/4", name:"fes1", syllable:"fa-bemoll1", midiNote:64},
+		{vtNote:"F/4", name:"f1", syllable:"fa1", line: 3.5, midiNote:65},
+		{vtNote:"F#/4", name:"fis1", syllable:"fa-diees1", midiNote:66},
 		
-		{vtNote:"G@/4", name:"ges1", syllable:"sol-bemoll1"},
-		{vtNote:"G/4", name:"g1", syllable:"sol1", line: 3},
-		{vtNote:"G#/4", name:"gis1", syllable:"sol-bemoll1"},
+		{vtNote:"G@/4", name:"ges1", syllable:"sol-bemoll1", midiNote: 66},
+		{vtNote:"G/4", name:"g1", syllable:"sol1", line: 3, midiNote: 67},
+		{vtNote:"G#/4", name:"gis1", syllable:"sol-diees1", midiNote: 68},
 		
-		{vtNote:"A@/4", name:"as1", syllable:"la-bemoll1"},
-		{vtNote:"A/4", name:"a1", syllable:"la1", line: 2.5},
-		{vtNote:"A#/4", name:"ais1", syllable:"la-diees1"},
+		{vtNote:"A@/4", name:"as1", syllable:"la-bemoll1", midiNote: 68},
+		{vtNote:"A/4", name:"a1", syllable:"la1", line: 2.5, midiNote: 69},
+		{vtNote:"A#/4", name:"ais1", syllable:"la-diees1", midiNote: 70},
 		
-		{vtNote:"B@/4", name:"b1", syllable:"si-bemoll1"},
-		{vtNote:"B/4", name:"h1", syllable:"si1", line: 2},
-		{vtNote:"B#/4", name:"his1", syllable:"si-diees1"},
+		{vtNote:"B@/4", name:"b1", syllable:"si-bemoll1", midiNote: 70},
+		{vtNote:"B/4", name:"h1", syllable:"si1", line: 2, midiNote: 71},
+		{vtNote:"B#/4", name:"his1", syllable:"si-diees1", midiNote: 72},
 		
 		
-		{vtNote:"C@/5", name:"ces2", syllable:"do-bemoll2"},
-		{vtNote:"C/5", name:"c2", syllable:"do2", line: 1.5},
-		{vtNote:"C#/5", name:"cis2", syllable:"do-diees2"},
+		{vtNote:"C@/5", name:"ces2", syllable:"do-bemoll2", midiNote: 71},
+		{vtNote:"C/5", name:"c2", syllable:"do2", line: 1.5, midiNote: 72},
+		{vtNote:"C#/5", name:"cis2", syllable:"do-diees2", midiNote: 73},
 		
-		{vtNote:"D@/5", name:"des2", syllable:"re-bemoll2"},
-		{vtNote:"D/5", name:"d2", syllable:"re2", line: 1},
-		{vtNote:"D#/5", name:"dis2", syllable:"re-diees2"},
+		{vtNote:"D@/5", name:"des2", syllable:"re-bemoll2", midiNote: 73},
+		{vtNote:"D/5", name:"d2", syllable:"re2", line: 1, midiNote: 74},
+		{vtNote:"D#/5", name:"dis2", syllable:"re-diees2", midiNote: 75},
 		
-		{vtNote:"E@/5", name:"es2", syllable:"mi-bemoll2"},
-		{vtNote:"E/5", name:"e2", syllable:"mi2", line: 0.5},
-		{vtNote:"E#/5", name:"eis2", syllable:"mi-diees2"},
+		{vtNote:"E@/5", name:"es2", syllable:"mi-bemoll2", midiNote: 75},
+		{vtNote:"E/5", name:"e2", syllable:"mi2", line: 0.5, midiNote: 76},
+		{vtNote:"E#/5", name:"eis2", syllable:"mi-diees2", midiNote: 77},
 		
-		{vtNote:"F@/5", name:"fes2", syllable:"fa-bemoll2"},
-		{vtNote:"F/5", name:"f2", syllable:"fa2", line: 0},
-		{vtNote:"F#/5", name:"fis2", syllable:"fa-diees2"},
+		{vtNote:"F@/5", name:"fes2", syllable:"fa-bemoll2", midiNote: 76},
+		{vtNote:"F/5", name:"f2", syllable:"fa2", line: 0, midiNote: 77},
+		{vtNote:"F#/5", name:"fis2", syllable:"fa-diees2", midiNote: 78},
 		
-		{vtNote:"G@/5", name:"ges2", syllable:"sol-bemoll2"},
-		{vtNote:"G/5", name:"g2", syllable:"sol2", line: -0.5},
-		{vtNote:"G#/5", name:"gis2", syllable:"sol-bemoll2"},
+		{vtNote:"G@/5", name:"ges2", syllable:"sol-bemoll2", midiNote: 78},
+		{vtNote:"G/5", name:"g2", syllable:"sol2", line: -0.5, midiNote: 79},
+		{vtNote:"G#/5", name:"gis2", syllable:"sol-diees2", midiNote: 80},
 		
-		{vtNote:"A@/5", name:"as2", syllable:"la-bemoll2"},
-		{vtNote:"A/5", name:"a2", syllable:"la2", line: -1},
-		{vtNote:"A#/5", name:"ais2", syllable:"la-diees2"},
+		{vtNote:"A@/5", name:"as2", syllable:"la-bemoll2", midiNote: 80},
+		{vtNote:"A/5", name:"a2", syllable:"la2", line: -1, midiNote: 81},
+		{vtNote:"A#/5", name:"ais2", syllable:"la-diees2", midiNote: 82},
 		
-		{vtNote:"B@/5", name:"b2", syllable:"si-bemoll2"},
-		{vtNote:"B/5", name:"h2", syllable:"si2", line: -1.5},
-		{vtNote:"B#/5", name:"his2", syllable:"si-diees2"},
+		{vtNote:"B@/5", name:"b2", syllable:"si-bemoll2", midiNote: 82},
+		{vtNote:"B/5", name:"h2", syllable:"si2", line: -1.5, midiNote: 83},
+		{vtNote:"B#/5", name:"his2", syllable:"si-diees2", midiNote: 84},
 		
-		{vtNote:"C@/6", name:"ces3", syllable:"do-bemoll3"},
-		{vtNote:"C/6", name:"c3", syllable:"do3", line: -2},
-		{vtNote:"C#/6", name:"cis3", syllable:"do-diees3"},
+		{vtNote:"C@/6", name:"ces3", syllable:"do-bemoll3", midiNote: 83},
+		{vtNote:"C/6", name:"c3", syllable:"do3", line: -2, midiNote: 84},
+		{vtNote:"C#/6", name:"cis3", syllable:"do-diees3", midiNote: 85},
 		
 		
 	];
@@ -108,6 +108,7 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 	}
 	
 	document.body.addEventListener('keydown', function (e) { // TODO: how to remove when this function is not used?
+		console.log("Klahv", e.keyCode)
 		if ((e.keyCode==173 || e.keyCode==109) && currentNoteIndex >= 0) { // minus key, also on nupad
 			handleAccidental(-1);
 		}
@@ -127,6 +128,13 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
     bemolleButton.onclick = function(){handleAccidental(-1)};
     exercise.canvas.appendChild(bemolleButton);
 	
+	var pianoDiv = document.createElement("div"); // piano keyboard
+	pianoDiv.id="piano-container";
+	pianoDiv.style.marginTop = "5px";
+	exercise.canvas.appendChild(pianoDiv);
+
+	var piano = new Piano("piano-container"); // 1 octava from middle C by default
+	piano.createPiano();
 	
 	
 	exercise.generate = function() {
@@ -179,11 +187,23 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 		}
 	}
 	
+	exercise.renew = function() {
+		document.getElementById("feedback").innerHTML = "";
+        this.generate();
+        this.draw();
+		piano.deactivateAllKeys();
+	}
+	
 	exercise.renew();		
 	
 	exercise.responseFunction = function() {
 		if (currentNoteIndex < 0) {
 			alert("Sisesta noot noodijoonestikule!")
+			return;
+		}
+		
+		if (!piano.pressedKey.active) {
+			alert("Klahv klaviatuuril valimata!")
 			return;
 		}
 		
@@ -207,12 +227,25 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 		}
 		
 		if (currentNoteIndex === noteIndex) {
-			feedback += "Noot noodijoonestikul on õige!"
+			feedback += "Noot noodijoonestikul on õige! "
 			correct = correct && true;;
 		} else {
-			feedback += "Noot noodijoonestikul valesti!"; 
+			feedback += "Noot noodijoonestikul on vale! "; 
 			exercise.notes += " " + possibleNotes[noteIndex].vtNote;
 			exercise.draw(); // redraw with right note
+			correct = correct && false;
+		}
+		
+		console.log(piano.pressedKey.dataset.midinote, possibleNotes[noteIndex].midiNote)
+		
+		if ( piano.pressedKey.dataset.midinote%12 === possibleNotes[noteIndex].midiNote%12) { // check pich class, igonre octave
+			feedback += "Noot klaviatuuril on õige! "
+			piano.fillKey(piano.pressedKey, "green");
+			correct = correct && true;
+		} else {
+			feedback += "Noot klaviatuuril vale! "; 
+			piano.fillKey(piano.pressedKey, "red");
+			piano.fillKey(piano.findKeyByMidiNote(possibleNotes[noteIndex].midiNote%12), "blue")
 			correct = correct && false;
 		}
 		
