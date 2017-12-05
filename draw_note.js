@@ -6,13 +6,6 @@
 
 //var exercise; should it be declared in the script part of main html?? 
 
-function removeLastDigit(word) {
-		if (!isNaN(parseInt(word[word.length-1]))) { // last character is number
-			word = word.slice(0, -1); // remove last character
-		}
-		return word; 
-	}
-	
 
 function drawNote(clef) { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
 	
@@ -225,19 +218,24 @@ function drawNote(clef) { // generates 2 bars in given time, hides barlines, on 
 	var piano = new Piano("piano-container"); // 1 octava from middle C by default
 	piano.createPiano();
 	
+	function removeLastDigit(word) { // to turn notenames like "ces2" into "ces"
+		if (!isNaN(parseInt(word[word.length-1]))) { // last character is number
+			word = word.slice(0, -1); // remove last character
+		}
+		return word; 
+	}
 	
 	exercise.generate = function() {
 				
 		noteIndex = Math.floor(Math.random()*possibleNotes.length); 
 		console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable);
 		
-		var noteName = removeLastDigit(possibleNotes[noteIndex].name);
-		document.getElementById("question").innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleNotes[noteIndex].name + '</b><br>Noot <b><big>' + possibleNotes[noteIndex].name.slice(0, -1)  + '</b></big> on silpnimetusega: <select id="syllable"></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
+		document.getElementById("question").innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleNotes[noteIndex].name + '</b><br>Noot <b><big>' + removeLastDigit(possibleNotes[noteIndex].name.toLowerCase())  + '</b></big> on silpnimetusega: <select id="syllable"></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
 		var select = document.getElementById('syllable');
 		for(var i = 0; i < 7*3; i++) {
 			var option = document.createElement('option');
-			var syllable = possibleNotes[i].syllable.slice(0,-1); // remove octave (1 or 2)
+			var syllable = removeLastDigit(possibleNotes[i].syllable.toLowerCase()); // remove octave (1 or 2), if present
 			option.innerHTML = syllable;
 			option.value = syllable;
 			select.appendChild(option);
@@ -308,11 +306,13 @@ function drawNote(clef) { // generates 2 bars in given time, hides barlines, on 
 		
 		// TODO: eemalda silbilt oktavinumber
 		
-		if (document.getElementById("syllable").value === possibleNotes[noteIndex].syllable.slice(0,-1) ) { 
+		var syllable = removeLastDigit(possibleNotes[noteIndex].syllable.toLowerCase());
+		
+		if (document.getElementById("syllable").value === syllable ) { 
 			feedback += "Silpnimetus õige! "
 			correct = true;
 		} else {
-			feedback += "Silpnimetus vale! See on hoopis " + possibleNotes[noteIndex].syllable.slice(0,-1) + ". ";			
+			feedback += "Silpnimetus vale! See on hoopis " + syllable + ". ";			
 			correct = false;
 		}
 		
