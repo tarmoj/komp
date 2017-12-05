@@ -107,12 +107,15 @@ function drawNote() { // generates 2 bars in given time, hides barlines, on clic
 		
 	}
 	
-	document.body.addEventListener('keydown', function (e) { // TODO: how to remove when this function is not used?
-		console.log("Klahv", e.keyCode)
-		if ((e.keyCode==173 || e.keyCode==109) && currentNoteIndex >= 0) { // minus key, also on nupad
+
+	document.body.addEventListener('keypress', function (e) { // TODO: how to remove when this function is not used? 
+		// TODO: redo on keypressed -  otherwise different reults in different browsers
+		e = e || window.event;
+		var charCode = e.keyCode || e.which;		
+		if ( charCode === 45 && currentNoteIndex >= 0) { // minus key
 			handleAccidental(-1);
 		}
-		if ((e.keyCode==171 || e.keyCode==107) && currentNoteIndex >= 0 ) { // plus key, also on nupad
+		if (charCode === 43 && currentNoteIndex >= 0 ) { // plus key
 			handleAccidental(1);
 		}
 		
