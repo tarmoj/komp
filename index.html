@@ -23,6 +23,7 @@
     <script src="recognize_key_signature.js"></script>
     <script src="draw_barlines.js"></script>
     <script src="draw_note.js"></script>
+    <script src="note_from_notation.js"></script>
     
     <!--main-->
     <script>
@@ -55,6 +56,7 @@
 		} else {		
  			exercise = new MusicExercise("mainCanvas") ;
  			exercise.draw(); // dummy exercise -  just show empty staff
+			//noteFromNotation("treble");
 		}
 	}
 	
@@ -69,8 +71,10 @@
 	<a onclick="describeNote()" href="#">Kirjelda helikõrguse asukohta</a>
 	<a onclick="recognizeKeySignature()" href="#">Määra helistik</a>
 	<a onclick="drawBarlines()" href="#">Lisa taktijoon</a>
-	<a onclick='drawNote("violin")' href="#">Kirjuta helikõrgus: viiulivõti</a>
+	<a onclick='drawNote("treble")' href="#">Kirjuta helikõrgus: viiulivõti</a>
 	<a onclick='drawNote("bass")' href="#">Kirjuta helikõrgus: bassivõti</a>
+	<a onclick='noteFromNotation("treble")' href="#">Mis noot see on? Viiulivõti</a>
+	<a onclick='noteFromNotation("bass")' href="#">Mis noot see on? Bassivõti</a>
 	jne
 	<hr>
 	<br>
