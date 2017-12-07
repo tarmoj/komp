@@ -23,9 +23,10 @@
     <script src="describe_note.js"></script>
     <script src="recognize_key_signature.js"></script>
     <script src="draw_barlines.js"></script>
-    <script src="draw_note.js"></script>
+    <script src="note_from_notename.js"></script>
     <script src="note_from_notation.js"></script>
     <script src="note_from_keyboard.js"></script>
+    <script src="note_from_syllable.js"></script>
     
     <!--main-->
     <script>
@@ -50,15 +51,15 @@
 				case "1.2.3" : findMissingDuration(); break;
 				case "1.2.4" : drawBarlines(); break;
 				case "1.3.5" : describeNote(); break;
-				case "1.3.7" : drawNote(); break;
+				case "1.3.7" : noteFromNoteName(); break;
 				case "1.8.1" : recognizeKeySignature(); break;
 				default: console.log("Exercise "+exerciseNumber+" is unkonwn or not defined yet");
 			}
 			
 		} else {		
-//  			exercise = new MusicExercise("mainCanvas") ;
-//  			exercise.draw(); // dummy exercise -  just show empty staff
-			noteFromKeyboard("treble");
+  			exercise = new MusicExercise("mainCanvas") ;
+  			exercise.draw(); // dummy exercise -  just show empty staff
+
 		}
 	}
 	
@@ -68,21 +69,34 @@
     </head>
     
 	<body>
-	<a onclick="findMissingDuration()" href="#">Leia puuduv vältus</a> 
-	<a onclick="nameDuration()" href="#">Määra helivältus</a> 
-	<a onclick="describeNote()" href="#">Kirjelda helikõrguse asukohta</a>
-	<a onclick="recognizeKeySignature()" href="#">Määra helistik</a>
-	<a onclick="drawBarlines()" href="#">Lisa taktijoon</a>
-	<a onclick='drawNote("treble")' href="#">Kirjuta helikõrgus: viiulivõti</a>
-	<a onclick='drawNote("bass")' href="#">Kirjuta helikõrgus: bassivõti</a>
-	<a onclick='noteFromNotation("treble")' href="#">Mis noot see on? Viiulivõti</a>
-	<a onclick='noteFromNotation("bass")' href="#">Mis noot see on? Bassivõti</a>
-	<a onclick='noteFromKeyboard("treble")' href="#">Mis klahv see on? Viiulivõti</a>
-	<a onclick='noteFromKeyboard("bass")' href="#">Mis klahv see on? Bassivõti</a>
-	jne
+	<h1 id="title">MUUSIKA KOMPOSITSIOONIÕPETUS. Harjutused</h1>
+	<h2>Sisukord</h2>
+	<h3>Helivältus</h3>
+	<a onclick="findMissingDuration()" href="#start">Leia puuduv vältus</a><br> 
+	<a onclick="nameDuration()" href="#start">Määra helivältus</a> <br>
+	<a onclick="drawBarlines()" href="#start">Lisa taktijoon</a> <br>
+		
+	<h3>Helikõrgus</h3>
+	<a onclick="describeNote()" href="#start">Kirjelda helikõrguse asukohta</a> <br>
+	<a onclick='noteFromNoteName("treble")' href="#start">Kirjuta helikõrgus tähtnime järgi: viiulivõti</a> <br>
+	<a onclick='noteFromNoteName("bass")' href="#start">Kirjuta helikõrgus tähtnime järgi : bassivõti</a> <br>
+	<a onclick='noteFromSyllable("treble")' href="#start">Kirjuta helikõrgus silpnime järgi: viiulivõti</a> <br>
+	<a onclick='noteFromSyllable("bass")' href="#start">Kirjuta helikõrgus silpnime järgi: bassivõti</a> <br>
+	<a onclick='noteFromNotation("treble")' href="#start">Mis noot see on? Viiulivõti</a> <br>
+	<a onclick='noteFromNotation("bass")' href="#start">Mis noot see on? Bassivõti</a> <br>
+	<a onclick='noteFromKeyboard("treble")' href="#start">Mis klahv see on? Viiulivõti</a> <br>
+	<a onclick='noteFromKeyboard("bass")' href="#start">Mis klahv see on? Bassivõti</a> <br>
+	
+	<h3>Akord</h3>
+	<br>
+	<h3>Harmoonia</h3>
+	<a onclick="recognizeKeySignature()" href="#start">Määra helistik</a> <br>
+	
+	
 	<hr>
 	<br>
-	<h1 id="title">MUUSIKA KOMPOSITSIOONIÕPETUS. Harjutused</h1>
+	
+	<h1 id="title"><a name="start">MUUSIKA KOMPOSITSIOONIÕPETUS. Harjutused</a></h1>
 	<h2 id="exerciseTitle">Harjutuse nimi</h2>
 	<br>
 	<p id="description">Ülesande kirjeldus.</p>

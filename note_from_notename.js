@@ -9,7 +9,7 @@
 
 // possibleNotes for treble and bass cled defined in possible_notes.js -  must be included in main html
 
-function drawNote(clef) { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
+function noteFromNoteName(clef) { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
 	
 	var answered = false;
 	var noteIndex = -1, currentNoteIndex = -1;
@@ -34,14 +34,10 @@ function drawNote(clef) { // generates 2 bars in given time, hides barlines, on 
 	}
 	
 	// Create or set necessary HTML elements
-	document.getElementById("exerciseTitle").innerHTML = "Kirjuta helikõrgus. " + ( (clef==="bass") ? "Bassivõti." : " Viiulivõti." );
-	document.getElementById("description").innerHTML = "Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul [, klaviatuuril].<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
-	//TODO: luba ka pause, mitte ainult noodid -  kas vaja?
-	document.getElementById("question").innerHTML =	"See noot on silpnimetusega: / Kliki noodijoonestukul kohale, kus peaks asuma noot. Kasuta +/- nuppe, et lisada diees või bemoll";
+	document.getElementById("exerciseTitle").innerHTML = "Kirjuta helikõrgus tähtnime järgi. " + ( (clef==="bass") ? "Bassivõti." : " Viiulivõti." );
+	document.getElementById("description").innerHTML = "Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul, klaviatuuril.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
 	
 	
-	
-	// add diesis and bemoll button to mainCanvas
 	
 	function handleAccidental(plusMinus) {  // -1 to lower half tone, +1 to raise halftone
 		console.log("handleAccidental", plusMinus, );
@@ -104,7 +100,7 @@ function drawNote(clef) { // generates 2 bars in given time, hides barlines, on 
 		noteIndex = Math.floor(Math.random()*possibleNotes.length); 
 		console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable);
 		
-		document.getElementById("question").innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleNotes[noteIndex].name + '</b><br>Noot <b><big>' + removeLastDigit(possibleNotes[noteIndex].name.toLowerCase())  + '</b></big> on silpnimetusega: <select id="syllable"></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
+		document.getElementById("question").innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleNotes[noteIndex].name + '</b><br>Noot <b><big>' + removeLastDigit(possibleNotes[noteIndex].name.toLowerCase())  + '</b></big> on silpnimetusega: <select id="syllable"><option>---</option></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
 		var select = document.getElementById('syllable');
 		for(var i = 0; i < 7*3; i++) {
@@ -151,9 +147,9 @@ function drawNote(clef) { // generates 2 bars in given time, hides barlines, on 
 	
 	exercise.renew = function() {
 		document.getElementById("feedback").innerHTML = "";
-        this.generate();
-        this.draw();
-		
+		piano.deactivateAllKeys();
+        exercise.generate();
+        exercise.draw();
 	}
 	
 	exercise.renew();		
