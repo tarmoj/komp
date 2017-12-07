@@ -67,7 +67,7 @@ var violinClefNotes = [   // line - line number in staff: 0 upper, 4 - lower, 5 
 	var bassClefNotes = [   // line - line number in staff: 0 upper, 4 - lower, 5 - lower ledger line. Used to draw the note
 		{vtNote:"C@/2", name:"Ces", syllable:"Do-bemoll", midiNote: 35},
 		{vtNote:"C/2", name:"C", syllable:"Do", line: 6, midiNote: 36},
-		{vtNote:"C#/2", name:"C", syllable:"Do-diees", midiNote: 37},
+		{vtNote:"C#/2", name:"Cis", syllable:"Do-diees", midiNote: 37},
 		
 		{vtNote:"D@/2", name:"Des", syllable:"Re-bemoll", midiNote: 37},
 		{vtNote:"D/2", name:"D", syllable:"Re", line: 5.5, midiNote: 38},

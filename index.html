@@ -25,6 +25,7 @@
     <script src="draw_barlines.js"></script>
     <script src="draw_note.js"></script>
     <script src="note_from_notation.js"></script>
+    <script src="note_from_keyboard.js"></script>
     
     <!--main-->
     <script>
@@ -55,9 +56,9 @@
 			}
 			
 		} else {		
- 			exercise = new MusicExercise("mainCanvas") ;
- 			exercise.draw(); // dummy exercise -  just show empty staff
-			//noteFromNotation("treble");
+//  			exercise = new MusicExercise("mainCanvas") ;
+//  			exercise.draw(); // dummy exercise -  just show empty staff
+			noteFromKeyboard("treble");
 		}
 	}
 	
@@ -76,6 +77,8 @@
 	<a onclick='drawNote("bass")' href="#">Kirjuta helikõrgus: bassivõti</a>
 	<a onclick='noteFromNotation("treble")' href="#">Mis noot see on? Viiulivõti</a>
 	<a onclick='noteFromNotation("bass")' href="#">Mis noot see on? Bassivõti</a>
+	<a onclick='noteFromKeyboard("treble")' href="#">Mis klahv see on? Viiulivõti</a>
+	<a onclick='noteFromKeyboard("bass")' href="#">Mis klahv see on? Bassivõti</a>
 	jne
 	<hr>
 	<br>
