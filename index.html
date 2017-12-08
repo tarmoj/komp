@@ -13,9 +13,11 @@
     <script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
     <script src='https://surikov.github.io/webaudiofontdata/sound/0000_JCLive_sf2_file.js'> </script>
 	
+	<!--common classes or data-->
 	<script src="baseclass.js"></script>
 	<script src="pianoclass.js"></script>
 	<script src="possible_notes.js"></script>
+	<script src="possible_intervals.js"></script>
 	
 	<!--exercises-->
 	<script src="find_missing_duration.js"></script>
@@ -27,6 +29,8 @@
     <script src="note_from_notation.js"></script>
     <script src="note_from_keyboard.js"></script>
     <script src="note_from_syllable.js"></script>
+    <script src="build_interval.js"></script>
+    
     
     <!--main-->
     <script>
@@ -88,6 +92,7 @@
 	<a onclick='noteFromKeyboard("bass")' href="#start">Mis klahv see on? Bassivõti</a> <br>
 	
 	<h3>Akord</h3>
+	<a onclick='buildInterval("treble", "up")' href="#start">Ehita intervall üles. Viiulivõti. </a> <br>
 	<br>
 	<h3>Harmoonia</h3>
 	<a onclick="recognizeKeySignature()" href="#start">Määra helistik</a> <br>
