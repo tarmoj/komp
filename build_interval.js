@@ -35,6 +35,20 @@ function buildInterval(clef, direction) { // generates 2 bars in given time, hid
 		
 	];
 	
+	function findIntervalBySemitones(semitones) {
+		// takend that there is 1 interval by number of semitones. It can be different - for example diminished fifth and augmented fourth; TODO: then return an array, not first found item		
+		if (semitones>12) {
+			alert("Liiga suur intervall")
+			return NaN;
+		}
+		for (var i= 0; i<possibleIntervals.length; i++) { 
+			if (semitones === possibleIntervals[i].semitones) {
+				return possibleIntervals[i];
+			}
+		}
+		return NaN;
+	}
+	
 	// set necessary methods in exercise
 	exercise = new MusicExercise("mainCanvas",150,10,10,1.5); // bigger scale for note input
  	exercise.time = "";
@@ -47,7 +61,7 @@ function buildInterval(clef, direction) { // generates 2 bars in given time, hid
 	var lowLimit= 10, highLimit = 35; // to set range from which to take the random note to build interval from
 	if (clef==="bass" ) { // && direction == "up"
 		exercise.clef ="bass"
-		possibleNotes = bassClefNotesbass
+		possibleNotes = bassClefNotes;
 		if (direction.toLowerCase()==="up") {
 			lowLimit = 10; // index in the possibleNotes array  - about F..c to build up
 			highLimit = 22
@@ -124,7 +138,7 @@ function buildInterval(clef, direction) { // generates 2 bars in given time, hid
 				
 		intervalIndex = Math.floor(Math.random()* possibleIntervals.length);
 		noteIndex = lowLimit + Math.floor(Math.random()* (highLimit - lowLimit));
-		console.log("Selected: ", possibleIntervals[intervalIndex].longName, "from ", possibleNotes[noteIndex]);
+		console.log("Selected: ", possibleIntervals[intervalIndex].longName, "from ", possibleNotes[noteIndex].name);
 		
 		document.getElementById("question").innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleIntervals[intervalIndex].longName + " " + directionTranslation +  '</b>.<br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
@@ -160,10 +174,9 @@ function buildInterval(clef, direction) { // generates 2 bars in given time, hid
 					}
 					
 					//exercise.notes = ":w (" +  possibleNotes[noteIndex].vtNote + "." + possibleNotes[i].vtNote + ")" 
-					
+
 					exercise.draw();
 					break;
-					
 				}
 			}
 			
@@ -192,13 +205,10 @@ function buildInterval(clef, direction) { // generates 2 bars in given time, hid
 		
 		if (possibleIntervals[intervalIndex].semitones === currentInterval) {
 			feedback += "Intervall õige! "
-			correct = correct && true;;
+			correct = true;
 		} else {
-			feedback += "Vale. Sinu sisestatud intervall  on hoopis: "; 
-			// TODO: find from possibleIntervals by semitones
-			//exercise.notes += " " + possibleNotes[noteIndex].vtNote;
-			//exercise.draw(); // redraw with right note
-			correct = correct && false;
+			feedback += "Vale. Sinu sisestatud intervall  on hoopis: <b>" + findIntervalBySemitones(currentInterval).longName + "</b> (arvestades võimalikke enharmoonilisi teisendamisi)"; 
+			correct = false;
 		}
 		
 		if (correct) {
