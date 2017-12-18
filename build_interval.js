@@ -57,24 +57,24 @@ function buildInterval(clef, direction) { // generates 2 bars in given time, hid
 	
 	
 	// set clef
-	var possibleNotes;
-	var lowLimit= 10, highLimit = 35; // to set range from which to take the random note to build interval from
+	var possibleNotes = [];
+	var possibleBaseNotes = [];
+	//var lowLimit= 10, highLimit = 35; // to set range from which to take the random note to build interval from
 	if (clef==="bass" ) { // && direction == "up"
 		exercise.clef ="bass"
 		possibleNotes = bassClefNotes;
 		if (direction.toLowerCase()==="up") {
-			lowLimit = 10; // index in the possibleNotes array  - about F..c to build up
-			highLimit = 22
+			possibleBaseNotes =  ["F/2", "G/2", "A/2", "B/2", "C/3", "D/3"];
 		} else {
-			lowLimit = 28; highLimit = 43; // e..c1
+			possibleBaseNotes =  ["F/3", "G/3", "A/3", "B/3", "C/4"];
 		}
 	} else {
 		exercise.clef = "treble"
 		possibleNotes = violinClefNotes;
 		if (direction.toLowerCase()==="up") {
-			lowLimit = 1; highLimit = 13; // c1..g1 
+			possibleBaseNotes =  ["C/4", "D/4", "E/4", "F/4", "G/4", "A/4"]; 
 		} else {
-			lowLimit = 25; highLimit = 37; // upper part of the staff d2..a2
+			possibleBaseNotes =  ["C/5", "D/5", "E/5", "F/5", "G/5", "A/5"];
 		}
 	}
 	
@@ -137,9 +137,25 @@ function buildInterval(clef, direction) { // generates 2 bars in given time, hid
 	exercise.generate = function() {
 				
 		intervalIndex = Math.floor(Math.random()* possibleIntervals.length);
-		noteIndex = lowLimit + Math.floor(Math.random()* (highLimit - lowLimit));
-		console.log("Selected: ", possibleIntervals[intervalIndex].longName, "from ", possibleNotes[noteIndex].name);
 		
+		var baseNote = possibleBaseNotes[Math.floor(Math.random()* possibleBaseNotes.length)];
+		console.log("Basenote: ", baseNote );
+		
+		//find according noteIndex from possibleNotes: TODO: add this as function to possible_notes.js, that perhaps should be part of baseclass...
+		noteIndex = -1;
+		for (var i=0;i<possibleNotes.length;i++) {
+			if (possibleNotes[i].vtNote === baseNote) {
+				noteIndex = i;
+				break;
+			}
+		}
+		
+		if (noteIndex==-1) {
+			console.log("Generation failed. Could not find ", baseNote, "in possibleNotes");
+			return;
+		}
+		
+		console.log("Selected: ", possibleIntervals[intervalIndex].longName, "from ", possibleNotes[noteIndex].name);
 		document.getElementById("question").innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleIntervals[intervalIndex].longName + " " + directionTranslation +  '</b>.<br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
 		
