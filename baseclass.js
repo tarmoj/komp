@@ -207,7 +207,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 	
 	
 	//audio
-	this.volume = 0.5;
+	this.volume = 0.3;
 	this.tempo = 60.0;
 	this.playNote = function(midiNote, start, duration) {
 		this.player.queueWaveTable(this.audioContext, this.audioContext.destination,
@@ -216,18 +216,25 @@ function MusicExercise(canvasId, width, x, y, scale) {
 
 	this.play = function() {
 		var _start = 0, _duration = 1;
-		for (let _note of this.artist.staves[0].note_notes) {
-			 
+		var notes = this.artist.staves[0].note_notes ;
+		console.log("notes: ", notes)
+		for (var i=0; i<notes.length; i++ ) {
+			var _note = notes[i];
+			console.log("Note to play:", _note);
 			if (_note.duration!=="b") { // check if not barline
 				_duration = _note.getTicks().value()/4096.0 * 60.0/this.tempo;
-				var key = _note.getPlayNote()[0];
-				[noteName, octave] = key.split("/");
-				noteName = noteName.trim().toLowerCase();
-				var note_value = Vex.Flow.Music.noteValues[noteName];
-				var midiNote = (24 + ((octave-1) * 12)) + note_value.int_val
-				// get start from note, maybe 
-				console.log(midiNote, _start, _duration); // no output in console???
-				this.playNote(midiNote, _start, _duration);
+				var keys = _note.getPlayNote(); // can be an array if chord
+				for (var j=0; j<keys.length; j++) { 
+					[noteName, octave] = keys[j].split("/");
+					noteName = noteName.trim().toLowerCase();
+					var noteValue =Vex.Flow.Music.noteValues[noteName];
+					var midiNote = (24 + ((octave-1) * 12)) + noteValue.int_val
+					// get start from note, maybe 
+					console.log(midiNote, _start, _duration); // 
+					if (_note.noteType=="n") { 
+						this.playNote(midiNote, _start, _duration);
+					}
+				}
 				_start += _duration;  // TODO: what if rest?? see code of artist.coffee
 			
 				
