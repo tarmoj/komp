@@ -73,10 +73,11 @@
     </head>
     
 	<body>
+	
 	<h1 id="title">MUUSIKA KOMPOSITSIOONIÕPETUS. Harjutused</h1>
 	<h2>Sisukord</h2>
 	<h3>Helivältus</h3>
-	<a onclick="findMissingDuration()" href="#start">Leia puuduv vältus</a><br> 
+	<a onclick="exercise = findMissingDuration()" href="#start">Leia puuduv vältus</a><br> 
 	<a onclick="nameDuration()" href="#start">Määra helivältus</a> <br>
 	<a onclick="drawBarlines()" href="#start">Lisa taktijoon</a> <br>
 		
@@ -103,41 +104,42 @@
 	
 	<hr>
 	<br>
-	
-	<h1 id="title"><a name="start">MUUSIKA KOMPOSITSIOONIÕPETUS. Harjutused</a></h1>
-	<h2 id="exerciseTitle">Harjutuse nimi</h2>
+	<div id="exercise1">
+	<h1 id="title" class="title"><a name="start">MUUSIKA KOMPOSITSIOONIÕPETUS. Harjutused</a></h1>
+	<h2 id="exerciseTitle" class="exerciseTitle">Harjutuse nimi</h2>
 	<br>
-	<p id="description">Ülesande kirjeldus.</p>
+	<p id="description" class="description">Ülesande kirjeldus.</p>
 	<br>
-	<button id="playButton" onclick="exercise.play();">Mängi</button>
+	<button id="playButton" class="playButton" onclick="exercise.play();">Mängi</button>
 	<!-- for CANVAS backend: <canvas id="mainCanvas"></canvas>-->
-	<div id="mainCanvas"></div>
+	<div id="mainCanvas" class="mainCanvas"></div>
 	<br>
-	<button id = "renewButton" onclick='exercise.renew()'>Uuenda</button><br>
+	<button id = "renewButton" class="renewButton" onclick='exercise.renew()'>Uuenda</button><br>
 	<br>
-	<span id="question">Küsimus</span>
+	<span id="question" class="question">Küsimus</span>
 	
-	<span id="responseDiv">	
+	<span id="responseDiv" class="responseDiv">	
 	</span>
-	<button id="replyButton" onclick="exercise.checkResponse()">Vasta</button>
+	<button id="replyButton" class="replyButton" onclick="exercise.checkResponse()">Vasta</button>
 	
-	<p id="feedback"></p>
-	Katseid: <label id="attempts">0</label>. Neist õigeid vastuseid: <label id="score">0</label> 
-	<button id="resetButton" onclick='exercise.attempts=0;exercise.score=0;attempts.innerHTML="0"; score.innerHTML = "0" '>Nulli</button>
+	<p id="feedback" class="feedback"></p>
+	Katseid: <label id="attempts" class="attempts">0</label>. Neist õigeid vastuseid: <label id="score" class="score">0</label> 
+	<button id="resetButton" class="resetButton" onclick='exercise.attempts=0;exercise.score=0;attempts.innerHTML="0"; score.innerHTML = "0" '>Nulli</button>
 	<br>
 	<br>
-	Kui tunned, et oled valmis <b>testi sooritama</b>, vajuta: <button id="showTestButton" onclick='testDiv.style.visibility="visible";'> Test</button> <br>
+	Kui tunned, et oled valmis <b>testi sooritama</b>, vajuta: <button id="showTestButton"  class="showTestButton" onclick='testDiv.style.visibility="visible";'> Test</button> <br>
 	
-	<div id="testDiv" style="visibility:hidden">
-	Küsimus nr <b><label id="questionNumber">0</label></b>. Aega on: <b><label id="timer">0</label></b> sekundit.
-	<button id="startTest" onclick="exercise.startTest()">Alusta</button>
-	<button id="stopTest" onclick="exercise.stopTest()">Peata</button>
+	<div id="testDiv" class="testDiv" style="visibility:hidden">
+	Küsimus nr <b><label id="questionNumber" class="questionNumber" >0</label></b>. Aega on: <b><label id="timer" class="timer">0</label></b> sekundit.
+	<button id="startTest" class="startTest" onclick="exercise.startTest()">Alusta</button>
+	<button id="stopTest" class="stopTest" onclick="exercise.stopTest()">Peata</button>
 	<br>
 	<p><small>
 	Teile esitatkse 5 küsimust, mis tuleb ettemääratud aja jooksul vastata. Kui jõuate varem valmis, vajutage lihtsalt "Vasta". Uus küsimus kuvatakse peale eelmise vastamist või aja täitumisel.
 	</small></p>
 	
 	</div>
-
+	</div>
+	
 	</body>
 </html>

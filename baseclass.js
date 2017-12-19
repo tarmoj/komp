@@ -7,15 +7,23 @@
 // <script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
 // <script src='https://surikov.github.io/webaudiofontdata/sound/0000_JCLive_sf2_file.js'></script> 
 
-function MusicExercise(canvasId, width, x, y, scale) {
-	this.canvas = document.getElementById(canvasId) 
+function MusicExercise(canvasId, width, x, y, scale, containerNode) {
+	//this.canvas = document.getElementsById(canvasId) // TODO: make it classname 
+	this.containerNode = containerNode===undefined ? document.body : containerNode; // to  make it independent and enable to use several exercises per page
+	//TODO: rewrite with jquery kind of syntax
+	this.canvas = this.containerNode.getElementsByClassName(canvasId)[0]; //TODO: create the div in container, if not given
+// 	if (this.canvas === undefined) {
+// 		this.canvas = create element
+// 		this.containerNode.append
+// 	}
+	
 	var _this = this;
 	
 	// Notation elements
-	this.canvasWidth = width == undefined ? 600 : width; // NB! if set to 0, don't create notation
-	this.canvasX = x == undefined ? 10 : x;
-	this.canvasY = y == undefined ? 10 : y;
-	this.canvasScale = scale == undefined ? 0.8 : scale;
+	this.canvasWidth = width === undefined ? 600 : width; // NB! if set to 0, don't create notation
+	this.canvasX = x === undefined ? 10 : x;
+	this.canvasY = y === undefined ? 10 : y;
+	this.canvasScale = scale === undefined ? 0.8 : scale;
 	
 	this.notes = ""; // notenames, durations  and octaves in vextab format like ":4 C/4" -  and other parts of VT notation
 	//this.vexFlowNotes = []; // including all parameters VF objects
@@ -37,7 +45,8 @@ function MusicExercise(canvasId, width, x, y, scale) {
     // for test -------------
     this.timer = -1;
 	this.timeToThink = 15; // Could be also il levels:  slow/medium/fast
-	this.maxQuestions = 5, this.currentQuestion = 0; // should be local variables defined with var but this is not reachable from countdown() if it is executed from setTimeout callbaclk. javascript.....
+	this.maxQuestions = 5; 
+	this.currentQuestion = 0; // should be local variables defined with var but this is not reachable from countdown() if it is executed from setTimeout callbaclk. javascript.....
 	this.countdownReference = NaN;
 	
 	this.createVexTabString = function() {
@@ -45,7 +54,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 		var clefString = (this.clef.length>0) ? "clef="+this.clef+"\n" : "";
 		var keyString = (this.key.length>0) ? "key="+this.key+"\n" : "";
 		var timeString = (this.time.length>0) ?  "time="+this.time+"\n" : "";
-		var notesString = (this.notes==="") ? ""  : "\nnotes " + this.notes + "\n"
+		var notesString = (this.notes==="") ? ""  : "\nnotes " + this.notes + "\n";
 		var endString = "\noptions space=20\n";
 		return startString + clefString + keyString + timeString + notesString + endString;
 	}
@@ -69,10 +78,10 @@ function MusicExercise(canvasId, width, x, y, scale) {
 				this.canvas.removeChild(this.canvas.firstChild);
 			}
 			// Feedback and results, hide test div
-			document.getElementById("attempts").innerHTML = "0";
-			document.getElementById("score").innerHTML = "0";
-			document.getElementById("testDiv").style.visibility="hidden";
-			document.getElementById("responseDiv").innerHTML = ""; // take care that not elements inserted to tesDiv before creating the exercise object 
+			this.containerNode.getElementsByClassName("attempts")[0].innerHTML = "0";
+			this.containerNode.getElementsByClassName("score")[0].innerHTML = "0";
+			this.containerNode.getElementsByClassName("testDiv")[0].style.visibility="hidden";
+			this.containerNode.getElementsByClassName("responseDiv")[0].innerHTML = ""; // take care that not elements inserted to tesDiv before creating the exercise object 
 			
 			// VexTab
 			if (this.canvasWidth>0) {
@@ -109,7 +118,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 		try {
 			this.vextab.reset();
 			this.artist.reset();
-			var parseString = (string==undefined) ? this.createVexTabString() : string; // allow to set the string by user;
+			var parseString = (string===undefined) ? this.createVexTabString() : string; // allow to set the string by user;
 			this.vextab.parse(parseString);
 			this.artist.render(this.renderer);
 		} catch (e) {
@@ -118,7 +127,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 	}
 	
 	this.renew = function() { // in some exercise you may need to ad more, like hide() or similar
-		document.getElementById("feedback").innerHTML = "";
+		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = "";
         this.generate();
         this.draw();
     }
@@ -149,7 +158,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 	
 	function countdown() {		
         //console.log(_this.timer);
-        document.getElementById("timer").innerHTML = _this.timer.toString();
+        this.containerNode.getElementsByClassName("timer")[0].innerHTML = _this.timer.toString();
 		if (_this.timer>0) { 
             _this.timer--;
             _this.countdownReference = setTimeout(function(){countdown();}, 1000); // recursive
@@ -171,7 +180,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 	
 	this.startTest = function() {	
         this.attempts=0; this.score=0;
-        document.getElementById("attempts").innerHTML="0"; document.getElementById("score").innerHTML = "0";
+        this.containerNode.getElementsByClassName("attempts")[0].innerHTML="0"; this.containerNode.getElementsByClassName("score")[0].innerHTML = "0";
         this.timer = this.timeToThink;
 		this.currentQuestion = 0;
 		this.nextQuestion();		
@@ -185,7 +194,7 @@ function MusicExercise(canvasId, width, x, y, scale) {
 		clearTimeout(_this.countdownReference); // stop timer
 		if (this.currentQuestion<this.maxQuestions) {
 			this.currentQuestion++; 
-			document.getElementById("questionNumber").innerHTML = this.currentQuestion.toString();
+			this.containerNode.getElementsByClassName("questionNumber")[0].innerHTML = this.currentQuestion.toString();
 			exercise.renew();
 			this.timer = this.timeToThink
 			countdown();
@@ -201,8 +210,8 @@ function MusicExercise(canvasId, width, x, y, scale) {
         clearTimeout(_this.countdownReference);
 		this.timer = -1;
         this.currentQuestion = 0;
-		document.getElementById("questionNumber").innerHTML = "0";
-		document.getElementById("timer").innerHTML = "0";
+		this.containerNode.getElementsByClassName("questionNumber")[0].innerHTML = "0";
+		this.containerNode.getElementsByClassName("timer")[0].innerHTML = "0";
     }
 	
 	
@@ -220,12 +229,13 @@ function MusicExercise(canvasId, width, x, y, scale) {
 		console.log("notes: ", notes)
 		for (var i=0; i<notes.length; i++ ) {
 			var _note = notes[i];
-			console.log("Note to play:", _note);
+			//console.log("Note to play:", _note);
 			if (_note.duration!=="b") { // check if not barline
 				_duration = _note.getTicks().value()/4096.0 * 60.0/this.tempo;
 				var keys = _note.getPlayNote(); // can be an array if chord
 				for (var j=0; j<keys.length; j++) { 
-					[noteName, octave] = keys[j].split("/");
+					var noteName = keys[j].split("/")[0];
+					var octave = keys[j].split("/")[1];
 					noteName = noteName.trim().toLowerCase();
 					var noteValue =Vex.Flow.Music.noteValues[noteName];
 					var midiNote = (24 + ((octave-1) * 12)) + noteValue.int_val

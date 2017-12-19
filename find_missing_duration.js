@@ -4,44 +4,47 @@
 
 // Exercise: Helivältus. Harjutus. Lisa puuduv vältus
 
-    //var exercise; should it be declared in the script part of main html?? 
-	
-function findMissingDuration() { // Harjutus 1.2.3 Lisa puuduv helivältus
+// returns MusicExercise	
+function findMissingDuration(containerNode) { // Harjutus 1.2.3 Lisa puuduv helivältus
 	// variables
+	
 	var hiddenNote = -1, hiddenDuration = -1;
 	var answered = false;
+	this.containerNode = containerNode===undefined ? document.body : containerNode;
 	
 	// Create or set necessary HTML elements
-	document.getElementById("exerciseTitle").innerHTML = "Lisa puuduv helivältus";
-	document.getElementById("description").innerHTML = "Antud on teatud taktimõõdus takt, milles on peidetud üks helivältus (noot või paus). Lisa puuduv helivältus (noot või paus) // VÕI: arva ära peidetud vältus."; 
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Lisa puuduv helivältus";
+	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on teatud taktimõõdus takt, milles on peidetud üks helivältus (noot või paus). Lisa puuduv helivältus (noot või paus) // VÕI: arva ära peidetud vältus."; 
 	//TODO: luba ka pause, mitte ainult noodid -  kas vaja?
-	document.getElementById("question").innerHTML =	"Mis on peidetud noodi vältus?";
+	this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Mis on peidetud noodi vältus?";
 
 		
-	// set necessary methods in exercise
-	exercise = new MusicExercise("mainCanvas"); // must be defined before filling response with elements
+	// create exercise as local variable, then return it in the end of function
+	var _exercise = new MusicExercise("mainCanvas",600,10,10,0.8, this.containerNode);  //TODO: later -  containerNode as first parameter
 	
-	var oldResponse = document.getElementById("response");
+	var oldResponse = this.containerNode.getElementsByClassName("response")[0];
 	var response = document.createElement("select"); 
 	
-	response.id = "response";
+	
+	response.id = "response"; // TODO: add classname
+	response.className = "response";
 	response.innerHTML ='<option value="0" selected>----</option>' +
 		'<option value="2">Poolnoot</option>' +
 		'<option value="1">Veerandnoot</option>' +
 		'<option value="0.5">Kaheksandiknoot</option>' +
 		'<option value="0.25">Kuueteistkümnendiknoot</option>';
 		
-	if (oldResponse === null) {
+	if (oldResponse === null || oldResponse===undefined) {
 		console.log("Creating new response element");
-		document.getElementById("responseDiv"). appendChild(response)
+		this.containerNode.getElementsByClassName("responseDiv")[0].appendChild(response)
 	} else {
 		console.log("Replacing response element");
-		document.getElementById("responseDiv").replaceChild(response, oldResponse);
+		this.containerNode.getElementsByClassName("responseDiv")[0].replaceChild(response, oldResponse);
 	}
 
 	
 	
-	exercise.generate = function() {
+	_exercise.generate = function() {
 	
 		var totalDuration = 0, barLength = 4; // barLength in beats
 		var durations;
@@ -77,45 +80,45 @@ function findMissingDuration() { // Harjutus 1.2.3 Lisa puuduv helivältus
 			
 		}
 		console.log("Generated notes: ", parseString);
-		exercise.notes = parseString;
+		_exercise.notes = parseString;
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
 	
 	}
 	
-	exercise.hide = function() {
+	_exercise.hide = function() {
 		
-		var notes = exercise.getNotes(0); // millegipärast 0???
+		var notes = _exercise.getNotes(0); // millegipärast 0???
 		if (hiddenNote>notes.length) {
 			console.log("There is not that many notes!", hiddenNote)
 			return;
 		}
-		var note = exercise.artist.staves[0].note_notes[hiddenNote];
-		var context = exercise.renderer.getContext();
+		var note = _exercise.artist.staves[0].note_notes[hiddenNote];
+		var context = _exercise.renderer.getContext();
 		//context.setFillStyle("darkgreen"); // <- for canvas
 		//context.fillRect(note.getAbsoluteX()-10, note.stave.getYForTopText()-10, note.width+20, note.stave.height+10);
 		context.rect(note.getAbsoluteX()-10, note.stave.getYForTopText()-10, note.width+20, note.stave.height+10, { fill: 'darkgreen' });
 	}
 	
-	exercise.renew = function() {
-		document.getElementById("feedback").innerHTML = "";
-		exercise.generate();		
-		exercise.draw();
-		exercise.hide();
+	_exercise.renew = function() {
+		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = "";
+		_exercise.generate();		
+		_exercise.draw();
+		_exercise.hide();
 	}
 	
-	exercise.renew();
+	_exercise.renew();
 	
-	exercise.responseFunction = function() {
+	_exercise.responseFunction = function() {
 		//TODO: kontrolli, kas uuendatud, muidu tõstab ainult skoori...
 		if (answered) {
 			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
 			return;
 		}
-		exercise.attempts += 1;
+		_exercise.attempts += 1;
 		var feedback = "";
-		if (parseFloat(document.getElementById("response").value)===hiddenDuration) {
+		if (parseFloat(this.containerNode.getElementsByClassName("response")[0].value) === hiddenDuration) {
 			feedback = "Õige!"
-			exercise.score += 1;
+			_exercise.score += 1;
 		} else {
 			var durationString = "";
 			switch (hiddenDuration) {
@@ -129,13 +132,14 @@ function findMissingDuration() { // Harjutus 1.2.3 Lisa puuduv helivältus
 		}
 		
 		
-		document.getElementById("attempts").innerHTML = exercise.attempts;
-		document.getElementById("score").innerHTML = exercise.score;
-		document.getElementById("feedback").innerHTML = feedback; 
-		exercise.draw(); // redraw without rectangle
+		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = _exercise.attempts;
+		this.containerNode.getElementsByClassName("score")[0].innerHTML = _exercise.score;
+		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 
+		_exercise.draw(); // redraw without rectangle
 		answered = true;
 	
 	}
 	
-
+	return _exercise;
+	
 }
