@@ -55,7 +55,7 @@ function drawBarlines(containerNode) { // generates 2 bars in given time, hides 
 		
 		var parseString = "";
 		var possibleNotes = ["C","D","E","F","G"]; // etc all 12
-		for (var i=0; i<durations.length, i++) {
+		for (var i=0; i<durations.length; i++) {
 			var flexDuration = (4/durations[i]).toString();
 			//console.log(_duration,flexDuration);
 			parseString += " :"+flexDuration + " " + possibleNotes[Math.floor(Math.random()*possibleNotes.length)] +"/4 ";

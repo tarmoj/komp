@@ -5,21 +5,24 @@
 // 1.3.5 Helikõrgus    Viiulivõti/Bassivõti. Antud on helikõrgus noodijoonestikul. Kirjelda helikõrguse asukohta noodijoonestikul (mitmendal joonel või mitmendas vahes) ja anna helikõrguse tähtnimetus ja silpnimetus.
 
 
-function describeNote() {
+function describeNote(containerNode) {
 // variables
 	var duration = -1;
 	var answered = false;
 	var selectedNoteIndex = -1;
 	
+	this.containerNode = containerNode===undefined ? document.body : containerNode;
+
+	
 	// Create or set necessary HTML elements
-	document.getElementById("exerciseTitle").innerHTML = "Kirjelda helikõrguse asukohta";
-	document.getElementById("description").innerHTML = "Antud on helikõrgus noodijoonestikul. Kirjelda helikõrguse asukohta noodijoonestikul (mitmendal joonel või mitmendas vahes) ja anna helikõrguse tähtnimetus ja silpnimetus."; 
-	document.getElementById("question").innerHTML =	"Kirjelda noodi asukohta. Mis noot see on?";
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Kirjelda helikõrguse asukohta";
+	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helikõrgus noodijoonestikul. Kirjelda helikõrguse asukohta noodijoonestikul (mitmendal joonel või mitmendas vahes) ja anna helikõrguse tähtnimetus ja silpnimetus."; 
+	this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Kirjelda noodi asukohta. Mis noot see on?";
 	
 	var oldIndex = -1; // to check that same random value is not used twice in a row
 	var answerString = "";
 	var positions = [ // array to describe the note posistions as strings (in Estonian now)
-		{position:0,positionStrin:"joonel"}, 
+		{position:0,positionString:"joonel"}, 
 		{position:1,positionString:"vahes"},
 		{position:-1,positionString:"joone all"},
 		{position:2,positionString:"joone peal"},
@@ -66,22 +69,22 @@ function describeNote() {
 	}
 	
 	// set necessary methods in exercise
-	exercise = new MusicExercise("mainCanvas", 100); // relatively narrow canvas
+	var exercise = new MusicExercise(this.containerNode, "mainCanvas", 100); // relatively narrow canvas
 	exercise.time = ""; // no time signature
 	exercise.timeToThink = 25
 	
 	
-	var oldResponse = document.getElementById("response");
+	var oldResponse = this.containerNode.getElementsByClassName("response")[0];
 	var response = document.createElement("div");
-	response.id = "response";
-	response.innerHTML = '<br>See noot asub: <select id="lineOrSpace">' +
+	response.className = "response";
+	response.innerHTML = '<br>See noot asub: <select class="lineOrSpace">' +
 		'<option value="1">1.</option>' + 
 		'<option value="2">2.</option>' +
 		'<option value="3">3.</option>' +
 		'<option value="4">4.</option>' +
 		'<option value="5">5.</option>' +
 	'</select>' +
-	'<select id="position">' +
+	'<select class="position">' +
 		'<option value="0">joonel</option>' +
 		'<option value="1">vahes</option>' +
 		'<option value="-1">joone all</option>'+  // as d4
@@ -91,16 +94,16 @@ function describeNote() {
 		'<option value="10">ülemisel abijoonel</option>' + // as a5,c6
 		'<option value="11">ülemise abijoone peal</option>' + // as b5
 	'</select>' + 	
-	'<br> Noodi nimi tähtnimetusega (kas c, d, e, f, g, a või h) <input type="text" id="noteName" size=4></input>, ' +
-	'silpnimetusega (kas do, re, mi, fa, sol, la või si) <input type="text" id="syllable" size=4></input><br>';
+	'<br> Noodi nimi tähtnimetusega (kas c, d, e, f, g, a või h) <input type="text" class="noteName" size=4></input>, ' +
+	'silpnimetusega (kas do, re, mi, fa, sol, la või si) <input type="text" class="syllable" size=4></input><br>';
 
 	
-	if (oldResponse === null) {
+	if (oldResponse === null || oldResponse===undefined) {
 		console.log("Creating new response element");
-		document.getElementById("responseDiv"). appendChild(response)
+		this.containerNode.getElementsByClassName("responseDiv")[0].appendChild(response)
 	} else {
 		console.log("Replacing response element");
-		document.getElementById("responseDiv").replaceChild(response, oldResponse);
+		this.containerNode.getElementsByClassName("responseDiv")[0].replaceChild(response, oldResponse);
 	}
 	
 	
@@ -121,14 +124,8 @@ function describeNote() {
 	
 	}
 	
-	exercise.generate();		
-	exercise.draw();
+	exercise.renew();		
 	
-	document.getElementById("renewButton").onclick = function() {
-		document.getElementById("feedback").innerHTML = "";
-		exercise.generate(); 
-		exercise.draw();
-	}
 	
 	exercise.responseFunction = function() { // TODO: - kas oleks võimalik tõsta baseclassi? Siis vist switch case peaks olema välditud ja õige vastus peaks olema juba loetava stringina nagu "poolnoot" - vist mõtekas. Samas, kuidas basclass tead html elementide ID-sid???
 
@@ -140,8 +137,8 @@ function describeNote() {
 		exercise.attempts += 1;
 		var feedback = "";
 		var correct = false;
-		if (parseInt(document.getElementById("lineOrSpace").value)===trebleClefNotes[selectedNoteIndex].lineOrSpace &&
-			parseInt(document.getElementById("position").value)===trebleClefNotes[selectedNoteIndex].position) {
+		if (parseInt(this.containerNode.getElementsByClassName("lineOrSpace")[0].value) === trebleClefNotes[selectedNoteIndex].lineOrSpace &&
+			parseInt(this.containerNode.getElementsByClassName("position")[0].value) === trebleClefNotes[selectedNoteIndex].position) {
 			feedback = "Asukoht õige!";
 			correct = true;
 		} else {
@@ -149,7 +146,7 @@ function describeNote() {
 			correct = false;
 		}
 		
-		if (document.getElementById("noteName").value.toLowerCase()===trebleClefNotes[selectedNoteIndex].name.toLowerCase()) {
+		if (this.containerNode.getElementsByClassName("noteName")[0].value.toLowerCase()===trebleClefNotes[selectedNoteIndex].name.toLowerCase()) {
 			feedback += " Tähtnimetus õige!";
 			correct = correct && true;
 		} else {
@@ -157,7 +154,7 @@ function describeNote() {
 			correct = correct && false;
 		}
 		
-		if (document.getElementById("syllable").value.toLowerCase()===trebleClefNotes[selectedNoteIndex].syllable.toLowerCase()) {
+		if (this.containerNode.getElementsByClassName("syllable")[0].value.toLowerCase()===trebleClefNotes[selectedNoteIndex].syllable.toLowerCase()) {
 			feedback += " Silpnimetus õige!";
 			correct = correct && true;
 		} else {
@@ -169,12 +166,14 @@ function describeNote() {
 			exercise.score += 1;
 		}
 		
-		document.getElementById("attempts").innerHTML = exercise.attempts;
-		document.getElementById("score").innerHTML = exercise.score;
-		document.getElementById("feedback").innerHTML = feedback; 
+		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = exercise.attempts;
+		this.containerNode.getElementsByClassName("score")[0].innerHTML = exercise.score;
+		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 
 		exercise.draw(); // redraw without rectangle
 		answered = true;
 	
 	}
+	
+	return exercise;
 
 }
