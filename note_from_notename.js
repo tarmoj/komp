@@ -79,7 +79,6 @@ function noteFromNoteName(clef, containerNode) {
     exercise.canvas.appendChild(bemolleButton);
 	
 	var pianoDiv = document.createElement("div"); // piano keyboard
-	pianoDiv.className="piano-container";
 	pianoDiv.style.marginTop = "5px";
 	exercise.canvas.appendChild(pianoDiv);
 

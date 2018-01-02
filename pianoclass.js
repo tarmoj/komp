@@ -5,7 +5,7 @@
     
 function Piano(container, octaveBegin, octaves, width) {
 
-    this.container =container; // TODO: protection if not given    
+    this.container =container; // TODO: protection if not given
     var _this = this;
     
     this.octaveBegin = octaveBegin == undefined ? 4 : octaveBegin
@@ -23,7 +23,7 @@ function Piano(container, octaveBegin, octaves, width) {
         this.currentX = 0
         
         // listeners to the keys
-		$('#piano-container rect').click(function (e) {
+		$('rect', this.container).click(function (e) {
 			var key = e.target
 			console.log("Key: ",key.dataset.midinote);
 			
