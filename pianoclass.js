@@ -5,22 +5,21 @@
     
 function Piano(container, octaveBegin, octaves, width) {
 
-	this.container = container
-    this.elem = document.getElementById(container)
+    this.container =container; // TODO: protection if not given    
     var _this = this;
     
     this.octaveBegin = octaveBegin == undefined ? 4 : octaveBegin
     this.octaves = octaves == undefined ? 1 : octaves
     this.width = width == undefined ? 300 : width
-    this.elem.style.maxWidth = this.width.toString() + "px"
-    this.elem.style.width = "100%" // allow shhrinking in smaller screens
+    this.container.style.maxWidth = this.width.toString() + "px"
+    this.container.style.width = "100%" // allow shhrinking in smaller screens
     var height = 80, octaveWidth = 140;
     
     this.pressedKey = {active:false};
     
     this.createPiano = function () {
         var svg = this.getPianoSVG()
-        this.elem.innerHTML = svg
+        this.container.innerHTML = svg
         this.currentX = 0
         
         // listeners to the keys
