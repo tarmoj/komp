@@ -20,7 +20,7 @@ function findMissingDuration(containerNode) { // Harjutus 1.2.3 Lisa puuduv heli
 
 		
 	// create exercise as local variable, then return it in the end of function
-	var _exercise = new MusicExercise("mainCanvas",600,10,10,0.8, this.containerNode);  //TODO: later -  containerNode as first parameter
+	var exercise = new MusicExercise(this.containerNode,"mainCanvas");  //TODO: later -  containerNode as first parameter
 	
 	var oldResponse = this.containerNode.getElementsByClassName("response")[0];
 	var response = document.createElement("select"); 
@@ -44,7 +44,7 @@ function findMissingDuration(containerNode) { // Harjutus 1.2.3 Lisa puuduv heli
 
 	
 	
-	_exercise.generate = function() {
+	exercise.generate = function() {
 	
 		var totalDuration = 0, barLength = 4; // barLength in beats
 		var durations;
@@ -72,53 +72,53 @@ function findMissingDuration(containerNode) { // Harjutus 1.2.3 Lisa puuduv heli
 		hiddenDuration = durations[hiddenNote];
 		console.log("Hide the note (index), with duration", hiddenNote, hiddenDuration);
 		var parseString = "";
-		for (let duration of durations) {
-			var flexDuration = (4/duration).toString();
+		for (var i=0; i<durations.length; i++) {
+			var flexDuration = (4/durations[i]).toString();
 			//console.log(_duration,flexDuration);
 			parseString += " :"+flexDuration + " B/4 ";
 			// better probably artist.addNote(), but it is unclear how to use it
 			
 		}
 		console.log("Generated notes: ", parseString);
-		_exercise.notes = parseString;
+		exercise.notes = parseString;
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
 	
 	}
 	
-	_exercise.hide = function() {
+	exercise.hide = function() {
 		
-		var notes = _exercise.getNotes(0); // millegipärast 0???
+		var notes = exercise.getNotes(0); // millegipärast 0???
 		if (hiddenNote>notes.length) {
 			console.log("There is not that many notes!", hiddenNote)
 			return;
 		}
-		var note = _exercise.artist.staves[0].note_notes[hiddenNote];
-		var context = _exercise.renderer.getContext();
+		var note = exercise.artist.staves[0].note_notes[hiddenNote];
+		var context = exercise.renderer.getContext();
 		//context.setFillStyle("darkgreen"); // <- for canvas
 		//context.fillRect(note.getAbsoluteX()-10, note.stave.getYForTopText()-10, note.width+20, note.stave.height+10);
 		context.rect(note.getAbsoluteX()-10, note.stave.getYForTopText()-10, note.width+20, note.stave.height+10, { fill: 'darkgreen' });
 	}
 	
-	_exercise.renew = function() {
+	exercise.renew = function() {
 		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = "";
-		_exercise.generate();		
-		_exercise.draw();
-		_exercise.hide();
+		exercise.generate();		
+		exercise.draw();
+		exercise.hide();
 	}
 	
-	_exercise.renew();
+	exercise.renew();
 	
-	_exercise.responseFunction = function() {
+	exercise.responseFunction = function() {
 		//TODO: kontrolli, kas uuendatud, muidu tõstab ainult skoori...
 		if (answered) {
 			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
 			return;
 		}
-		_exercise.attempts += 1;
+		exercise.attempts += 1;
 		var feedback = "";
 		if (parseFloat(this.containerNode.getElementsByClassName("response")[0].value) === hiddenDuration) {
 			feedback = "Õige!"
-			_exercise.score += 1;
+			exercise.score += 1;
 		} else {
 			var durationString = "";
 			switch (hiddenDuration) {
@@ -132,14 +132,14 @@ function findMissingDuration(containerNode) { // Harjutus 1.2.3 Lisa puuduv heli
 		}
 		
 		
-		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = _exercise.attempts;
-		this.containerNode.getElementsByClassName("score")[0].innerHTML = _exercise.score;
+		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = exercise.attempts;
+		this.containerNode.getElementsByClassName("score")[0].innerHTML = exercise.score;
 		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 
-		_exercise.draw(); // redraw without rectangle
+		exercise.draw(); // redraw without rectangle
 		answered = true;
 	
 	}
 	
-	return _exercise;
+	return exercise;
 	
 }

@@ -4,32 +4,34 @@
  
 // harjutus 1.2.2 "Helivältus. Kirjuta helivältuse nimetus. Antud on helivältus noodikirja märgina (noot või paus). Kirjuta helivältuse nimetus"
 
-function nameDuration() {		
+function nameDuration(containerNode) {		
 	// variables
 	var duration = -1;
 	var answered = false;
 	
+	this.containerNode = containerNode===undefined ? document.body : containerNode;
+	
 	// Create or set necessary HTML elements
-	document.getElementById("exerciseTitle").innerHTML = "Määra helivältus";
-	document.getElementById("description").innerHTML = "Antud on helivältus noodikirja märgina (noot või paus). Leia,  mis vältus see on"; 
-	document.getElementById("question").innerHTML =	"Mis vältus see on?";
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Määra helivältus";
+	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helivältus noodikirja märgina (noot või paus). Leia,  mis vältus see on"; 
+	this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Mis vältus see on?";
 	
-	exercise = new MusicExercise("mainCanvas", 100); // relatively narrow canvas 
+	var exercise = new MusicExercise(this.containerNode,"mainCanvas", 100); // relatively narrow canvas 
 	
-	var oldResponse = document.getElementById("response");
+	var oldResponse = this.containerNode.getElementsByClassName("response")[0];
 	var response = document.createElement("select");
-	response.id = "response";
+	response.className = "response";
 	response.innerHTML ='<option value="0" selected>----</option>' +
 		'<option value="2">Poolnoot/-paus</option>' +
 		'<option value="1">Veerandnoot/-paus</option>' +
 		'<option value="0.5">Kaheksandik</option>' +
 		'<option value="0.25">Kuueteistkümnendik</option>';		
-	if (oldResponse === null) {
+	if (oldResponse === null || oldResponse === undefined) {
 		console.log("Creating new response element");
-		document.getElementById("responseDiv"). appendChild(response)
+		this.containerNode.getElementsByClassName("responseDiv")[0]. appendChild(response)
 	} else {
 		console.log("Replacing response element");
-		document.getElementById("responseDiv").replaceChild(response, oldResponse);
+		this.containerNode.getElementsByClassName("responseDiv")[0].replaceChild(response, oldResponse);
 	}
 	
 	// set necessary methods in exercise	
@@ -67,7 +69,7 @@ function nameDuration() {
 		}
 		exercise.attempts += 1;
 		var feedback = "";
-		if (parseFloat(document.getElementById("response").value)===duration) {
+		if (parseFloat(this.containerNode.getElementsByClassName("response")[0].value)===duration) {
 			feedback = "Õige!"
 			exercise.score += 1;
 		} else {
@@ -82,11 +84,13 @@ function nameDuration() {
 			feedback = "Vale! Õige oli: "+durationString; 
 		}
 		
-		document.getElementById("attempts").innerHTML = exercise.attempts;
-		document.getElementById("score").innerHTML = exercise.score;
-		document.getElementById("feedback").innerHTML = feedback; 
+		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = exercise.attempts;
+		this.containerNode.getElementsByClassName("score")[0].innerHTML = exercise.score;
+		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 
 		exercise.draw(); // redraw without rectangle
 		answered = true;	
 	}
+	
+	return exercise;
 		
 }

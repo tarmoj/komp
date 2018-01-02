@@ -7,15 +7,16 @@
 // <script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
 // <script src='https://surikov.github.io/webaudiofontdata/sound/0000_JCLive_sf2_file.js'></script> 
 
-function MusicExercise(canvasId, width, x, y, scale, containerNode) {
-	//this.canvas = document.getElementsById(canvasId) // TODO: make it classname 
+function MusicExercise(containerNode, canvasClassName, width, x, y, scale, ) {
 	this.containerNode = containerNode===undefined ? document.body : containerNode; // to  make it independent and enable to use several exercises per page
-	//TODO: rewrite with jquery kind of syntax
-	this.canvas = this.containerNode.getElementsByClassName(canvasId)[0]; //TODO: create the div in container, if not given
-// 	if (this.canvas === undefined) {
-// 		this.canvas = create element
-// 		this.containerNode.append
-// 	}
+
+	if (canvasClassName === undefined) { // if not given, create div for canvas
+		this.canvas = document.createElement("div");
+		this.canvas.className = "mainCanvas";
+		this.containerNode.appendChild(this.canvas);
+	} else {
+		this.canvas = this.containerNode.getElementsByClassName(canvasClassName)[0]; // but always try to give the element, to have it in certain place!
+	}
 	
 	var _this = this;
 	
@@ -155,6 +156,8 @@ function MusicExercise(canvasId, width, x, y, scale, containerNode) {
 
 	
 	// methods for making tests ----------------
+	
+	// TODO: add timeSpent + feedback "Testi tegemiseks kulus aega: "+ this.timeSpent
 	
 	function countdown() {		
         //console.log(_this.timer);
