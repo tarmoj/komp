@@ -6,18 +6,19 @@
 var subExercise = [];
 	
 
-function recognizeKeySignature() {
+function recognizeKeySignature(containerNode) {
 	// variables
-	var keysToShow = 4;
+	var keysToShow = 4; // TODO: add user control up to how many keys to show
 	//var maxAccidentals = 7; // for later use
+	this.containerNode = containerNode===undefined ? document.body : containerNode;
 	
-	// TODO: add user control up to how many 
-	// maybe better array of objects {estMajor: "B duur", estMinor {"g moll"},  }
+	
 	
 	var keys = [
 		{vtKey:"C", major: "C-duur", minor: "a-moll"},
 		{vtKey:"G", major: "G-duur", minor: "e-moll"},
 		{vtKey:"D", major: "D-duur", minor: "h-moll"},
+		{vtKey:"A", major: "A-duur", minor: "fis-moll"},
 		{vtKey:"E", major: "E-duur", minor: "cis-moll"},
 		{vtKey:"B", major: "H-duur", minor: "gis-moll"},
 		{vtKey:"F#", major: "Fis-duur", minor: "dis-moll"},
@@ -49,21 +50,20 @@ function recognizeKeySignature() {
 	var answered = false;
 	
 	// Create or set necessary HTML elements
-	document.getElementById("exerciseTitle").innerHTML = "Määra helistik.";
-	document.getElementById("description").innerHTML = "Antud on helistik. Vali, millised on selle helistiku võtmemärgid."; 
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Määra helistik.";
+	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helistik. Vali, millised on selle helistiku võtmemärgid."; 
 	
 	
 	
 	
 	
 	// set necessary methods in exercise
-	exercise = new MusicExercise("mainCanvas",0); // no width
+	var exercise = new MusicExercise(this.containerNode,"mainCanvas",0); // no width, not staff, player etc
 	exercise.time = ""; // no time signature
 	
 	function checkResponse() { // must be separate function here since must be placed into object as listener's callback
-		console.log(selectedKey);
-		console.log(this.key);
-			
+		console.log(selectedKey, this.key);
+		
 		if (answered) {
 			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
 			return;
@@ -83,9 +83,9 @@ function recognizeKeySignature() {
 			this.artist.staves[0].note.context.attributes.fill = "red"
 		}
 		
-		document.getElementById("attempts").innerHTML = exercise.attempts;
-		document.getElementById("score").innerHTML = exercise.score;
-		document.getElementById("feedback").innerHTML = feedback; 
+		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = exercise.attempts;
+		this.containerNode.getElementsByClassName("score")[0].innerHTML = exercise.score;
+		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 
 		exercise.draw(); // redraw with colours
 		answered = true;
 		
@@ -100,18 +100,18 @@ function recognizeKeySignature() {
 	var container = [];
 	for (var i=0;i<keysToShow;i++) {
 		container[i] = document.createElement("span");
-		var id = "key"+(i+1)
-		container[i].id = id;
+		var className = "key"+(i+1)
+		container[i].className = className;
 		exercise.canvas.appendChild(container[i]);
-		subExercise[i] = new MusicExercise(id, 150);
+		subExercise[i] = new MusicExercise(this.containerNode,className, 150); 
 		//subExercise[i].index = i;
 		subExercise[i].time = "";
 		subExercise[i].clickActions = checkResponse; // this way it possible to use this.- properties in the function
 		
 	}
 	
-	document.getElementById("attempts").innerHTML = "0";
-	document.getElementById("score").innerHTML = "0";
+	this.containerNode.getElementsByClassName("attempts")[0].innerHTML = "0";
+	this.containerNode.getElementsByClassName("score")[0].innerHTML = "0";
 	
 	
 	
@@ -138,7 +138,7 @@ function recognizeKeySignature() {
 		// TODO: võimalda ka minoore, või siis
 		selectedKeysIsMajor = (Math.random()>0.5); // randomly 50-50
 		var keyName =  getKeyName(selectedKey, selectedKeysIsMajor);
-		document.getElementById("question").innerHTML =	"Milline neist on: <b>" + keyName + "</b> (Klõpsa noodijoonestikul)";
+		this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Milline neist on: <b>" + keyName + "</b> (Klõpsa noodijoonestikul)";
 		
 		
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
@@ -155,5 +155,7 @@ function recognizeKeySignature() {
 	exercise.checkResponse = function() { // nothing here, real check in checkResponse()
 		alert("Klõpsa õigele noodikrjale."); 
 	}
+	
+	return exercise;
 		
 }
