@@ -6,22 +6,24 @@
 
 //var exercise; should it be declared in the script part of main html?? 
 	
-function drawBarlines() { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
+function drawBarlines(containerNode) { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
 	// variables
 	var answered = false;
 	var time = "3/4"; // later random or  set by user, better random
-	//var previousX = 0, nextX = 0; // position of notes before and after barline
-	var barlineObject;
+	//var barlineObject;
 	var bar1 = {}, bar2 = {};
 	
+	this.containerNode = containerNode===undefined ? document.body : containerNode;
+
+	
 	// Create or set necessary HTML elements
-	document.getElementById("exerciseTitle").innerHTML = "Lisa taktijoon";
-	document.getElementById("description").innerHTML = "Antud taktimõõt, taktijoon on peidetud. Kus see peaks asuma?"; 
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Lisa taktijoon";
+	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud taktimõõt, taktijoon on peidetud. Kus see peaks asuma?"; 
 	//TODO: luba ka pause, mitte ainult noodid -  kas vaja?
-	document.getElementById("question").innerHTML =	"Kliki noodijoonestukul kohale, kus peaks asuma taktijoon.";
+	this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Kliki noodijoonestukul kohale, kus peaks asuma taktijoon.";
 	
 	// set necessary methods in exercise
-	exercise = new MusicExercise("mainCanvas");
+	var exercise = new MusicExercise(this.containerNode,"mainCanvas");
 	exercise.timeToThink = 20
 	
 	function generateBar(numerator, denomenator) { // return vextab string
@@ -53,8 +55,8 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 		
 		var parseString = "";
 		var possibleNotes = ["C","D","E","F","G"]; // etc all 12
-		for (let duration of durations) {
-			var flexDuration = (4/duration).toString();
+		for (var i=0; i<durations.length, i++) {
+			var flexDuration = (4/durations[i]).toString();
 			//console.log(_duration,flexDuration);
 			parseString += " :"+flexDuration + " " + possibleNotes[Math.floor(Math.random()*possibleNotes.length)] +"/4 ";
 			
@@ -126,9 +128,9 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 		var height = note.getYForLine(4) - note.getYForLine(0)  
 		context.rect(drawX, drawY, 2, height, { stroke: color,  fill: color});
 		
-		document.getElementById("attempts").innerHTML = exercise.attempts;
-		document.getElementById("score").innerHTML = exercise.score;
-		document.getElementById("feedback").innerHTML = feedback; 
+		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = exercise.attempts;
+		this.containerNode.getElementsByClassName("score")[0].innerHTML = exercise.score;
+		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 
 
 		answered = true;
 		
@@ -140,8 +142,8 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 	exercise.generate();		
 	exercise.draw();
 	
-	document.getElementById("renewButton").onclick = function() {
-		document.getElementById("feedback").innerHTML = "";
+	this.containerNode.getElementsByClassName("renewButton")[0].onclick = function() {
+		exercise.containerNode.getElementsByClassName("feedback")[0].innerHTML = "";
 		exercise.generate(); 
 		exercise.draw();
 	}
@@ -152,5 +154,5 @@ function drawBarlines() { // generates 2 bars in given time, hides barlines, on 
 	
 	}
 	
-
+	return exercise;
 }
