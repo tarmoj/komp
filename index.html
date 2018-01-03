@@ -17,7 +17,7 @@
 	<script src="baseclass.js"></script>
 	<script src="pianoclass.js"></script>
 	<script src="possible_notes.js"></script>
-	<script src="possible_intervals.js"></script>
+<!--	<script src="possible_intervals.js"></script>-->
 	
 	<!--exercises-->
 	<script src="find_missing_duration.js"></script>
@@ -93,10 +93,10 @@
 	<a onclick='exercise = noteFromKeyboard("bass")' href="#start">Mis klahv see on? Bassivõti</a> <br>
 	
 	<h3>Akord</h3>
-	<a onclick='buildInterval("treble", "up")' href="#start">Ehita intervall üles. Viiulivõti. </a> <br>
-	<a onclick='buildInterval("treble", "down")' href="#start">Ehita intervall alla. Viiulivõti. </a> <br>
-	<a onclick='buildInterval("bass", "up")' href="#start">Ehita intervall üles. Bassivõti. </a> <br>
-	<a onclick='buildInterval("bass", "down")' href="#start">Ehita intervall alla. Bassivõti. </a> <br>
+	<a onclick='exercise = buildInterval("treble", "up")' href="#start">Ehita intervall üles. Viiulivõti. </a> <br>
+	<a onclick='exercise = buildInterval("treble", "down")' href="#start">Ehita intervall alla. Viiulivõti. </a> <br>
+	<a onclick='exercise = buildInterval("bass", "up")' href="#start">Ehita intervall üles. Bassivõti. </a> <br>
+	<a onclick='exercise = buildInterval("bass", "down")' href="#start">Ehita intervall alla. Bassivõti. </a> <br>
 	<br>
 	<h3>Harmoonia</h3>
 	<a onclick="exercise = recognizeKeySignature()" href="#start">Määra helistik</a> <br>

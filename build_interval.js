@@ -9,13 +9,13 @@
 
 // possibleNotes for treble and bass cled defined in possible_notes.js -  must be included in main html
 
-function buildInterval(clef, direction) { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
+function buildInterval(clef, direction, containerNode) { 
 	if (direction===undefined) direction = "up";
 	if (clef===undefined) clef = "treble";
 	
 	var answered = false;
 	var intervalIndex = -1, noteIndex = -1, currentNoteIndex = -1;
-	
+	this.containerNode = containerNode===undefined ? document.body : containerNode;
 	
 	// descrtion of intervals
 	var possibleIntervals = [
@@ -50,7 +50,7 @@ function buildInterval(clef, direction) { // generates 2 bars in given time, hid
 	}
 	
 	// set necessary methods in exercise
-	exercise = new MusicExercise("mainCanvas",150,10,10,1.5); // bigger scale for note input
+	var exercise = new MusicExercise(this.containerNode, "mainCanvas",150,10,10,1.5); // bigger scale for note input
  	exercise.time = "";
  	exercise.key = "";
 	exercise.timeToThink = 30; // more time for doing the test
@@ -81,13 +81,13 @@ function buildInterval(clef, direction) { // generates 2 bars in given time, hid
 	
 	// Create or set necessary HTML elements
 	var directionTranslation = (direction==="up") ? "üles" : " alla" ;
-	document.getElementById("exerciseTitle").innerHTML = "Intervallide ehitamine: " + directionTranslation + ", "  + ( (clef==="bass") ? "bassivõti." : "viiulivõti." );
-	document.getElementById("description").innerHTML = "Antud on helikõrgus ja intervalli nimetus. Ehita intervall, klõpsates noodijoonestikule.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Intervallide ehitamine: " + directionTranslation + ", "  + ( (clef==="bass") ? "bassivõti." : "viiulivõti." );
+	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helikõrgus ja intervalli nimetus. Ehita intervall, klõpsates noodijoonestikule.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
 	
 	
 	
 	function handleAccidental(plusMinus) {  // -1 to lower half tone, +1 to raise halftone
-		console.log("handleAccidental", plusMinus, );
+		//console.log("handleAccidental", plusMinus);
 		if (currentNoteIndex > 0) {
 			currentNoteIndex += plusMinus;
 			if (currentNoteIndex>=possibleNotes.length-1)
@@ -156,7 +156,7 @@ function buildInterval(clef, direction) { // generates 2 bars in given time, hid
 		}
 		
 		console.log("Selected: ", possibleIntervals[intervalIndex].longName, "from ", possibleNotes[noteIndex].name);
-		document.getElementById("question").innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleIntervals[intervalIndex].longName + " " + directionTranslation +  '</b>.<br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
+		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleIntervals[intervalIndex].longName + " " + directionTranslation +  '</b>.<br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
 		
 		exercise.notes = ":w " + possibleNotes[noteIndex].vtNote; // the note the interval is built from
@@ -231,12 +231,13 @@ function buildInterval(clef, direction) { // generates 2 bars in given time, hid
 			exercise.score += 1;
 		}
 		
-		document.getElementById("attempts").innerHTML = exercise.attempts;
-		document.getElementById("score").innerHTML = exercise.score;
-		document.getElementById("feedback").innerHTML = feedback; 		
+		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = exercise.attempts;
+		this.containerNode.getElementsByClassName("score")[0].innerHTML = exercise.score;
+		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 		
 		answered = true;
 		
 	}
 	
+	return exercise;
 
 }
