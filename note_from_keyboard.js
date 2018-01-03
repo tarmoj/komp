@@ -10,16 +10,16 @@
 
 // possibleNotes for treble and bass cled defined in possible_notes.js -  must be included in main html
 
-function noteFromKeyboard(clef) { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
+function noteFromKeyboard(clef, containerNode) { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
 	
 	var answered = false;
 	var noteIndex = -1, currentNoteIndex = -1, selectedMidiNote = -1;
 	var correctNames = [], correctSyllables = []; // must be array since there are several enharmonic possibilities for black keys
-	
+	this.containerNode = containerNode===undefined ? document.body : containerNode;
 	
 	
 	// set necessary methods in exercise
-	exercise = new MusicExercise("mainCanvas",150,10,10,1.5); // bigger scale for note input
+	var exercise = new MusicExercise(this.containerNode, "mainCanvas",150,10,10,1.5); // bigger scale for note input
  	exercise.time = "";
  	exercise.key = "";
 	exercise.timeToThink = 30; // more time for doing the test
@@ -36,16 +36,16 @@ function noteFromKeyboard(clef) { // generates 2 bars in given time, hides barli
 	}
 	
 	// Create or set necessary HTML elements
-	document.getElementById("exerciseTitle").innerHTML = "Helikõrgus klaviatuurilt: " + ( (clef==="bass") ? "Bassivõti." : " Viiulivõti." );
-	document.getElementById("description").innerHTML = " Antud on helikõrgus klaviatuuril. Kirjuta helikõrgus tähtnimetusega, silpnimetusega, noodijoonestikul.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
-	//document.getElementById("question").innerHTML =	"See noot on silpnimetusega: / Kliki noodijoonestukul kohale, kus peaks asuma noot. Kasuta +/- nuppe, et lisada diees või bemoll";
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Helikõrgus klaviatuurilt: " + ( (clef==="bass") ? "Bassivõti." : " Viiulivõti." );
+	this.containerNode.getElementsByClassName("description")[0].innerHTML = " Antud on helikõrgus klaviatuuril. Kirjuta helikõrgus tähtnimetusega, silpnimetusega, noodijoonestikul.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
+	//this.containerNode.getElementsByClassName("question")[0].innerHTML =	"See noot on silpnimetusega: / Kliki noodijoonestukul kohale, kus peaks asuma noot. Kasuta +/- nuppe, et lisada diees või bemoll";
 	
 	
 	
 	// add diesis and bemoll button to mainCanvas
 	
 	function handleAccidental(plusMinus) {  // -1 to lower half tone, +1 to raise halftone
-		console.log("handleAccidental", plusMinus, );
+		//console.log("handleAccidental", plusMinus);
 		if (currentNoteIndex > 0) {
 			currentNoteIndex += plusMinus;
 			if (currentNoteIndex>=possibleNotes.length-1)
@@ -86,12 +86,11 @@ function noteFromKeyboard(clef) { // generates 2 bars in given time, hides barli
     exercise.canvas.appendChild(bemolleButton);
 	
 	var pianoDiv = document.createElement("div"); // piano keyboard
-	pianoDiv.id="piano-container";
 	pianoDiv.style.marginTop = "5px";
 	exercise.canvas.appendChild(pianoDiv);
 
 	var startingOctave = (clef==="bass") ? 2 : 4; 
-	var piano = new Piano("piano-container",startingOctave, 2, 500); // 1 octava from middle C by default
+	var piano = new Piano(pianoDiv,startingOctave, 2, 500); // 2 octavas from low C
 	piano.createPiano();
 	var lowestKey = (clef==="bass") ? 36 : 60;
 	var highestKey = (clef==="bass") ? 59 : 83;
@@ -123,25 +122,25 @@ function noteFromKeyboard(clef) { // generates 2 bars in given time, hides barli
 		}
 		console.log("Found ", correctNames.length, " matching notes.")
 		
-		document.getElementById("question").innerHTML =	'Klaviatuuril märgitud noodi tähtnimetus on: <select id="noteName"><option>---</option></select>,  silpnimetus: <select id="syllable"><option>---</option></select><br>Kui oled noodi kirjutanud ka noodijoonestikule, vajuta Vasta:' ;
+		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'Klaviatuuril märgitud noodi tähtnimetus on: <select class="noteName"><option>---</option></select>,  silpnimetus: <select class="syllable"><option>---</option></select><br>Kui oled noodi kirjutanud ka noodijoonestikule, vajuta Vasta:' ;
 		
-		var select1 = document.getElementById('noteName');
-		for(var i = 0; i < 7*3; i++) {
-			let option = document.createElement('option');
-			let noteName = removeLastDigit(possibleNotes[i].name.toLowerCase()); // remove octave (1 or 2), if present
+		var select1 = this.containerNode.getElementsByClassName('noteName')[0];
+		for(var ii = 0; ii < 7*3; ii++) {
+			var option = document.createElement('option');
+			var noteName = removeLastDigit(possibleNotes[ii].name.toLowerCase()); // remove octave (1 or 2), if present
 			option.innerHTML = noteName;
 			option.value = noteName;
 			select1.appendChild(option);
 		}
 		
 		
-		var select2 = document.getElementById('syllable');
-		for(var i = 0; i < 7*3; i++) {
-			let option = document.createElement('option');
-			let syllable = removeLastDigit(possibleNotes[i].syllable.toLowerCase()); // remove octave (1 or 2), if present
-			option.innerHTML = syllable;
-			option.value = syllable;
-			select2.appendChild(option);
+		var select2 = this.containerNode.getElementsByClassName('syllable')[0];
+		for(var j = 0; j < 7*3; j++) {
+			var option2 = document.createElement('option');
+			var syllable = removeLastDigit(possibleNotes[j].syllable.toLowerCase()); // remove octave (1 or 2), if present
+			option2.innerHTML = syllable;
+			option2.value = syllable;
+			select2.appendChild(option2);
 		}
 		
 		exercise.notes = ""; // nothing drawn	
@@ -176,7 +175,7 @@ function noteFromKeyboard(clef) { // generates 2 bars in given time, hides barli
 	}
 	
 	exercise.renew = function() {
-		document.getElementById("feedback").innerHTML = "";
+		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = "";
 		piano.deactivateAllKeys(); // must be before generate, otherwise deactivates selected key.
         this.generate();
         this.draw();
@@ -204,7 +203,7 @@ function noteFromKeyboard(clef) { // generates 2 bars in given time, hides barli
 		var noteIndex = 0;
 		//var syllable = removeLastDigit(possibleNotes[noteIndex].syllable.toLowerCase());
 		
-		if ( correctNames.indexOf( document.getElementById("noteName").value) >= 0 ) { 
+		if ( correctNames.indexOf( this.containerNode.getElementsByClassName("noteName")[0].value) >= 0 ) { 
 			feedback += "Tähtnimetus õige! "
 			correct = true;
 		} else {
@@ -212,7 +211,7 @@ function noteFromKeyboard(clef) { // generates 2 bars in given time, hides barli
 			correct = false;
 		}
 		
-		if ( correctSyllables.indexOf( document.getElementById("syllable").value) >= 0 ) { 
+		if ( correctSyllables.indexOf( this.containerNode.getElementsByClassName("syllable")[0].value) >= 0 ) { 
 			feedback += "Silpnimetus õige! "
 			correct = correct && true;
 		} else {
@@ -235,12 +234,13 @@ function noteFromKeyboard(clef) { // generates 2 bars in given time, hides barli
 			exercise.score += 1;
 		}
 		
-		document.getElementById("attempts").innerHTML = exercise.attempts;
-		document.getElementById("score").innerHTML = exercise.score;
-		document.getElementById("feedback").innerHTML = feedback; 		
+		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = exercise.attempts;
+		this.containerNode.getElementsByClassName("score")[0].innerHTML = exercise.score;
+		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 		
 		answered = true;
 		
 	}
 	
-
+	return exercise;
+	
 }

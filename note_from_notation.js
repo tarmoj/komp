@@ -75,8 +75,8 @@ function noteFromNotation(clef, containerNode) {
 		for(var j = 0; j < 7*3; j++) {
 			var option2 = document.createElement('option');
 			var syllable = removeLastDigit(possibleNotes[i].syllable.toLowerCase()); // remove octave (1 or 2), if present
-			option.innerHTML = syllable;
-			option.value = syllable;
+			option2.innerHTML = syllable;
+			option2.value = syllable;
 			select2.appendChild(option2);
 		}
 		
