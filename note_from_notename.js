@@ -9,13 +9,14 @@
 
 // possibleNotes for treble and bass cled defined in possible_notes.js -  must be included in main html
 
-function noteFromNoteName(clef, containerNode) { 
+function noteFromNoteName(clef, containerNode, canvasClassName) { 
 	var answered = false;
 	var noteIndex = -1, currentNoteIndex = -1;
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
+	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
 
 	// set necessary methods in exercise
-	var exercise = new MusicExercise(this.containerNode, "mainCanvas",150,10,10,1.5); // bigger scale for note input
+	var exercise = new MusicExercise(this.containerNode, this.canvasClassName, 150,10,10,1.5); // bigger scale for note input
  	exercise.time = "";
  	exercise.key = "";
 	exercise.timeToThink = 30; // more time for doing the test

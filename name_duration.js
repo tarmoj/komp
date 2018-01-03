@@ -4,19 +4,20 @@
  
 // harjutus 1.2.2 "Helivältus. Kirjuta helivältuse nimetus. Antud on helivältus noodikirja märgina (noot või paus). Kirjuta helivältuse nimetus"
 
-function nameDuration(containerNode) {		
+function nameDuration(containerNode, canvasClassName) {		
 	// variables
 	var duration = -1;
 	var answered = false;
 	
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
+	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
 	
 	// Create or set necessary HTML elements
 	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Määra helivältus";
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helivältus noodikirja märgina (noot või paus). Leia,  mis vältus see on"; 
 	this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Mis vältus see on?";
 	
-	var exercise = new MusicExercise(this.containerNode,"mainCanvas", 100); // relatively narrow canvas 
+	var exercise = new MusicExercise(this.containerNode,this.canvasClassName, 100); // relatively narrow canvas 
 	
 	var oldResponse = this.containerNode.getElementsByClassName("response")[0];
 	var response = document.createElement("select");

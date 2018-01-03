@@ -9,13 +9,14 @@
 
 // possibleNotes for treble and bass cled defined in possible_notes.js -  must be included in main html
 
-function buildInterval(clef, direction, containerNode) { 
+function buildInterval(clef, direction, containerNode, canvasClassName) { 
 	if (direction===undefined) direction = "up";
 	if (clef===undefined) clef = "treble";
 	
 	var answered = false;
 	var intervalIndex = -1, noteIndex = -1, currentNoteIndex = -1;
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
+	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
 	
 	// descrtion of intervals
 	var possibleIntervals = [
@@ -50,7 +51,7 @@ function buildInterval(clef, direction, containerNode) {
 	}
 	
 	// set necessary methods in exercise
-	var exercise = new MusicExercise(this.containerNode, "mainCanvas",150,10,10,1.5); // bigger scale for note input
+	var exercise = new MusicExercise(this.containerNode, this.canvasClassName, 150,10,10,1.5); // bigger scale for note input
  	exercise.time = "";
  	exercise.key = "";
 	exercise.timeToThink = 30; // more time for doing the test

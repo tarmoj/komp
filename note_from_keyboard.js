@@ -10,16 +10,17 @@
 
 // possibleNotes for treble and bass cled defined in possible_notes.js -  must be included in main html
 
-function noteFromKeyboard(clef, containerNode) { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
+function noteFromKeyboard(clef, containerNode, canvasClassName) { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
 	
 	var answered = false;
 	var noteIndex = -1, currentNoteIndex = -1, selectedMidiNote = -1;
 	var correctNames = [], correctSyllables = []; // must be array since there are several enharmonic possibilities for black keys
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
+	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
 	
 	
 	// set necessary methods in exercise
-	var exercise = new MusicExercise(this.containerNode, "mainCanvas",150,10,10,1.5); // bigger scale for note input
+	var exercise = new MusicExercise(this.containerNode, this.canvasClassName, 150,10,10,1.5); // bigger scale for note input
  	exercise.time = "";
  	exercise.key = "";
 	exercise.timeToThink = 30; // more time for doing the test

@@ -5,13 +5,14 @@
 // 1.3.5 Helikõrgus    Viiulivõti/Bassivõti. Antud on helikõrgus noodijoonestikul. Kirjelda helikõrguse asukohta noodijoonestikul (mitmendal joonel või mitmendas vahes) ja anna helikõrguse tähtnimetus ja silpnimetus.
 
 
-function describeNote(containerNode) {
+function describeNote(containerNode, canvasClassName) {
 // variables
 	var duration = -1;
 	var answered = false;
 	var selectedNoteIndex = -1;
 	
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
+	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName
 
 	
 	// Create or set necessary HTML elements
@@ -69,7 +70,7 @@ function describeNote(containerNode) {
 	}
 	
 	// set necessary methods in exercise
-	var exercise = new MusicExercise(this.containerNode, "mainCanvas", 100); // relatively narrow canvas
+	var exercise = new MusicExercise(this.containerNode, this.canvasClassName, 100); // relatively narrow canvas
 	exercise.time = ""; // no time signature
 	exercise.timeToThink = 25
 	

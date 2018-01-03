@@ -6,7 +6,7 @@
 
 //var exercise; should it be declared in the script part of main html?? 
 	
-function drawBarlines(containerNode) { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
+function drawBarlines(containerNode, canvasClassName) { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
 	// variables
 	var answered = false;
 	var time = "3/4"; // later random or  set by user, better random
@@ -14,6 +14,7 @@ function drawBarlines(containerNode) { // generates 2 bars in given time, hides 
 	var bar1 = {}, bar2 = {};
 	
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
+	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
 
 	
 	// Create or set necessary HTML elements
@@ -23,7 +24,7 @@ function drawBarlines(containerNode) { // generates 2 bars in given time, hides 
 	this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Kliki noodijoonestukul kohale, kus peaks asuma taktijoon.";
 	
 	// set necessary methods in exercise
-	var exercise = new MusicExercise(this.containerNode,"mainCanvas");
+	var exercise = new MusicExercise(this.containerNode,this.canvasClassName);
 	exercise.timeToThink = 20
 	
 	function generateBar(numerator, denomenator) { // return vextab string

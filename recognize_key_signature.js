@@ -6,12 +6,12 @@
 var subExercise = [];
 	
 
-function recognizeKeySignature(containerNode) {
+function recognizeKeySignature(containerNode, canvasClassName) {
 	// variables
 	var keysToShow = 4; // TODO: add user control up to how many keys to show
 	//var maxAccidentals = 7; // for later use
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
-	
+	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
 	
 	
 	var keys = [
@@ -53,12 +53,8 @@ function recognizeKeySignature(containerNode) {
 	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Määra helistik.";
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helistik. Vali, millised on selle helistiku võtmemärgid."; 
 	
-	
-	
-	
-	
 	// set necessary methods in exercise
-	var exercise = new MusicExercise(this.containerNode,"mainCanvas",0); // no width, not staff, player etc
+	var exercise = new MusicExercise(this.containerNode,this.canvasClassName,0); // no width, not staff, player etc
 	exercise.time = ""; // no time signature
 	
 	function checkResponse() { // must be separate function here since must be placed into object as listener's callback

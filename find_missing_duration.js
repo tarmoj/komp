@@ -5,12 +5,13 @@
 // Exercise: Helivältus. Harjutus. Lisa puuduv vältus
 
 // returns MusicExercise	
-function findMissingDuration(containerNode) { // Harjutus 1.2.3 Lisa puuduv helivältus
+function findMissingDuration(containerNode, canvasClassName) { // Harjutus 1.2.3 Lisa puuduv helivältus
 	// variables
 	
 	var hiddenNote = -1, hiddenDuration = -1;
 	var answered = false;
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
+	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName
 	
 	// Create or set necessary HTML elements
 	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Lisa puuduv helivältus";
@@ -20,7 +21,7 @@ function findMissingDuration(containerNode) { // Harjutus 1.2.3 Lisa puuduv heli
 
 		
 	// create exercise as local variable, then return it in the end of function
-	var exercise = new MusicExercise(this.containerNode,"mainCanvas");  //TODO: later -  containerNode as first parameter
+	var exercise = new MusicExercise(this.containerNode, this.canvasClassName);  //TODO: later -  containerNode as first parameter
 	
 	var oldResponse = this.containerNode.getElementsByClassName("response")[0];
 	var response = document.createElement("select"); 
