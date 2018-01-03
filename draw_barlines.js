@@ -140,14 +140,7 @@ function drawBarlines(containerNode, canvasClassName) { // generates 2 bars in g
 		}
 	}
 	
-	exercise.generate();		
-	exercise.draw();
-	
-	this.containerNode.getElementsByClassName("renewButton")[0].onclick = function() {
-		exercise.containerNode.getElementsByClassName("feedback")[0].innerHTML = "";
-		exercise.generate(); 
-		exercise.draw();
-	}
+	exercise.renew();		
 	
 	exercise.checkResponse = function() {
 		//TODO: kontrolli, kas uuendatud, muidu tõstab ainult skoori...
