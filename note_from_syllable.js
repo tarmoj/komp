@@ -39,7 +39,7 @@ function noteFromSyllable(clef, containerNode) {
 
 	
 	function handleAccidental(plusMinus) {  // -1 to lower half tone, +1 to raise halftone
-		console.log("handleAccidental", plusMinus, );
+		console.log("handleAccidental", plusMinus );
 		if (currentNoteIndex > 0) {
 			currentNoteIndex += plusMinus;
 			if (currentNoteIndex>=possibleNotes.length-1)
@@ -183,7 +183,7 @@ function noteFromSyllable(clef, containerNode) {
 		
 		if (currentNoteIndex === noteIndex) {
 			feedback += "Noot noodijoonestikul on õige! "
-			correct = correct && true;;
+			correct = correct && true;
 		} else {
 			feedback += "Noot noodijoonestikul on vale! "; 
 			exercise.notes += " " + possibleNotes[noteIndex].vtNote;

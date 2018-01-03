@@ -9,18 +9,17 @@
 // 1.3.9. harjutus. Helikõrgus. Viiulivõti. Antud on helikõrgus noodijoonestikul. Kirjuta helikõrgus tähtnimetusega, silpnimetusega, klaviatuuril. (Column + MusGen)
 
 
-//var exercise must be defined in html.
-
 // violinClefNotes and bassClefNotes are defined in possible_notes.js -  must be included in main html
 
 
-function noteFromNotation(clef) { // draws a note, user must answer the letter name and syllable name of the note and press it on piano keyboard
+function noteFromNotation(clef, containerNode) {
 	
 	var answered = false;
 	var noteIndex = -1, currentNoteIndex = -1;
+	this.containerNode = containerNode===undefined ? document.body : containerNode;
 	
 	// set necessary methods in exercise
-	exercise = new MusicExercise("mainCanvas",150,10,10,1.5); // bigger scale for note input
+	var exercise = new MusicExercise(this.containerNode, "mainCanvas",150,10,10,1.5); // bigger scale for note input
  	exercise.time = "";
  	exercise.key = "";
 	exercise.timeToThink = 30; // more time for doing the test
@@ -37,18 +36,15 @@ function noteFromNotation(clef) { // draws a note, user must answer the letter n
 	}
 	
 	// Create or set necessary HTML elements
-	document.getElementById("exerciseTitle").innerHTML = "Mis noot see on? " + ( (clef==="bass") ? "Bassivõti." : " Viiulivõti." );
-	document.getElementById("description").innerHTML = "Antud on helikõrgus noodijoonestikul. Kirjuta helikõrgus tähtnimetusega, silpnimetusega, klaviatuuril"; 
-	//TODO: luba ka pause, mitte ainult noodid -  kas vaja?
-	//document.getElementById("question").innerHTML =	"Mis noot see on? Sisesa tähtnimetus, silpnimetus, asukoht klaviatuuril.";
-	
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Mis noot see on? " + ( (clef==="bass") ? "Bassivõti." : " Viiulivõti." );
+	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helikõrgus noodijoonestikul. Kirjuta helikõrgus tähtnimetusega, silpnimetusega, klaviatuuril"; 
+
 	
 	var pianoDiv = document.createElement("div"); // piano keyboard
-	pianoDiv.id="piano-container";
 	pianoDiv.style.marginTop = "5px";
 	exercise.canvas.appendChild(pianoDiv);
 
-	var piano = new Piano("piano-container"); // 1 octava from middle C by default
+	var piano = new Piano(pianoDiv); // 1 octava from middle C by default
 	piano.createPiano();
 	
 	function removeLastDigit(word) { // to turn notenames like "ces2" into "ces"
@@ -63,25 +59,25 @@ function noteFromNotation(clef) { // draws a note, user must answer the letter n
 		noteIndex = Math.floor(Math.random()*possibleNotes.length); 
 		console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable);
 		
-		document.getElementById("question").innerHTML =	'Noodijoonestikul kuvatud noodi tähtnimetus on: <select id="noteName"><option>---</option></select>,  silpnimetus: <select id="syllable"><option>---</option></select><br>Kui oled noodi leidnud ka klaviatuuril, vajuta Vasta:' ;
+		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'Noodijoonestikul kuvatud noodi tähtnimetus on: <select class="noteName"><option>---</option></select>,  silpnimetus: <select class="syllable"><option>---</option></select><br>Kui oled noodi leidnud ka klaviatuuril, vajuta Vasta:' ;
 		
-		var select1 = document.getElementById('noteName');
-		for(var i = 0; i < 7*3; i++) {
-			let option = document.createElement('option');
-			let noteName = removeLastDigit(possibleNotes[i].name.toLowerCase()); // remove octave (1 or 2), if present
+		var select1 = this.containerNode.getElementsByClassName('noteName')[0];
+		for (var i = 0; i < 7*3; i++) {
+			var option = document.createElement('option');
+			var noteName = removeLastDigit(possibleNotes[i].name.toLowerCase()); // remove octave (1 or 2), if present
 			option.innerHTML = noteName;
 			option.value = noteName;
 			select1.appendChild(option);
 		}
 		
 		
-		var select2 = document.getElementById('syllable');
-		for(var i = 0; i < 7*3; i++) {
-			let option = document.createElement('option');
-			let syllable = removeLastDigit(possibleNotes[i].syllable.toLowerCase()); // remove octave (1 or 2), if present
+		var select2 = this.containerNode.getElementsByClassName('syllable')[0];
+		for(var j = 0; j < 7*3; j++) {
+			var option2 = document.createElement('option');
+			var syllable = removeLastDigit(possibleNotes[i].syllable.toLowerCase()); // remove octave (1 or 2), if present
 			option.innerHTML = syllable;
 			option.value = syllable;
-			select2.appendChild(option);
+			select2.appendChild(option2);
 		}
 		
 		
@@ -93,7 +89,7 @@ function noteFromNotation(clef) { // draws a note, user must answer the letter n
 	}
 	
 	exercise.renew = function() {
-		document.getElementById("feedback").innerHTML = "";
+		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = "";
         this.generate();
         this.draw();
 		piano.deactivateAllKeys();
@@ -119,10 +115,10 @@ function noteFromNotation(clef) { // draws a note, user must answer the letter n
 		
 		// TODO: eemalda silbilt oktavinumber
 		
-		let syllable = removeLastDigit(possibleNotes[noteIndex].syllable.toLowerCase());
-		let noteName = removeLastDigit(possibleNotes[noteIndex].name.toLowerCase());
+		var syllable = removeLastDigit(possibleNotes[noteIndex].syllable.toLowerCase());
+		var noteName = removeLastDigit(possibleNotes[noteIndex].name.toLowerCase());
 		
-		if (document.getElementById("noteName").value === noteName ) { 
+		if (this.containerNode.getElementsByClassName("noteName")[0].value === noteName ) { 
 			feedback += "Tähtnimetus õige! "
 			correct = true;
 		} else {
@@ -130,7 +126,7 @@ function noteFromNotation(clef) { // draws a note, user must answer the letter n
 			correct = false;
 		}
 		
-		if (document.getElementById("syllable").value === syllable ) { 
+		if (this.containerNode.getElementsByClassName("syllable")[0].value === syllable ) { 
 			feedback += "Silpnimetus õige! "
 			correct = true;
 		} else {
@@ -153,12 +149,13 @@ function noteFromNotation(clef) { // draws a note, user must answer the letter n
 			exercise.score += 1;
 		}
 		
-		document.getElementById("attempts").innerHTML = exercise.attempts;
-		document.getElementById("score").innerHTML = exercise.score;
-		document.getElementById("feedback").innerHTML = feedback; 		
+		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = exercise.attempts;
+		this.containerNode.getElementsByClassName("score")[0].innerHTML = exercise.score;
+		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 		
 		answered = true;
 		
 	}
 	
+	return exercise;
 
 }
