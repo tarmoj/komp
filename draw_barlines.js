@@ -143,8 +143,12 @@ function drawBarlines(containerNode, canvasClassName) { // generates 2 bars in g
 	exercise.renew();		
 	
 	exercise.checkResponse = function() {
-		//TODO: kontrolli, kas uuendatud, muidu tõstab ainult skoori...
-		alert("Kliki noodijoonestikul kohele, kus peaks olema taktijoon");
+		if (answered) {
+			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
+			return;
+		} else {
+			alert("Kliki noodijoonestikul kohele, kus peaks olema taktijoon");
+		}
 	
 	}
 	
