@@ -106,11 +106,6 @@ function recognizeKeySignature(containerNode, canvasClassName) {
 		
 	}
 	
-	this.containerNode.getElementsByClassName("attempts")[0].innerHTML = "0";
-	this.containerNode.getElementsByClassName("score")[0].innerHTML = "0";
-	
-	
-	
 	
 	exercise.generate = function() {		
 		var keyIndexes = []; // indexes
@@ -119,7 +114,6 @@ function recognizeKeySignature(containerNode, canvasClassName) {
 		for (i=0; i<keysToShow; i++) {
 			var index = Math.floor(Math.random()* keys.length)
 			while (keyIndexes.indexOf(index)>=0) { // avoid repeating of same key
-				console.log("We have this key already, taking new.");
 				index = Math.floor(Math.random()* keys.length);
 			}
 			subExercise[i].key = keys[index].vtKey;
@@ -149,7 +143,12 @@ function recognizeKeySignature(containerNode, canvasClassName) {
 	
 	
 	exercise.checkResponse = function() { // nothing here, real check in checkResponse()
-		alert("Klõpsa õigele noodikrjale."); 
+		if (answered) {
+			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
+			return;
+		} else {
+			alert("Klõpsa õigele noodikrjale."); 
+		}
 	}
 	
 	return exercise;
