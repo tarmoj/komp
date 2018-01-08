@@ -20,35 +20,67 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 	
 	// descrtion of intervals
 	var possibleIntervals = [
-		{ shortName: "p1", longName: "puhas priim", semitones: 0 },
-		{ shortName: "v2", longName: "väikes sekund", semitones: 1 },
-		{ shortName: "s2", longName: "suur sekund", semitones: 2 },
-		{ shortName: "v3", longName: "väike terts", semitones: 3 },
-		{ shortName: "s3", longName: "suur terts", semitones: 4 },
-		{ shortName: "p4", longName: "puhas kvart", semitones: 5 },
-		{ shortName: "p4", longName: "suurendatud kvart", semitones: 6 },
-		{ shortName: "p5", longName: "puhas kvint", semitones: 7 },
-		{ shortName: "v6", longName: "väike sekst", semitones: 8 },
-		{ shortName: "s6", longName: "suur sekst", semitones: 9 },
-		{ shortName: "v7", longName: "väike septim", semitones: 10 },
-		{ shortName: "s7", longName: "suur septim", semitones: 11 },	
-		{ shortName: "p8", longName: "puhas oktav", semitones: 12 },
+		{ shortName: "p1", longName: "puhas priim", semitones: 0, degrees: 0 }, // degrees (astmeid) -  difference in scale degrees (Ces/C/Cis - 0,  Des/D/Dis - 1 etc)
+		{ shortName: "v2", longName: "väikes sekund", semitones: 1, degrees: 1 },
+		{ shortName: "s2", longName: "suur sekund", semitones: 2, degrees: 1 },
+		{ shortName: "v3", longName: "väike terts", semitones: 3, degrees: 2 },
+		{ shortName: "s3", longName: "suur terts", semitones: 4, degrees: 2 },
+		{ shortName: "p4", longName: "puhas kvart", semitones: 5, degrees: 3 },
+		{ shortName: ">4", longName: "suurendatud kvart", semitones: 6, degrees: 3 }, // vähendatud kvint?
+		{ shortName: "<5", longName: "vähendatud kvint", semitones: 6, degrees: 4 },
+		{ shortName: "p5", longName: "puhas kvint", semitones: 7, degrees: 4 },
+		{ shortName: "v6", longName: "väike sekst", semitones: 8, degrees: 5 },
+		{ shortName: "s6", longName: "suur sekst", semitones: 9, degrees: 5 },
+		{ shortName: "v7", longName: "väike septim", semitones: 10, degrees: 6 },
+		{ shortName: "s7", longName: "suur septim", semitones: 11, degrees: 6 },	
+		{ shortName: "p8", longName: "puhas oktav", semitones: 12, degrees: 0 },
 		
 	];
 	
-	function findIntervalBySemitones(semitones) {
-		// takend that there is 1 interval by number of semitones. It can be different - for example diminished fifth and augmented fourth; TODO: then return an array, not first found item		
+	function findIntervalBySemitones(semitones, degrees) {
+		//  degrees -  numbers of scale degrees between the notes
 		if (semitones>12) {
-			alert("Liiga suur intervall")
-			return NaN;
+			alert("Liiga suur intervall, oktavit ignoreeritaks");
+			interval = interval % 12;
 		}
+		var intervals = [];
+		
 		for (var i= 0; i<possibleIntervals.length; i++) { 
 			if (semitones === possibleIntervals[i].semitones) {
+				intervals.push(possibleIntervals[i]); // several intervals can be with same semitones  distance
+			}
+		}
+		
+		if (intervals.length === 0) {
+			return NaN;
+		}
+		
+		if (degrees === undefined) {
+			return intervals[0]; // first found interval if degrees is not set
+		} else {
+			for (var j=0; j<intervals.length; j++ ) {
+				if (intervals[j].degrees === degrees) {
+					return intervals[j];
+				}
+			}
+		}
+		
+		return NaN;
+	}
+	
+	function findIntervalByShortName(shortName) {
+		for (var i= 0; i<possibleIntervals.length; i++) {
+			if (shortName === possibleIntervals[i].shortName) {
 				return possibleIntervals[i];
 			}
 		}
 		return NaN;
 	}
+	
+	console.log(">4: ", findIntervalBySemitones(6,3) )
+	console.log("<4: ", findIntervalBySemitones(6,4) )
+	console.log("esimene sobiv: ", findIntervalBySemitones(6) )
+	console.log("p4", findIntervalByShortName("p4") )
 	
 	// set necessary methods in exercise
 	var exercise = new MusicExercise(this.containerNode, this.canvasClassName, 150,10,10,1.5); // bigger scale for note input
