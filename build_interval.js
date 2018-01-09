@@ -33,9 +33,11 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 		{ shortName: "s6", longName: "suur sekst", semitones: 9, degrees: 5 },
 		{ shortName: "v7", longName: "väike septim", semitones: 10, degrees: 6 },
 		{ shortName: "s7", longName: "suur septim", semitones: 11, degrees: 6 },	
-		{ shortName: "p8", longName: "puhas oktav", semitones: 12, degrees: 0 },
+		{ shortName: "p8", longName: "puhas oktav", semitones: 12, degrees:  7 },
 		
 	];
+	
+	var noInterval = {shortName: "none", longName: "määratlemata", semitones: -1, degrees: -1}; // to be used if nothing found
 	
 	function findIntervalBySemitones(semitones, degrees) {
 		//  degrees -  numbers of scale degrees between the notes
@@ -52,7 +54,7 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 		}
 		
 		if (intervals.length === 0) {
-			return NaN;
+			return noInterval;
 		}
 		
 		if (degrees === undefined) {
@@ -65,7 +67,7 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 			}
 		}
 		
-		return NaN;
+		return noInterval;
 	}
 	
 	function findIntervalByShortName(shortName) {
@@ -74,13 +76,25 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 				return possibleIntervals[i];
 			}
 		}
-		return NaN;
+		return noInterval;
 	}
 	
-	console.log(">4: ", findIntervalBySemitones(6,3) )
-	console.log("<4: ", findIntervalBySemitones(6,4) )
-	console.log("esimene sobiv: ", findIntervalBySemitones(6) )
-	console.log("p4", findIntervalByShortName("p4") )
+	function getInterval(note1, note2) { // return interval object and direction
+		var semitones = note2.midiNote - note1.midiNote;
+		var direction = semitones >=0 ? "up" : "down";
+		// we need also info about octaves
+		var oct1 = Math.floor(note1.midiNote / 12) - 1; // 4 for first octava etc
+		var oct2 = Math.floor(note2.midiNote / 12) - 1;
+		console.log("oct1, oct2", oct1, oct2,  note2.degree+oct1*7,note1.degree+oct2*7 )
+		var degrees = Math.abs((note2.degree+oct2*7) - (note1.degree+oct1*7)); // put the degrees int onw scale, so the difference gives the distance of degrees
+		/*if ((note2.degree + note1.degree) >6 ) { // if goves to other octave
+			degrees = 7 - degrees;
+		}*/ 
+		
+		var interval = findIntervalBySemitones(Math.abs(semitones), degrees);
+		console.log("semitones, degrees, interval, direction", semitones, degrees, interval.longName, direction )
+		return {interval: interval, direction: direction};
+	}
 	
 	// set necessary methods in exercise
 	var exercise = new MusicExercise(this.containerNode, this.canvasClassName, 150,10,10,1.5); // bigger scale for note input
@@ -198,7 +212,23 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 	
 	}
 	
-	
+	function makeChord(noteArray) { // noteArray - array of type possibleNotes, to have midiNotes to sort those
+		// sort, return vtString (<note>.<note>.<et>)
+		if (noteArray.length<2) {
+			console.log("Not enough notes for chord");
+			return "";
+		}
+		noteArray.sort(function(a,b) { return a.midiNote - b.midiNote; }  )
+		var vtString = "("; // make vextab chord notation
+		for (var i=0; i<noteArray.length; i++) {
+			if (i>0) vtString += "."; // separator between chord notes 
+			vtString += noteArray[i].vtNote;
+		}
+		vtString += ")"
+		console.log("Sorted chord: ", vtString);
+		return vtString;
+		
+	}
 	
 	exercise.clickActions = function(x,y) {
 		// console.log(x,y);		
@@ -211,19 +241,9 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 			if (possibleNotes[i].hasOwnProperty("line") ) {
 				//console.log(i, possibleNotes[i].line, line)
 				if (possibleNotes[i].line === line) {
-					console.log("FOUND ", i, possibleNotes[i].vtNote);
+					//console.log("FOUND ", i, possibleNotes[i].vtNote);
 					currentNoteIndex = i;
-					// The order of notes must be correct -  otherwis accidentals rendered wrong
-					// BETTER: check midiNotes, sort by that
-					// see about sort https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort
-					if (direction==="up") {
-						exercise.notes = ":w (" +  possibleNotes[noteIndex].vtNote + "." + possibleNotes[currentNoteIndex].vtNote + ")"; // enter as chord of whole notes
-					} else {
-						exercise.notes = ":w (" +  possibleNotes[currentNoteIndex].vtNote + "." + possibleNotes[noteIndex].vtNote + ")";
-					}
-					
-					//exercise.notes = ":w (" +  possibleNotes[noteIndex].vtNote + "." + possibleNotes[i].vtNote + ")" 
-
+					exercise.notes = ":w " + makeChord([possibleNotes[currentNoteIndex], possibleNotes[noteIndex]]);
 					exercise.draw();
 					break;
 				}
@@ -249,14 +269,13 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 		var feedback = "";
 		var correct = false;
 		
-		var currentInterval = Math.abs(possibleNotes[noteIndex].midiNote - possibleNotes[currentNoteIndex].midiNote);
-		console.log("Entered interval in halftones: ", currentInterval )
+		var currentInterval = getInterval(possibleNotes[noteIndex], possibleNotes[currentNoteIndex]);
 		
-		if (possibleIntervals[intervalIndex].semitones === currentInterval) {
-			feedback += "Intervall õige! "
+		if (possibleIntervals[intervalIndex].shortName === currentInterval.interval.shortName && currentInterval.direction === direction) { // kas direction saadaval või vaja this.direction
+			feedback += "<b>Intervall õige! </b>"
 			correct = true;
 		} else {
-			feedback += "Vale. Sinu sisestatud intervall  on hoopis: <b>" + findIntervalBySemitones(currentInterval).longName + "</b> (arvestades võimalikke enharmoonilisi teisendamisi)"; 
+			feedback += "<b>Vale.</b> Sinu sisestatud intervall  on hoopis: <b>" + currentInterval.interval.longName + "  " + ((currentInterval.direction==="up") ? "üles" : "alla") + "</b>"; 
 			correct = false;
 		}
 		
