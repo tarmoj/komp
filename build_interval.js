@@ -81,7 +81,13 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 	
 	function getInterval(note1, note2) { // return interval object and direction
 		var semitones = note2.midiNote - note1.midiNote;
-		var direction = semitones >=0 ? "up" : "down";
+		var direction; 
+		if (semitones>0) 
+			direction = "up";
+		else if (semitones==0) 
+			direction = "same";
+		else
+			direction = "down";
 		// we need also info about octaves
 		var oct1 = Math.floor(note1.midiNote / 12) - 1; // 4 for first octava etc
 		var oct2 = Math.floor(note2.midiNote / 12) - 1;
@@ -271,11 +277,15 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 		
 		var currentInterval = getInterval(possibleNotes[noteIndex], possibleNotes[currentNoteIndex]);
 		
-		if (possibleIntervals[intervalIndex].shortName === currentInterval.interval.shortName && currentInterval.direction === direction) { // kas direction saadaval või vaja this.direction
+		if (possibleIntervals[intervalIndex].shortName === currentInterval.interval.shortName && ( currentInterval.direction === direction || currentInterval.direction === "same") ) { 
 			feedback += "<b>Intervall õige! </b>"
 			correct = true;
 		} else {
-			feedback += "<b>Vale.</b> Sinu sisestatud intervall  on hoopis: <b>" + currentInterval.interval.longName + "  " + ((currentInterval.direction==="up") ? "üles" : "alla") + "</b>"; 
+			var directionString = "";
+			if (currentInterval.direction==="up") directionString = "üles";
+			if (currentInterval.direction==="down") directionString = "alla";
+			// nothing if same
+			feedback += "<b>Vale.</b> Sinu sisestatud intervall  on hoopis: <b>" + currentInterval.interval.longName + "  " + directionString + "</b>"; 
 			correct = false;
 		}
 		
@@ -293,3 +303,5 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 	return exercise;
 
 }
+
+
