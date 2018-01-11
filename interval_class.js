@@ -19,6 +19,12 @@ function IntervalClass() {
 		
 	];
 	
+	this.possibleChords = [
+		{ shortName: "M", longName: "mažoorne kolmkõla", intervalsUp: ["s3", "p5"], intervalsDown: ["v3", "p5"]  }, // intervals from lower note
+		{ shortName: "m", longName: "minoorne kolmkõla", intervalsUp: ["v3", "p5"], intervalsDown: ["s3", "p5"]  },
+		
+	];
+	
 	this.noInterval = {shortName: "none", longName: "määratlemata", semitones: -1, degrees: -1}; // to be used if nothing found
 	
 	this.findIntervalBySemitones = function(semitones, degrees) {

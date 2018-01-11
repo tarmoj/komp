@@ -2,23 +2,31 @@
 // TODO: proper credits, copyright
 
 
-// AKORD h 1. harjutus. Viiulivõti. Antud on helikõrgus ja intervalli nimetus. Ehita intervall üles 
-
-//var exercise; should it be declared in the script part of main html?? 
+// AKORD h 5  Viiulivõti/Bassivõti. Antud on helikõrgus ja akordi nimetus. Ehita akord üles/alla. (Column + MusGen)
 
 
-// possibleNotes for treble and bass cled defined in possible_notes.js -  must be included in main html
+// possibleNotes for treble and bass clef defined in possible_notes.js -  must be included in main html
 
-function buildInterval(clef, direction, containerNode, canvasClassName) { 
+function buildChord(clef, direction, containerNode, canvasClassName) { 
 	if (direction===undefined) direction = "up";
 	if (clef===undefined) clef = "treble";
 	
 	var answered = false;
-	var intervalIndex = -1, noteIndex = -1, currentNoteIndex = -1;
+	var chordIndex = -1, noteIndex = -1;
+	var chord = []; //notes of the chord index 0 always basenote, 1 - second note, 2 -  third note etc
+	var currentNoteIndex = [-1,-1,-1,-1];
+	var activeNote = 1; // if activeNote==1, insert or change the second note
+	
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
 	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
 	
 	var intervals = new IntervalClass();
+	
+	var possibleChords = intervals.possibleChords;
+	
+	//TODO: move to IntervalClass
+	
+	
 	
 	
 	// set necessary methods in exercise
@@ -28,7 +36,7 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 	exercise.timeToThink = 30; // more time for doing the test
 	
 	
-	var possibleIntervals = intervals.possibleIntervals;
+	var possibleChords = intervals.possibleChords;
 	var possibleNotes = [];
 	var possibleBaseNotes = [];
 	//var lowLimit= 10, highLimit = 35; // to set range from which to take the random note to build interval from
@@ -53,23 +61,23 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 	
 	// Create or set necessary HTML elements
 	var directionTranslation = (direction==="up") ? "üles" : " alla" ;
-	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Intervallide ehitamine: " + directionTranslation + ", "  + ( (clef==="bass") ? "bassivõti." : "viiulivõti." );
-	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helikõrgus ja intervalli nimetus. Ehita intervall, klõpsates noodijoonestikule.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Akordide ehitamine: " + directionTranslation + ", "  + ( (clef==="bass") ? "bassivõti." : "viiulivõti." );
+	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helikõrgus ja akordi nimetus. Ehita akord, klõpsates noodijoonestikule. Nuppude abil vali, millist akordi nooti sisetad või muudad. <br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
 	
 	
 	
 	function handleAccidental(plusMinus) {  // -1 to lower half tone, +1 to raise halftone
 		//console.log("handleAccidental", plusMinus);
-		if (currentNoteIndex > 0) {
-			currentNoteIndex += plusMinus;
-			if (currentNoteIndex>=possibleNotes.length-1)
-				currentNoteIndex = possibleNotes.length-1;
-			if (currentNoteIndex<0)
-				currentNoteIndex = 0;
-			console.log(currentNoteIndex, possibleNotes[currentNoteIndex].vtNote)
-			exercise.notes = ":w " + intervals, makeChord([possibleNotes[noteIndex], possibleNotes[currentNoteIndex]]);
+		if (currentNoteIndex[activeNote] > 0) {
+			currentNoteIndex[activeNote] += plusMinus;
+			if (currentNoteIndex[activeNote]>=possibleNotes.length-1)
+				currentNoteIndex[activeNote] = possibleNotes.length-1;
+			if (currentNoteIndex[activeNote]<0)
+				currentNoteIndex[activeNote] = 0;
+			console.log(currentNoteIndex[activeNote], possibleNotes[currentNoteIndex[activeNote]].vtNote);
+			chord[activeNote] = possibleNotes[currentNoteIndex[activeNote]];
+			exercise.notes =  ":w " +  intervals.makeChord(chord);
 			exercise.draw();
-			
 		} else {
 			alert("Klõpsa esmalt noodi asukohale noodijoonestikul!")
 		}
@@ -81,10 +89,10 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 		// TODO: redo on keypressed -  otherwise different reults in different browsers
 		e = e || window.event;
 		var charCode = e.keyCode || e.which;		
-		if ( charCode === 45 && currentNoteIndex >= 0) { // minus key
+		if ( charCode === 45 && currentNoteIndex[activeNote] >= 0) { // minus key
 			handleAccidental(-1);
 		}
-		if (charCode === 43 && currentNoteIndex >= 0 ) { // plus key
+		if (charCode === 43 && currentNoteIndex[activeNote] >= 0 ) { // plus key
 			handleAccidental(1);
 		}
 		
@@ -101,12 +109,26 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
     exercise.canvas.appendChild(bemolleButton);
 	
 	
+	exercise.setActiveNote = function(value) { // put this into exercise context to be reachable from html element
+		activeNote = parseInt(value);
+		console.log("Active note: ", activeNote);
+	}
+	
+	var radioDiv = document.createElement("div");
+	radioDiv.innerHTML = '<br>Sisetatav/Muudetav noot: ' + 
+	'<input type="radio" class="firstButton"  name="activeNote" value="1" onclick="exercise.setActiveNote(this.value)" checked>2</input> ' +
+	'<input type="radio" name="activeNote" value="2" onclick="exercise.setActiveNote(this.value)">3</input> ' +
+	'<input type="radio" name="activeNote" value="3" onclick="exercise.setActiveNote(this.value)">4</input> ';
+	//exercise.canvas.insertBefore(radioDiv, exercise.canvas.firstChild);
+	exercise.canvas.appendChild(radioDiv);
+	
 	exercise.generate = function() {
 				
-		intervalIndex = Math.floor(Math.random()* possibleIntervals.length);
+		chord = [];
+		chordIndex = Math.floor(Math.random()* possibleChords.length);
 		
 		var baseNote = possibleBaseNotes[Math.floor(Math.random()* possibleBaseNotes.length)];
-		console.log("Basenote: ", baseNote );
+		console.log("Basenote: ", baseNote);		
 		
 		//find according noteIndex from possibleNotes: TODO: add this as function to possible_notes.js, that perhaps should be part of baseclass...
 		noteIndex = -1;
@@ -122,23 +144,24 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 			return;
 		}
 		
-		console.log("Selected: ", possibleIntervals[intervalIndex].longName, "from ", possibleNotes[noteIndex].name);
-		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleIntervals[intervalIndex].longName + " " + directionTranslation +  '</b>.<br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
+		chord[0] = possibleNotes[noteIndex]; 
+		
+		console.log("Selected: ", possibleChords[chordIndex].longName, "from ", possibleNotes[noteIndex].name);
+		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleChords[chordIndex].longName + " " + directionTranslation +  '</b>.<br>Kui oled noodid sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
 		
 		exercise.notes = ":w " + possibleNotes[noteIndex].vtNote; // the note the interval is built from
-		currentNoteIndex = -1; 	
+		currentNoteIndex = [-1, -1, -1, -1]; 
+		this.containerNode.getElementsByClassName("firstButton")[0].checked = true;
+		activeNote = 1;
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
 	
 	}
 	
-	
+	// TOD: listener for active note UI -  when value changed, set activeNote to that
 	
 	exercise.clickActions = function(x,y) {
-		// console.log(x,y);		
-
-		var line = exercise.artist.staves[0].note.getLineForY(y);
-		
+		var line = exercise.artist.staves[0].note.getLineForY(y);		
 		// find note by line
 		line =  Math.round(line*2)/2; // round to neares 0.5
 		for (var i= 0; i<possibleNotes.length;i++) {
@@ -146,8 +169,9 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 				//console.log(i, possibleNotes[i].line, line)
 				if (possibleNotes[i].line === line) {
 					//console.log("FOUND ", i, possibleNotes[i].vtNote);
-					currentNoteIndex = i;
-					exercise.notes = ":w " + intervals.makeChord([possibleNotes[currentNoteIndex], possibleNotes[noteIndex]]);
+					currentNoteIndex[activeNote] = i;
+					chord[activeNote] = possibleNotes[i];
+					exercise.notes = ":w " + intervals.makeChord(chord);
 					exercise.draw();
 					break;
 				}
@@ -158,7 +182,7 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 	exercise.renew();		
 	
 	exercise.responseFunction = function() {
-		if (currentNoteIndex < 0) {
+		if (currentNoteIndex[activeNote] < 0) {
 			alert("Sisesta noot noodijoonestikule!")
 			return;
 		}
