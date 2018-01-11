@@ -83,13 +83,43 @@ function IntervalClass() {
 		var oct2 = Math.floor(note2.midiNote / 12) - 1;
 		console.log("oct1, oct2", oct1, oct2,  note2.degree+oct1*7,note1.degree+oct2*7 )
 		var degrees = Math.abs((note2.degree+oct2*7) - (note1.degree+oct1*7)); // put the degrees int onw scale, so the difference gives the distance of degrees
-		/*if ((note2.degree + note1.degree) >6 ) { // if goves to other octave
-			degrees = 7 - degrees;
-		}*/ 
-		
+
 		var interval = this.findIntervalBySemitones(Math.abs(semitones), degrees);
 		//console.log("semitones, degrees, interval, direction", semitones, degrees, interval.longName, direction )
 		return {interval: interval, direction: direction};
+	}
+	
+	this.makeInterval = function(note, shortName, direction, possibleNotes) { // possibleNotes -  array of note objects
+		// possibleNotes global for now, see later; return found note as object or undefined otherwise
+		
+		var midiNote1 = note.midiNote;
+		var interval = this.findIntervalByShortName(shortName);
+		var semitones = interval.semitones;
+		var degrees = interval.degrees;
+		if (interval.semitones === -1) { // not found
+			console.log(shortName," not found");
+			return;
+		}
+		if (direction==="down") {
+			semitones = -semitones;
+			degrees = -degrees;
+		}
+		
+		var oct1 = Math.floor(note.midiNote / 12) - 1; // 4 for first octava etc
+		var degree1 = note.degree + oct1*7 ; // take also octave into account to get correct difference
+		console.log("note: ", note.midiNote, oct1, degree1);
+		// find note by midiNote
+		
+		for (var i=0; i<possibleNotes.length; i++) {
+			var oct2 = Math.floor(possibleNotes[i].midiNote / 12) - 1;
+			var degree2 = possibleNotes[i].degree + oct2*7;
+			if ( (possibleNotes[i].midiNote === note.midiNote + semitones) &&  (degree2 === (degree1 + degrees)) ) {
+				console.log("Found: ", i, possibleNotes[i].vtNote);
+				return possibleNotes[i];
+			}
+		}
+		
+		// otherwise return undefined
 	}
 	
 	
