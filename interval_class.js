@@ -22,6 +22,8 @@ function IntervalClass() {
 	this.possibleChords = [
 		{ shortName: "M", longName: "mažoorne kolmkõla", intervalsUp: ["s3", "p5"], intervalsDown: ["v3", "p5"]  }, // intervals from lower note
 		{ shortName: "m", longName: "minoorne kolmkõla", intervalsUp: ["v3", "p5"], intervalsDown: ["s3", "p5"]  },
+		{ shortName: "M7", longName: "väike mažoorseptakord", intervalsUp: ["s3", "p5", "v7"], intervalsDown: ["v3", "<5", "v7" ]  },
+		{ shortName: "<kk", longName: "vähendatud kolmkõla", intervalsUp: ["v3", "<5"], intervalsDown: ["v3", "<5"]  }
 		
 	];
 	
@@ -135,11 +137,14 @@ function IntervalClass() {
 			console.log("Not enough notes for chord");
 			return "";
 		}
-		noteArray.sort(function(a,b) { return a.midiNote - b.midiNote; }  )
+		var localArray = noteArray.slice(); // otherwise original array will be sorted
+		localArray.sort(function(a,b) { return a.midiNote - b.midiNote; }  )
 		var vtString = "("; // make vextab chord notation
-		for (var i=0; i<noteArray.length; i++) {
-			if (i>0) vtString += "."; // separator between chord notes 
-			vtString += noteArray[i].vtNote;
+		for (var i=0; i<localArray.length; i++) {
+			
+			if (i>0 && localArray[i] != undefined) vtString += "."; // separator between chord notes 
+			if (localArray[i] != undefined)
+				vtString += localArray[i].vtNote;
 		}
 		vtString += ")";
 		//console.log("Sorted chord: ", vtString);

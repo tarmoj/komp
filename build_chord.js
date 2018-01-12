@@ -118,7 +118,7 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 	radioDiv.innerHTML = '<br>Sisetatav/Muudetav noot: ' + 
 	'<input type="radio" class="firstButton"  name="activeNote" value="1" onclick="exercise.setActiveNote(this.value)" checked>2</input> ' +
 	'<input type="radio" name="activeNote" value="2" onclick="exercise.setActiveNote(this.value)">3</input> ' +
-	'<input type="radio" name="activeNote" value="3" onclick="exercise.setActiveNote(this.value)">4</input> ';
+	'<input type="radio" class="lastButton" name="activeNote" value="3" onclick="exercise.setActiveNote(this.value)">4</input> ';
 	//exercise.canvas.insertBefore(radioDiv, exercise.canvas.firstChild);
 	exercise.canvas.appendChild(radioDiv);
 	
@@ -153,6 +153,11 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 		exercise.notes = ":w " + possibleNotes[noteIndex].vtNote; // the note the interval is built from
 		currentNoteIndex = [-1, -1, -1, -1]; 
 		this.containerNode.getElementsByClassName("firstButton")[0].checked = true;
+		if (possibleChords[chordIndex].intervalsUp.length < 3) { // disable 4. button if 3 notes in chord
+			this.containerNode.getElementsByClassName("lastButton")[0].disabled = true;
+		} else {
+			this.containerNode.getElementsByClassName("lastButton")[0].disabled = false;
+		}
 		activeNote = 1;
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
 	
@@ -182,8 +187,18 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 	exercise.renew();		
 	
 	exercise.responseFunction = function() {
-		if (currentNoteIndex[activeNote] < 0) {
-			alert("Sisesta noot noodijoonestikule!")
+		if (currentNoteIndex[1] == -1) {
+			alert("Akordi 2. noot sisestamata!")
+			return;
+		}
+		
+		if (currentNoteIndex[2] == -1) {
+			alert("Akordi 3. noot sisestamata!")
+			return;
+		}
+		
+		if ( possibleChords[chordIndex].intervalsUp.length >= 3 && currentNoteIndex[3] == -1) {
+			alert("Akordi 4. noot sisestamata!")
 			return;
 		}
 		
@@ -196,22 +211,48 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 		var feedback = "";
 		var correct = false;
 		
-		var currentInterval = intervals.getInterval(possibleNotes[noteIndex], possibleNotes[currentNoteIndex]);
+		var interval1 = intervals.getInterval(chord[0],chord[1]).interval; // ignore the direction, probably right
+		var interval2 = intervals.getInterval(chord[0],chord[2]).interval;
+		var interval3 = undefined;
+		// TODO: 4-note chords
+		if (currentNoteIndex[3] != -1 ) { // 4-note chord
+			var interval3 = intervals.getInterval(chord[0],chord[3]).interval;
+		}
 		
-		if (possibleIntervals[intervalIndex].shortName === currentInterval.interval.shortName && ( currentInterval.direction === direction || currentInterval.direction === "same") ) { 
-			feedback += "<b>Intervall õige! </b>"
-			correct = true;
+		var rightIntervals = [];
+		if (direction==="up") {
+			rightIntervals = possibleChords[chordIndex].intervalsUp;
 		} else {
-			var directionString = "";
-			if (currentInterval.direction==="up") directionString = "üles";
-			if (currentInterval.direction==="down") directionString = "alla";
-			// nothing if same
-			feedback += "<b>Vale.</b> Sinu sisestatud intervall  on hoopis: <b>" + currentInterval.interval.longName + "  " + directionString + "</b>"; 
+			rightIntervals = possibleChords[chordIndex].intervalsDown;
+		}
+		
+		
+		if (interval1.shortName===rightIntervals[0] && interval2.shortName===rightIntervals[1]) { 
+			correct = true;
+			if (interval3 != undefined) {
+				if (interval3.shortName !== rightIntervals[2] ) {
+					correct = false;
+				}
+			}
+		} else {
 			correct = false;
 		}
 		
 		if (correct) {
+			feedback += "<b>Akord õige! </b>"
 			exercise.score += 1;
+		} else {
+			feedback += "<b>Vale.</b>. Õige akord on kuvatud järgmises taktis"; 
+			// form righ chord to show
+			var correctChord = [possibleNotes[noteIndex]];
+			correctChord.push(intervals.makeInterval(possibleNotes[noteIndex], rightIntervals[0], direction, possibleNotes  ));
+			correctChord.push(intervals.makeInterval(possibleNotes[noteIndex], rightIntervals[1], direction, possibleNotes  ));
+			if (possibleChords[chordIndex].intervalsUp.length >= 3) {
+				correctChord.push(intervals.makeInterval(possibleNotes[noteIndex], rightIntervals[2], direction, possibleNotes  ));
+			}
+			
+			exercise.notes += " | :w " + intervals.makeChord(correctChord); // show the right chord in second bar
+			exercise.draw(); 
 		}
 		
 		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = exercise.attempts;
