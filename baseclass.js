@@ -65,6 +65,12 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, ) {
 	
 	this.handleClick = function(event) {
 		//event.stopPropagation(); // not sure if this is necessary
+		if (event.target.parentElement.className.baseVal === "vf-notehead") {
+			console.log("This is notehead!")
+			event.target.setAttribute("fill", "blue"); // probably overdrawn somewhere
+			event.target.setAttribute("stroke", "blue");
+		}
+		
 		
 		var _x = event.layerX / _this.canvasScale; // This is not consistent. Requires handling in exercises (drawx= x-canvas.X). Think
 		var _y =  (event.layerY - _this.canvas.offsetTop) / _this.canvasScale; // was: clientX, clientY // TODO: test other browsers

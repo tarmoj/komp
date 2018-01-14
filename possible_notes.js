@@ -1,5 +1,7 @@
  
-var violinClefNotes = [   // line - line number in staff: 0 upper, 4 - lower, 5 - lower ledger line. Used to draw the note
+// TODO: make it a class, not gobal
+ 
+ var violinClefNotes = [   // line - line number in staff: 0 upper, 4 - lower, 5 - lower ledger line. Used to draw the note
 		{vtNote:"C@/4", name:"ces1", syllable:"do-bemoll1", midiNote: 59, degree: 0 }, // degrees (astmed) -  scale degrees (Ces/C/Cis - 0,  Des/D/Dis - 1 etc)
 		{vtNote:"C/4", name:"c1", syllable:"do1", line: 5, midiNote: 60, degree: 0},
 		{vtNote:"C#/4", name:"cis1", syllable:"do-diees1", midiNote: 61, degree: 0},
@@ -128,3 +130,46 @@ var violinClefNotes = [   // line - line number in staff: 0 upper, 4 - lower, 5 
 		
 		
 	];
+
+	function findNoteByVtNote(vtNote, noteArray) {
+		for (var i=0; i<noteArray.length; i++) {
+			if (noteArray[i].vtNote === vtNote) {
+				return noteArray[i];
+			}
+		}
+	}
+	
+	function findNoteByName(noteName, noteArray) {
+		for (var i=0; i<noteArray.length; i++) {
+			if (noteArray[i].name === noteName) {
+				return noteArray[i];
+			}
+		}
+	}
+	
+	function findNoteBySyllable(syllable, noteArray) {
+		for (var i=0; i<noteArray.length; i++) {
+			if (noteArray[i].syllable === syllable) {
+				return noteArray[i];
+			}
+		}
+	}
+	
+	function findNotesByMidiNote(midiNote, noteArray) { // return an array
+		notes = [];
+		for (var i=0; i<noteArray.length; i++) {
+			if (noteArray[i].midiNote === midiNote) {
+				notes.push(noteArray[i]);
+			}
+		}
+		return notes;
+	}
+	
+	function removeLastDigit(word) { // to turn notenames like "ces2" into "ces"
+		if (!isNaN(parseInt(word[word.length-1]))) { // last character is number
+			word = word.slice(0, -1); // remove last character
+		}
+		return word; 
+	}
+	
+	
