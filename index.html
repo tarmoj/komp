@@ -40,7 +40,7 @@
     <script src="build_chord.js"></script>
 	
 	<script src="recognize_key_signature.js"></script>
-
+	<script src="build_scale.js"></script>
     
     
     <!--main-->
@@ -72,9 +72,10 @@
 			}
 			
 		} else {		
-  			exercise = new MusicExercise(document.body, "mainCanvas") ;
-  			exercise.draw(); // dummy exercise -  just show empty staff
-
+//   			exercise = new MusicExercise(document.body, "mainCanvas") ;
+//   			exercise.draw(); // dummy exercise -  just show empty staff
+//   			
+				exercise = buildScale("major");
 		}
 	}
 	
