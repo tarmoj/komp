@@ -32,8 +32,10 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 	
 	
 	var possibleScales = [ 
-		{ name: "major", translation: "mažoor", intervals: ["s2", "s3", "p4", "p5", "s6", "s7", "p8"  ] },  
-		{ name: "natural", translation: "loomulik minoor", intervals: ["s2", "v3", "p4", "p5", "v6", "v7", "p8"  ] },  	
+		{ name: "major", translation: "mažoor", intervals: ["p1", "s2", "s3", "p4", "p5", "s6", "s7", "p8"  ] },  
+		{ name: "natural", translation: "loomulik minoor", intervals: ["p1", "s2", "v3", "p4", "p5", "v6", "v7", "p8"  ] }, 
+		{ name: "harmonic", translation: "harmooniline minoor", intervals: ["p1", "s2", "v3", "p4", "p5", "v6", "s7", "p8"  ] },
+		{ name: "melodic", translation: "meloodiline minoor", intervals: ["p1", "s2", "v3", "p4", "p5", "s6", "s7", "p8"  ] },
  	];
 	
 	var possibleIntervals = intervals.possibleIntervals;
@@ -44,7 +46,7 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 	// Create or set necessary HTML elements
 	//var directionTranslation = (direction==="up") ? "üles" : " alla" ;
 	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Heliridade ehitamine.";
-	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Kirjuta antud helist duur/loomulik moll/harmooniline moll / meloodiline moll-helirida üles. Sisesta noodid noodijoonestikule. Kui sisestatud nooti muuta, selle aktiveerimiseks/deaktiveerimiseks klõpsa noodile.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
+	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Kirjuta antud  helist antud helirida üles. Sisesta noodid noodijoonestikule. <br>Kui soovid sisestatud nooti muuta, siis selle aktiveerimiseks/deaktiveerimiseks klõpsa noodile.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
 	
 	
 	
@@ -86,7 +88,6 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 		// TODO: redo on keypressed -  otherwise different reults in different browsers
 		e = e || window.event;
 		var charCode = e.keyCode || e.which;		
-		console.log(charCode);
 		if ( charCode === 45 && currentNoteIndex[activeNote] >= 0) { // minus key
 			handleAccidental(-1);
 		}
@@ -135,7 +136,7 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 		}
 		
 		console.log("Selected: ", possibleScales[scaleIndex].translation, "from ", possibleNotes[noteIndex].name);
-		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleScales[scaleIndex].translation + " noodist "  +  possibleNotes[noteIndex].name  + '</b>.<br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
+		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleScales[scaleIndex].translation + " noodist "  +  possibleNotes[noteIndex].name  + ' üles </b>.<br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
 		
 		exercise.notes = ":q " + possibleNotes[noteIndex].vtNote; // the note the interval is built from
@@ -232,10 +233,10 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 	exercise.renew();		
 	
 	exercise.responseFunction = function() {
-		if (currentNoteIndex < 0) {
-			alert("Sisesta noot noodijoonestikule!")
-			return;
-		}
+// 		if (currentNoteIndex < 0) {
+// 			alert("Sisesta noot noodijoonestikule!")
+// 			return;
+// 		}
 		
 		if (answered) {
 			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
@@ -244,24 +245,35 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 		
 		exercise.attempts += 1;
 		var feedback = "";
-		var correct = false;
-		
-		var currentInterval = intervals.getInterval(possibleNotes[noteIndex], possibleNotes[currentNoteIndex]);
-		
-		if (possibleIntervals[intervalIndex].shortName === currentInterval.interval.shortName && ( currentInterval.direction === direction || currentInterval.direction === "same") ) { 
-			feedback += "<b>Intervall õige! </b>"
-			correct = true;
-		} else {
-			var directionString = "";
-			if (currentInterval.direction==="up") directionString = "üles";
-			if (currentInterval.direction==="down") directionString = "alla";
-			// nothing if same
-			feedback += "<b>Vale.</b> Sinu sisestatud intervall  on hoopis: <b>" + currentInterval.interval.longName + "  " + directionString + "</b>"; 
-			correct = false;
+		var correct = true;
+		var correctNotes = [];
+		var firstNote = possibleNotes[noteIndex];
+		for (var i=0; i<possibleScales[scaleIndex].intervals.length; i++) {
+			var interval = intervals.getInterval(firstNote, findNoteByVtNote(scaleNotes[i], possibleNotes)); // ignore direction -  probably right
+			var correctNote = intervals.makeInterval(firstNote, possibleScales[scaleIndex].intervals[i], "up", possibleNotes );
+			correctNotes.push(correctNote.vtNote);
+			console.log(interval.interval.shortName, possibleScales[scaleIndex].intervals[i]);
+			if (interval.interval.shortName == possibleScales[scaleIndex].intervals[i] && (interval.direction === "up" || interval.direction === "same")) {
+				correct = correct && true;
+				console.log("Inerval ", i, "correct");
+			} else {
+				correct =  correct && false;
+			}
 		}
 		
+		
+		
 		if (correct) {
+			feedback = "<b>Õige</b>";
 			exercise.score += 1;
+		} else {
+			feedback = "<b>Vale!</b> Võrdle õige helireaga.";
+			// add other staff with rendered barline
+		
+			var vt1 = exercise.createVexTabString(); // with the notes already entered
+			exercise.notes = ":q " + correctNotes.join(" ");
+			var vt2 = exercise.createVexTabString(); // second staff with corrct notes
+			exercise.draw(vt1 + "\n" + vt2);
 		}
 		
 		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = exercise.attempts;

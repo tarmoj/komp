@@ -78,6 +78,10 @@ function IntervalClass() {
 	}
 	
 	this.getInterval = function(note1, note2) { // return interval object and direction
+		if (note1 === undefined || note2 === undefined) {
+			console.log("Notes undefined");
+			return {interval: this.noInterval, direction: "none"};
+		}
 		var semitones = note2.midiNote - note1.midiNote;
 		var direction; 
 		if (semitones>0) 
@@ -87,9 +91,9 @@ function IntervalClass() {
 		else
 			direction = "down";
 		// we need also info about octaves
-		var oct1 = Math.floor(note1.midiNote / 12) - 1; // 4 for first octava etc
+		var oct1 = Math.floor(note1.midiNote / 12) - 1; // TODO: find by vtNote octave, not MIDI -  gives wron result fro ces
 		var oct2 = Math.floor(note2.midiNote / 12) - 1;
-		console.log("oct1, oct2", oct1, oct2,  note2.degree+oct1*7,note1.degree+oct2*7 )
+		//console.log("oct1, oct2", oct1, oct2,  note2.degree+oct1*7,note1.degree+oct2*7 )
 		var degrees = Math.abs((note2.degree+oct2*7) - (note1.degree+oct1*7)); // put the degrees int onw scale, so the difference gives the distance of degrees
 
 		var interval = this.findIntervalBySemitones(Math.abs(semitones), degrees);
