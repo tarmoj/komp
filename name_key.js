@@ -35,7 +35,14 @@ function nameKey(majorMinor, containerNode, canvasClassName) {
 		{vtKey:"B", name: "H", type: "major"},
 		{vtKey:"F#", name: "Fis", type: "major"},
 		{vtKey:"C#", name: "Cis", type: "major"},
-		//ec
+		
+		{vtKey:"F", name: "F", type: "major"},
+		{vtKey:"Bb", name: "B", type: "major"},
+		{vtKey:"Eb", name: "Es", type: "major"},
+		{vtKey:"Ab", name: "As", type: "major"},
+		{vtKey:"Db", name: "Des", type: "major"},
+		{vtKey:"Gb", name: "Ges", type: "major"},
+		{vtKey:"Cb", name: "Ces", type: "major"}
 		
 	];
 	
@@ -48,7 +55,14 @@ function nameKey(majorMinor, containerNode, canvasClassName) {
 		{vtKey:"B", name: "gis", type: "minor"},
 		{vtKey:"F#", name: "dis", type: "minor"},
 		{vtKey:"C#", name: "ais", type: "minor"},
-		//ec
+		
+		{vtKey:"F", name: "d", type: "minor"},
+		{vtKey:"Bb", name: "g", type: "minor"},
+		{vtKey:"Eb", name: "c", type: "minor"},
+		{vtKey:"Ab", name: "f", type: "minor"},
+		{vtKey:"Db", name: "b", type: "minor"},
+		{vtKey:"Gb", name: "es", type: "minor"},
+		{vtKey:"Cb", name: "as", type: "minor"}
 		
 	];
 	
