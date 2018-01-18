@@ -66,6 +66,8 @@
 		
 	];
 	
+	var trebleClefNotes = violinClefNotes; // convenience overload
+	
 	var bassClefNotes = [   // line - line number in staff: 0 upper, 4 - lower, 5 - lower ledger line. Used to draw the note
 		{vtNote:"C@/2", name:"Ces", syllable:"Do-bemoll", midiNote: 35, degree: 0},
 		{vtNote:"C/2", name:"C", syllable:"Do", line: 6, midiNote: 36, degree: 0},

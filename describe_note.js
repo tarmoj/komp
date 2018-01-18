@@ -5,18 +5,20 @@
 // 1.3.5 Helikõrgus    Viiulivõti/Bassivõti. Antud on helikõrgus noodijoonestikul. Kirjelda helikõrguse asukohta noodijoonestikul (mitmendal joonel või mitmendas vahes) ja anna helikõrguse tähtnimetus ja silpnimetus.
 
 
-function describeNote(containerNode, canvasClassName) {
+function describeNote(clef, containerNode, canvasClassName) {
 // variables
 	var duration = -1;
 	var answered = false;
 	var selectedNoteIndex = -1;
+	if (clef===undefined) clef = "treble";
+	var translation = clef === "treble" ? "viiulivõti" : "bassivõti";
 	
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
 	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName
 
 	
 	// Create or set necessary HTML elements
-	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Kirjelda helikõrguse asukohta";
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Kirjelda helikõrguse asukohta: " + translation;
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helikõrgus noodijoonestikul. Kirjelda helikõrguse asukohta noodijoonestikul (mitmendal joonel või mitmendas vahes) ja anna helikõrguse tähtnimetus ja silpnimetus."; 
 	this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Kirjelda noodi asukohta. Mis noot see on?";
 	
@@ -56,11 +58,33 @@ function describeNote(containerNode, canvasClassName) {
 		
 	];
 	
+	var bassClefNotes = [  // lineOrSpace: 1...5; position: 0 - on the line, 1 -in the space, -1 - under line, 2 - on the line (like g2), -10 - on lower ledger line, -11 under lower ledger line; 10 - on upper ledeger line, 11 - above upper ledger line
+		{vtNote:"C/2", name:"c", syllable:"do", lineOrSpace: 2, position:-10 },
+		{vtNote:"D/2", name:"d", syllable:"re", lineOrSpace: 1, position:-11 },
+		{vtNote:"E/2", name:"e", syllable:"mi", lineOrSpace: 1, position:-10 },
+		{vtNote:"F/2", name:"f", syllable:"fa", lineOrSpace: 1, position:-1 },
+		{vtNote:"G/2", name:"g", syllable:"sol", lineOrSpace: 1, position:0 },
+		{vtNote:"A/2", name:"a", syllable:"la", lineOrSpace: 1, position:1 },
+		{vtNote:"B/4", name:"h", syllable:"si", lineOrSpace: 2, position:0 },
+		{vtNote:"C/3", name:"c", syllable:"do", lineOrSpace: 2, position:1 },
+		{vtNote:"D/3", name:"d", syllable:"re", lineOrSpace: 3, position:0 },		
+		{vtNote:"E/3", name:"e", syllable:"mi", lineOrSpace: 3, position:1 },
+		{vtNote:"F/3", name:"f", syllable:"fa", lineOrSpace: 4, position:0 },
+		{vtNote:"G/3", name:"g", syllable:"sol", lineOrSpace: 4, position:1 },
+		{vtNote:"A/3", name:"a", syllable:"la", lineOrSpace: 5, position:0 },
+		{vtNote:"B/3", name:"h", syllable:"si", lineOrSpace: 5, position:2 },
+		{vtNote:"C/4", name:"c", syllable:"do", lineOrSpace: 1, position:10 },
+		{vtNote:"D/4", name:"d", syllable:"re", lineOrSpace: 1, position:11 },
+		{vtNote:"E/4", name:"e", syllable:"mi", lineOrSpace: 2, position:10 },
+		
+	];
+	
+	var notes = clef === "bass" ? bassClefNotes : trebleClefNotes;
 	
 	function getPositionString(index) {
-		var result = trebleClefNotes[index].lineOrSpace + ". ";
+		var result = notes[index].lineOrSpace + ". ";
 		for (var i = 0; i < positions.length; i++) {  // do not use array.find for support of older browsers
-			if (positions[i].position === trebleClefNotes[index].position) { 
+			if (positions[i].position === notes[index].position) { 
 				result += positions[i].positionString;
 				break;
 			} 
@@ -73,6 +97,7 @@ function describeNote(containerNode, canvasClassName) {
 	var exercise = new MusicExercise(this.containerNode, this.canvasClassName, 100); // relatively narrow canvas
 	exercise.time = ""; // no time signature
 	exercise.timeToThink = 25
+	exercise.clef = clef;
 	
 	
 	var oldResponse = this.containerNode.getElementsByClassName("response")[0];
@@ -110,14 +135,14 @@ function describeNote(containerNode, canvasClassName) {
 	
 	exercise.generate = function() {
 		
-		selectedNoteIndex = Math.floor(Math.random()*trebleClefNotes.length );
+		selectedNoteIndex = Math.floor(Math.random()*notes.length );
 		//not shure if midinote is good idea...
 		
 		while (selectedNoteIndex === oldIndex) { // to avoid same value twice
-			selectedNoteIndex = Math.floor(Math.random()*trebleClefNotes.length );
+			selectedNoteIndex = Math.floor(Math.random()*notes.length );
 		}
 		oldIndex = selectedNoteIndex;
-		exercise.notes = trebleClefNotes[selectedNoteIndex].vtNote;
+		exercise.notes = notes[selectedNoteIndex].vtNote;
 		getPositionString(selectedNoteIndex); // late to checkResponse
 		
 		
@@ -138,28 +163,28 @@ function describeNote(containerNode, canvasClassName) {
 		exercise.attempts += 1;
 		var feedback = "";
 		var correct = false;
-		if (parseInt(this.containerNode.getElementsByClassName("lineOrSpace")[0].value) === trebleClefNotes[selectedNoteIndex].lineOrSpace &&
-			parseInt(this.containerNode.getElementsByClassName("position")[0].value) === trebleClefNotes[selectedNoteIndex].position) {
-			feedback = "Asukoht õige!";
+		if (parseInt(this.containerNode.getElementsByClassName("lineOrSpace")[0].value) === notes[selectedNoteIndex].lineOrSpace &&
+			parseInt(this.containerNode.getElementsByClassName("position")[0].value) === notes[selectedNoteIndex].position) {
+			feedback = "Asukoht <b>õige</b>!";
 			correct = true;
 		} else {
-			feedback = "Vale! Õige asukoht: " + getPositionString(selectedNoteIndex);
+			feedback = "Asukoht <b>vale!</b> Õige asukoht: <b>" + getPositionString(selectedNoteIndex) + "</b>";
 			correct = false;
 		}
 		
-		if (this.containerNode.getElementsByClassName("noteName")[0].value.toLowerCase()===trebleClefNotes[selectedNoteIndex].name.toLowerCase()) {
-			feedback += " Tähtnimetus õige!";
+		if (this.containerNode.getElementsByClassName("noteName")[0].value.toLowerCase()===notes[selectedNoteIndex].name.toLowerCase()) {
+			feedback += " Tähtnimetus <b>õige</b>!";
 			correct = correct && true;
 		} else {
-			feedback += " Tähtnimetus vale! Õige on: "+ trebleClefNotes[selectedNoteIndex].name;
+			feedback += " Tähtnimetus <b>vale</b>! Õige on: <b>"+ notes[selectedNoteIndex].name + "</b>";
 			correct = correct && false;
 		}
 		
-		if (this.containerNode.getElementsByClassName("syllable")[0].value.toLowerCase()===trebleClefNotes[selectedNoteIndex].syllable.toLowerCase()) {
-			feedback += " Silpnimetus õige!";
+		if (this.containerNode.getElementsByClassName("syllable")[0].value.toLowerCase()===notes[selectedNoteIndex].syllable.toLowerCase()) {
+			feedback += " Silpnimetus <b>õige</b>!";
 			correct = correct && true;
 		} else {
-			feedback += " Silpnimetus vale! Õige on: "+ trebleClefNotes[selectedNoteIndex].syllable;
+			feedback += " Silpnimetus <b>vale</b>! Õige on: <b>"+ notes[selectedNoteIndex].syllable + "</b>";
 			correct = correct && false;
 		}
 		
