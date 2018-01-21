@@ -132,7 +132,7 @@ function NotesClass = function() {
 		
 	];
 	
-	this.trebleClefNotes = violinClefNotes; // convenience overload;
+	this.trebleClefNotes = this.violinClefNotes; // convenience overload;
 
 	this.findNoteByVtNote = function(vtNote, noteArray) {
 		for (var i=0; i<noteArray.length; i++) {

@@ -41,6 +41,7 @@
 	
 	<script src="recognize_key_signature.js"></script>
 	<script src="build_scale.js"></script>
+	<script src="name_key.js"></script>
     
     
     <!--main-->
@@ -96,7 +97,8 @@
 	<a onclick="exercise = findTime()" href="#start">Määra taktimõõt</a> <br>
 		
 	<h3>Helikõrgus</h3>
-	<a onclick="exercise = describeNote()" href="#start">Kirjelda helikõrguse asukohta</a> <br>
+	<a onclick='exercise = describeNote("treble")' href="#start">Kirjelda helikõrguse asukohta: viiulivõti</a> <br>
+	<a onclick='exercise = describeNote("bass")' href="#start">Kirjelda helikõrguse asukohta: bassivõti</a> <br>
 	<a onclick='exercise =  noteFromNoteName("treble")' href="#start">Kirjuta helikõrgus tähtnime järgi: viiulivõti</a> <br>
 	<a onclick='exercise =  noteFromNoteName("bass")' href="#start">Kirjuta helikõrgus tähtnime järgi : bassivõti</a> <br>
 	<a onclick='exercise = noteFromSyllable("treble")' href="#start">Kirjuta helikõrgus silpnime järgi: viiulivõti</a> <br>
@@ -123,6 +125,9 @@
 	<h3>Harmoonia</h3>
 	<a onclick="exercise = recognizeKeySignature()" href="#start">Määra helistik</a> <br>
 	<a onclick="exercise = buildScale()" href="#start">Ehita helirida antud noodist üles</a> <br>
+	<a onclick='exercise = nameKey("major")' href="#start">Kirjuta duur-helirea nimetus</a> <br>
+	<a onclick='exercise = nameKey("minor")' href="#start">Kirjuta moll-helirea nimetus</a> <br>
+	
 	
 	<hr>
 	<br>
