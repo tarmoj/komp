@@ -1,5 +1,5 @@
  
-function NotesClass = function() {
+function NoteClass() {
 
 
 	this.violinClefNotes = [   // line - line number in staff: 0 upper, 4 - lower, 5 - lower ledger line. Used to draw the note
@@ -142,7 +142,7 @@ function NotesClass = function() {
 		}
 	}
 	
-	this.findNoteByName = = function(noteName, noteArray) {
+	this.findNoteByName = function(noteName, noteArray) {
 		for (var i=0; i<noteArray.length; i++) {
 			if (noteArray[i].name === noteName) {
 				return noteArray[i];
@@ -177,7 +177,7 @@ function NotesClass = function() {
 		}
 	}
 	
-	this.findIndexByName = = function(noteName, noteArray) {
+	this.findIndexByName = function(noteName, noteArray) {
 		for (var i=0; i<noteArray.length; i++) {
 			if (noteArray[i].name === noteName) {
 				return i;

@@ -5,7 +5,7 @@
 // AKORD h 5  Viiulivõti/Bassivõti. Antud on helikõrgus ja akordi nimetus. Ehita akord üles/alla. (Column + MusGen)
 
 
-// possibleNotes for treble and bass clef defined in possible_notes.js -  must be included in main html
+// NoteClass defined in possible_notes.js -  must be included in main html
 
 function buildChord(clef, direction, containerNode, canvasClassName) { 
 	if (direction===undefined) direction = "up";
@@ -21,6 +21,7 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
 	
 	var intervals = new IntervalClass();
+	var notes = new NoteClass();
 	
 	var possibleChords = intervals.possibleChords;
 	
@@ -42,7 +43,7 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 	//var lowLimit= 10, highLimit = 35; // to set range from which to take the random note to build interval from
 	if (clef==="bass" ) { // && direction == "up"
 		exercise.clef ="bass"
-		possibleNotes = bassClefNotes;
+		possibleNotes = notes.bassClefNotes;
 		if (direction.toLowerCase()==="up") {
 			possibleBaseNotes =  ["F/2", "G/2", "A/2", "B/2", "C/3", "D/3"];
 		} else {
@@ -50,7 +51,7 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 		}
 	} else {
 		exercise.clef = "treble"
-		possibleNotes = violinClefNotes;
+		possibleNotes = notes.violinClefNotes;
 		if (direction.toLowerCase()==="up") {
 			possibleBaseNotes =  ["C/4", "D/4", "E/4", "F/4", "G/4", "A/4"]; 
 		} else {
