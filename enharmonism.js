@@ -10,6 +10,7 @@ function enharmonism(nameOrSyllable, containerNode, canvasClassName) {
 	var selectedNotes = [];
 	var answered = false;
 	var askFor = "", correctAnswer = "";
+	var notes = new NoteClass();
 	
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
 	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
@@ -20,6 +21,7 @@ function enharmonism(nameOrSyllable, containerNode, canvasClassName) {
 	var translation1 = nameOrSyllable === "name" ? "tähtnimetusena" : "silpnimetusena"
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on heliõrgus " + translation1 + ". Leia sellele enharmooniliselt vastav noot (dubldieese ja dublbemolle pole kasutatud.)"; 
 	this.containerNode.getElementsByClassName("question")[0].innerHTML =	'Noodile  X vastab: '; 
+	
 	
 	var exercise = new MusicExercise(this.containerNode,this.canvasClassName, 150); // relatively narrow canvas 
 	
@@ -62,14 +64,14 @@ function enharmonism(nameOrSyllable, containerNode, canvasClassName) {
 		console.log("Selected notes: ", selectedNotes);
 		
 		if (nameOrSyllable === "syllable") {
-			askFor = findNoteByVtNote(selectedNotes[0], violinClefNotes).syllable;
-			correctAnswer = findNoteByVtNote(selectedNotes[1], violinClefNotes).syllable;
+			askFor = notes.findNoteByVtNote(selectedNotes[0], notes.violinClefNotes).syllable;
+			correctAnswer = notes.findNoteByVtNote(selectedNotes[1], notes.violinClefNotes).syllable;
 		} else {
-			askFor = findNoteByVtNote(selectedNotes[0], violinClefNotes).name;
-			correctAnswer = findNoteByVtNote(selectedNotes[1], violinClefNotes).name;
+			askFor = notes.findNoteByVtNote(selectedNotes[0], notes.violinClefNotes).name;
+			correctAnswer = notes.findNoteByVtNote(selectedNotes[1], notes.violinClefNotes).name;
 		}
-		askFor = removeLastDigit(askFor); // remove octave number, if present
-		correctAnswer = removeLastDigit(correctAnswer);
+		askFor = notes.removeLastDigit(askFor); // remove octave number, if present
+		correctAnswer = notes.removeLastDigit(correctAnswer);
 		
 		
 		console.log(askFor, correctAnswer);

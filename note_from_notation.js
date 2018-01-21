@@ -9,7 +9,6 @@
 // 1.3.9. harjutus. Helikõrgus. Viiulivõti. Antud on helikõrgus noodijoonestikul. Kirjuta helikõrgus tähtnimetusega, silpnimetusega, klaviatuuril. (Column + MusGen)
 
 
-// violinClefNotes and bassClefNotes are defined in possible_notes.js -  must be included in main html
 
 
 function noteFromNotation(clef, containerNode, canvasClassName) {
@@ -18,6 +17,7 @@ function noteFromNotation(clef, containerNode, canvasClassName) {
 	var noteIndex = -1, currentNoteIndex = -1;
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
 	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
+	var notes = new NoteClass();
 	
 	// set necessary methods in exercise
 	var exercise = new MusicExercise(this.containerNode, this.canvasClassName,150,10,10,1.5); // bigger scale for note input
@@ -30,10 +30,10 @@ function noteFromNotation(clef, containerNode, canvasClassName) {
 	var possibleNotes;
 	if (clef==="bass") {
 		exercise.clef ="bass"
-		possibleNotes = bassClefNotes;
+		possibleNotes = notes.bassClefNotes;
 	} else {
 		exercise.clef = "treble"
-		possibleNotes = violinClefNotes;
+		possibleNotes = notes.violinClefNotes;
 	}
 	
 	// Create or set necessary HTML elements
@@ -48,13 +48,6 @@ function noteFromNotation(clef, containerNode, canvasClassName) {
 	var piano = new Piano(pianoDiv); // 1 octava from middle C by default
 	piano.createPiano();
 	
-	function removeLastDigit(word) { // to turn notenames like "ces2" into "ces"
-		if (!isNaN(parseInt(word[word.length-1]))) { // last character is number
-			word = word.slice(0, -1); // remove last character
-		}
-		return word; 
-	}
-	
 	exercise.generate = function() {
 				
 		noteIndex = Math.floor(Math.random()*possibleNotes.length); 
@@ -65,7 +58,7 @@ function noteFromNotation(clef, containerNode, canvasClassName) {
 		var select1 = this.containerNode.getElementsByClassName('noteName')[0];
 		for (var i = 0; i < 7*3; i++) {
 			var option = document.createElement('option');
-			var noteName = removeLastDigit(possibleNotes[i].name.toLowerCase()); // remove octave (1 or 2), if present
+			var noteName = notes.removeLastDigit(possibleNotes[i].name.toLowerCase()); // remove octave (1 or 2), if present
 			option.innerHTML = noteName;
 			option.value = noteName;
 			select1.appendChild(option);
@@ -75,7 +68,7 @@ function noteFromNotation(clef, containerNode, canvasClassName) {
 		var select2 = this.containerNode.getElementsByClassName('syllable')[0];
 		for(var j = 0; j < 7*3; j++) {
 			var option2 = document.createElement('option');
-			var syllable = removeLastDigit(possibleNotes[i].syllable.toLowerCase()); // remove octave (1 or 2), if present
+			var syllable = notes.removeLastDigit(possibleNotes[j].syllable.toLowerCase()); // remove octave (1 or 2), if present
 			option2.innerHTML = syllable;
 			option2.value = syllable;
 			select2.appendChild(option2);
@@ -83,7 +76,7 @@ function noteFromNotation(clef, containerNode, canvasClassName) {
 		
 		
 		
-		exercise.notes = possibleNotes[noteIndex].vtNote; // nothing drawn	
+		exercise.notes = possibleNotes[noteIndex].vtNote; 
 		currentNoteIndex = -1; 	
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
 	
@@ -116,8 +109,8 @@ function noteFromNotation(clef, containerNode, canvasClassName) {
 		
 		// TODO: eemalda silbilt oktavinumber
 		
-		var syllable = removeLastDigit(possibleNotes[noteIndex].syllable.toLowerCase());
-		var noteName = removeLastDigit(possibleNotes[noteIndex].name.toLowerCase());
+		var syllable = notes.removeLastDigit(possibleNotes[noteIndex].syllable.toLowerCase());
+		var noteName = notes.removeLastDigit(possibleNotes[noteIndex].name.toLowerCase());
 		
 		if (this.containerNode.getElementsByClassName("noteName")[0].value === noteName ) { 
 			feedback += "Tähtnimetus õige! "

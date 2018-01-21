@@ -17,6 +17,7 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) { // generates 2
 	var correctNames = [], correctSyllables = []; // must be array since there are several enharmonic possibilities for black keys
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
 	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
+	var notes = new NoteClass();
 	
 	
 	// set necessary methods in exercise
@@ -30,10 +31,10 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) { // generates 2
 	var possibleNotes;
 	if (clef==="bass") {
 		exercise.clef ="bass"
-		possibleNotes = bassClefNotes;
+		possibleNotes = notes.bassClefNotes;
 	} else {
 		exercise.clef = "treble"
-		possibleNotes = violinClefNotes;
+		possibleNotes = notes.violinClefNotes;
 	}
 	
 	// Create or set necessary HTML elements
@@ -96,12 +97,6 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) { // generates 2
 	var lowestKey = (clef==="bass") ? 36 : 60;
 	var highestKey = (clef==="bass") ? 59 : 83;
 	
-	function removeLastDigit(word) { // to turn notenames like "ces2" into "ces"
-		if (!isNaN(parseInt(word[word.length-1]))) { // last character is number
-			word = word.slice(0, -1); // remove last character
-		}
-		return word; 
-	}
 	
 	
 	exercise.generate = function() {
@@ -117,8 +112,8 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) { // generates 2
 		
 		for (var i=0;i<possibleNotes.length;i++) {
 			if (possibleNotes[i].midiNote === selectedMidiNote) {
-				correctNames.push( removeLastDigit(possibleNotes[i].name.toLowerCase()))
-				correctSyllables.push ( removeLastDigit(possibleNotes[i].syllable.toLowerCase()) )
+				correctNames.push( notes.removeLastDigit(possibleNotes[i].name.toLowerCase()))
+				correctSyllables.push ( notes.removeLastDigit(possibleNotes[i].syllable.toLowerCase()) )
 			}
 		}
 		console.log("Found ", correctNames.length, " matching notes.")
@@ -128,7 +123,7 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) { // generates 2
 		var select1 = this.containerNode.getElementsByClassName('noteName')[0];
 		for(var ii = 0; ii < 7*3; ii++) {
 			var option = document.createElement('option');
-			var noteName = removeLastDigit(possibleNotes[ii].name.toLowerCase()); // remove octave (1 or 2), if present
+			var noteName = notes.removeLastDigit(possibleNotes[ii].name.toLowerCase()); // remove octave (1 or 2), if present
 			option.innerHTML = noteName;
 			option.value = noteName;
 			select1.appendChild(option);
@@ -138,7 +133,7 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) { // generates 2
 		var select2 = this.containerNode.getElementsByClassName('syllable')[0];
 		for(var j = 0; j < 7*3; j++) {
 			var option2 = document.createElement('option');
-			var syllable = removeLastDigit(possibleNotes[j].syllable.toLowerCase()); // remove octave (1 or 2), if present
+			var syllable = notes.removeLastDigit(possibleNotes[j].syllable.toLowerCase()); // remove octave (1 or 2), if present
 			option2.innerHTML = syllable;
 			option2.value = syllable;
 			select2.appendChild(option2);
@@ -202,7 +197,6 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) { // generates 2
 		var correct = false;
 		
 		var noteIndex = 0;
-		//var syllable = removeLastDigit(possibleNotes[noteIndex].syllable.toLowerCase());
 		
 		if ( correctNames.indexOf( this.containerNode.getElementsByClassName("noteName")[0].value) >= 0 ) { 
 			feedback += "Tähtnimetus õige! "

@@ -22,6 +22,7 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
 	
 	var intervals = new IntervalClass();
+	var notes = new NoteClass();
 	
 	
 	// set necessary methods in exercise
@@ -39,7 +40,7 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
  	];
 	
 	var possibleIntervals = intervals.possibleIntervals;
-	var possibleNotes = violinClefNotes;
+	var possibleNotes = notes.violinClefNotes;
 	var possibleBaseNotes = ["C/4", "D/4", "E/4", "F/4", "G/4", "A/4"];  // TODO: different notes depending on major/minor
 	
 	
@@ -249,7 +250,7 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 		var correctNotes = [];
 		var firstNote = possibleNotes[noteIndex];
 		for (var i=0; i<possibleScales[scaleIndex].intervals.length; i++) {
-			var interval = intervals.getInterval(firstNote, findNoteByVtNote(scaleNotes[i], possibleNotes)); // ignore direction -  probably right
+			var interval = intervals.getInterval(firstNote, notes.findNoteByVtNote(scaleNotes[i], possibleNotes)); // ignore direction -  probably right
 			var correctNote = intervals.makeInterval(firstNote, possibleScales[scaleIndex].intervals[i], "up", possibleNotes );
 			correctNotes.push(correctNote.vtNote);
 			console.log(interval.interval.shortName, possibleScales[scaleIndex].intervals[i]);

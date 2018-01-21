@@ -16,6 +16,7 @@ function noteFromSyllable(clef, containerNode, canvasClassName) {
 	var noteIndex = -1, currentNoteIndex = -1;
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
 	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;	
+	var notes = new NoteClass();
 	
 	// set necessary methods in exercise
 	var exercise = new MusicExercise(this.containerNode, this.canvasClassName, 150,10,10,1.5); // bigger scale for note input
@@ -28,10 +29,10 @@ function noteFromSyllable(clef, containerNode, canvasClassName) {
 	var possibleNotes;
 	if (clef==="bass") {
 		exercise.clef ="bass"
-		possibleNotes = bassClefNotes;
+		possibleNotes = notes.bassClefNotes;
 	} else {
 		exercise.clef = "treble"
-		possibleNotes = violinClefNotes;
+		possibleNotes = notes.violinClefNotes;
 	}
 	
 	// Create or set necessary HTML elements
@@ -87,24 +88,18 @@ function noteFromSyllable(clef, containerNode, canvasClassName) {
 	var piano = new Piano(pianoDiv); // 1 octava from middle C by default
 	piano.createPiano();
 	
-	function removeLastDigit(word) { // to turn notenames like "ces2" into "ces"
-		if (!isNaN(parseInt(word[word.length-1]))) { // last character is number
-			word = word.slice(0, -1); // remove last character
-		}
-		return word; 
-	}
 	
 	exercise.generate = function() {
 				
 		noteIndex = Math.floor(Math.random()*possibleNotes.length); 
 		console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable);
 		
-		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleNotes[noteIndex].syllable + '</b><br>Noot <b><big>' + removeLastDigit(possibleNotes[noteIndex].syllable.toLowerCase())  + '</b></big> on tähtnimetusega: <select class="noteName"><option>---</option></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
+		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleNotes[noteIndex].syllable + '</b><br>Noot <b><big>' + notes.removeLastDigit(possibleNotes[noteIndex].syllable.toLowerCase())  + '</b></big> on tähtnimetusega: <select class="noteName"><option>---</option></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
 		var select = this.containerNode.getElementsByClassName('noteName')[0];
 		for(var i = 0; i < 7*3; i++) {
 			var option = document.createElement('option');
-			var noteName = removeLastDigit(possibleNotes[i].name.toLowerCase()); // remove octave (1 or 2), if present
+			var noteName = notes.removeLastDigit(possibleNotes[i].name.toLowerCase()); // remove octave (1 or 2), if present
 			option.innerHTML = noteName;
 			option.value = noteName;
 			select.appendChild(option);
@@ -172,7 +167,7 @@ function noteFromSyllable(clef, containerNode, canvasClassName) {
 		
 		// TODO: eemalda silbilt oktavinumber
 		
-		var noteName = removeLastDigit(possibleNotes[noteIndex].name.toLowerCase());
+		var noteName = notes.removeLastDigit(possibleNotes[noteIndex].name.toLowerCase());
 		
 		if (this.containerNode.getElementsByClassName("noteName")[0].value === noteName ) { 
 			feedback += "Tähtnimetus õige! "

@@ -19,6 +19,7 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
 	
 	var intervals = new IntervalClass();
+	var notes = new NoteClass();
 	
 	
 	// set necessary methods in exercise
@@ -42,7 +43,7 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 		}
 	} else {
 		exercise.clef = "treble"
-		possibleNotes = violinClefNotes;
+		possibleNotes = notes.violinClefNotes;
 		if (direction.toLowerCase()==="up") {
 			possibleBaseNotes =  ["C/4", "D/4", "E/4", "F/4", "G/4", "A/4"]; 
 		} else {
