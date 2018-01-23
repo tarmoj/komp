@@ -1,8 +1,23 @@
-// Music exercises for "MUUSIKA KOMPOSITSIOONIÕPETUS"
-// TODO: proper credits, copyright
+/*
+
+Autogenerating Music Exercises for education program "Muusika Kompositsiooniõpetus" https://et.wikibooks.org/wiki/Muusika_kompositsiooni%C3%B5petus/N%C3%84IDISKURSUS._G%C3%9CMNAASIUM
+Commissioned by Estonian Ministry of Education and Research, Tallinn University,  in the frame of Digital Learning Resources project DigiÕppeVaramu https://htk.tlu.ee/oppevara/
 
 
-// 1.3.5 Helikõrgus    Viiulivõti/Bassivõti. Antud on helikõrgus noodijoonestikul. Kirjelda helikõrguse asukohta noodijoonestikul (mitmendal joonel või mitmendas vahes) ja anna helikõrguse tähtnimetus ja silpnimetus.
+Copyright 2018, by Tarmo Johannes trmjhnns@gmail.com
+
+License: MIT
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
+
+
+// Original exercise: 3.5 Helikõrgus    Viiulivõti/Bassivõti. Antud on helikõrgus noodijoonestikul. Kirjelda helikõrguse asukohta noodijoonestikul (mitmendal joonel või mitmendas vahes) ja anna helikõrguse tähtnimetus ja silpnimetus.
 
 
 function describeNote(clef, containerNode, canvasClassName) {
@@ -65,7 +80,7 @@ function describeNote(clef, containerNode, canvasClassName) {
 		{vtNote:"F/2", name:"f", syllable:"fa", lineOrSpace: 1, position:-1 },
 		{vtNote:"G/2", name:"g", syllable:"sol", lineOrSpace: 1, position:0 },
 		{vtNote:"A/2", name:"a", syllable:"la", lineOrSpace: 1, position:1 },
-		{vtNote:"B/4", name:"h", syllable:"si", lineOrSpace: 2, position:0 },
+		{vtNote:"B/2", name:"h", syllable:"si", lineOrSpace: 2, position:0 },
 		{vtNote:"C/3", name:"c", syllable:"do", lineOrSpace: 2, position:1 },
 		{vtNote:"D/3", name:"d", syllable:"re", lineOrSpace: 3, position:0 },		
 		{vtNote:"E/3", name:"e", syllable:"mi", lineOrSpace: 3, position:1 },
@@ -136,7 +151,6 @@ function describeNote(clef, containerNode, canvasClassName) {
 	exercise.generate = function() {
 		
 		selectedNoteIndex = Math.floor(Math.random()*notes.length );
-		//not shure if midinote is good idea...
 		
 		while (selectedNoteIndex === oldIndex) { // to avoid same value twice
 			selectedNoteIndex = Math.floor(Math.random()*notes.length );
@@ -145,17 +159,13 @@ function describeNote(clef, containerNode, canvasClassName) {
 		exercise.notes = notes[selectedNoteIndex].vtNote;
 		getPositionString(selectedNoteIndex); // late to checkResponse
 		
-		
-		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
-	
+		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse	
 	}
 	
 	exercise.renew();		
 	
 	
-	exercise.responseFunction = function() { // TODO: - kas oleks võimalik tõsta baseclassi? Siis vist switch case peaks olema välditud ja õige vastus peaks olema juba loetava stringina nagu "poolnoot" - vist mõtekas. Samas, kuidas basclass tead html elementide ID-sid???
-
-		//TODO: kontrolli, kas uuendatud, muidu tõstab ainult skoori...
+	exercise.responseFunction = function() { 
 		if (answered) {
 			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
 			return;
@@ -195,7 +205,7 @@ function describeNote(clef, containerNode, canvasClassName) {
 		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = exercise.attempts;
 		this.containerNode.getElementsByClassName("score")[0].innerHTML = exercise.score;
 		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 
-		exercise.draw(); // redraw without rectangle
+		//exercise.draw(); 
 		answered = true;
 	
 	}

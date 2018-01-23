@@ -1,3 +1,21 @@
+/*
+
+Autogenerating Music Exercises for education program "Muusika Kompositsiooniõpetus" https://et.wikibooks.org/wiki/Muusika_kompositsiooni%C3%B5petus/N%C3%84IDISKURSUS._G%C3%9CMNAASIUM
+Commissioned by Estonian Ministry of Education and Research, Tallinn University,  in the frame of Digital Learning Resources project DigiÕppeVaramu https://htk.tlu.ee/oppevara/
+
+
+Copyright 2018, by Tarmo Johannes trmjhnns@gmail.com
+
+License: MIT
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
+
 
 function IntervalClass() {
 	
@@ -33,7 +51,8 @@ function IntervalClass() {
 		//  degrees -  numbers of scale degrees between the notes
 		if (semitones>12) {
 			alert("Liiga suur intervall, oktavit ignoreeritaks");
-			interval = interval % 12;
+			semitones = semitones % 12;
+			degreees = degrees - 7;
 		}
 		var intervals = [];
 		
@@ -56,7 +75,7 @@ function IntervalClass() {
 				}
 			}
 		}
-		return this.this.noInterval;
+		return this.noInterval;
 	}
 	
 	this.findIntervalByShortName = function(shortName) {
@@ -91,8 +110,8 @@ function IntervalClass() {
 		else
 			direction = "down";
 		// we need also info about octaves
-		var oct1 = Math.floor(note1.midiNote / 12) - 1; // TODO: find by vtNote octave, not MIDI -  gives wron result fro ces
-		var oct2 = Math.floor(note2.midiNote / 12) - 1;
+		var oct1 =  parseInt(note1.vtNote.split("/")[1]); // take octave from vtNote like C/5, B#/4 
+		var oct2 = parseInt(note2.vtNote.split("/")[1]);
 		//console.log("oct1, oct2", oct1, oct2,  note2.degree+oct1*7,note1.degree+oct2*7 )
 		var degrees = Math.abs((note2.degree+oct2*7) - (note1.degree+oct1*7)); // put the degrees int onw scale, so the difference gives the distance of degrees
 
@@ -117,13 +136,13 @@ function IntervalClass() {
 			degrees = -degrees;
 		}
 		
-		var oct1 = Math.floor(note.midiNote / 12) - 1; // 4 for first octava etc
+		var oct1 = parseInt(note.vtNote.split("/")[1]); // 4 for first octava etc
 		var degree1 = note.degree + oct1*7 ; // take also octave into account to get correct difference
 		console.log("note: ", note.midiNote, oct1, degree1);
 		// find note by midiNote
 		
 		for (var i=0; i<possibleNotes.length; i++) {
-			var oct2 = Math.floor(possibleNotes[i].midiNote / 12) - 1;
+			var oct2 = parseInt(possibleNotes[i].vtNote.split("/")[1]);
 			var degree2 = possibleNotes[i].degree + oct2*7;
 			if ( (possibleNotes[i].midiNote === note.midiNote + semitones) &&  (degree2 === (degree1 + degrees)) ) {
 				console.log("Found: ", i, possibleNotes[i].vtNote);

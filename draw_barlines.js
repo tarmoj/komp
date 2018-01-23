@@ -2,15 +2,13 @@
 // TODO: proper credits, copyright
 
 
-// harjutus  1.2.4. Helivältus. Lisa taktijooned. Antud on taktimõõt ja rida helivältusi. Kirjuta taktijooned vastavalt taktimõõdule õigesse kohta. (Column + MusGen)
+// Original exercise:   1.2.4. Helivältus. Lisa taktijooned. Antud on taktimõõt ja rida helivältusi. Kirjuta taktijooned vastavalt taktimõõdule õigesse kohta.
 
-//var exercise; should it be declared in the script part of main html?? 
-	
-function drawBarlines(containerNode, canvasClassName) { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
+
+function drawBarlines(containerNode, canvasClassName) { // generates 2 bars in given time, hides barlines, on click draws a line an checks if it is correct (between right notes)
 	// variables
 	var answered = false;
-	var time = "3/4"; // later random or  set by user, better random
-	//var barlineObject;
+	var time = "3/4"; 
 	var bar1 = {}, bar2 = {};
 	
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
@@ -29,7 +27,6 @@ function drawBarlines(containerNode, canvasClassName) { // generates 2 bars in g
 	
 	function generateBar(numerator, denomenator) { // return vextab string
 		
-		// pitches -  take random pitches??
 		var totalDuration = 0; 
 		var barLength = numerator/denomenator * 4; // barLength in beats, 6/8 -> 3 beats
 		var durations;
@@ -44,25 +41,22 @@ function drawBarlines(containerNode, canvasClassName) { // generates 2 bars in g
 				if ((totalDuration + duration)>barLength) {
 					break;
 				}
-				//console.log("Duration: ", duration);
 				durations.push(duration);
 				totalDuration += duration;
 			}
 		} while (totalDuration!=barLength);  // bad code, avoid loop, rather add up random notes and fill the rest with suitable values
-		console.log("Generted durations:", durations); // BETTER: create separate function for creating rhytms for a bar
+		//console.log("Generted durations:", durations); 
 		
 		
 		// create VexFlow string of notes
-		
 		var parseString = "";
-		var possibleNotes = ["C","D","E","F","G"]; // etc all 12
+		var possibleNotes = ["C","D","E","F","G"]; // some random pitches
 		for (var i=0; i<durations.length; i++) {
 			var flexDuration = (4/durations[i]).toString();
-			//console.log(_duration,flexDuration);
 			parseString += " :"+flexDuration + " " + possibleNotes[Math.floor(Math.random()*possibleNotes.length)] +"/4 ";
 			
 		}
-		console.log("Generated notes: ", parseString);
+		//console.log("Generated notes: ", parseString);
 		return {vtNotes: parseString, count: durations.length}; 
 		
 	}
@@ -70,15 +64,10 @@ function drawBarlines(containerNode, canvasClassName) { // generates 2 bars in g
 	
 	exercise.generate = function() {
 	
-		// generate time signatur first
-		var beats = Math.floor(Math.random()*4 + 4); //3/4 .. 7/4
+		// generate time signature first
+		var beats = Math.floor(Math.random()*4 + 4); // 3/4 .. 7/4
 		var time =  beats.toString() +  "/4"
 		exercise.time = time;
-		
-		
-		
-		//TODO: ühtlane paigutus 
-		//exercise.notes = generateBar(beats,4) + " | "  + generateBar(beats,4);
 		
 		bar1 = generateBar(beats,4);
 		bar2 = generateBar(beats,4);
@@ -102,15 +91,14 @@ function drawBarlines(containerNode, canvasClassName) { // generates 2 bars in g
 		var notes = exercise.getNotes(0);
 		previousX = notes[bar1.count-1].getAbsoluteX() + notes[bar1.count-1].width; // last note of first bar
 		nextX = notes[bar1.count].getAbsoluteX() + notes[bar1.count].width;
-		//var comparableX = x*exercise.canvasScale + exercise.canvasX;
-		var drawX = x - exercise.canvasX; // <- fixed in baseclass
-		console.log(drawX, previousX, "next: ", nextX)
-		if (drawX>= previousX && drawX<=nextX) { // +10 note width
-			feedback = "Õige!"
+		var drawX = x - exercise.canvasX; 
+		//console.log(drawX, previousX, "next: ", nextX)
+		if (drawX>= previousX && drawX<=nextX) { 
+			feedback = "<b>Õige!</b>"
 			exercise.score += 1;
 			color = "green";
 		} else {
-			feedback = "Vale koht!";
+			feedback = "<b>Vale koht!</b>";
 			color = "red";
 		}
 		

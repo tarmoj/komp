@@ -1,11 +1,25 @@
-// Music exercises for "MUUSIKA KOMPOSITSIOONIÕPETUS"
-// TODO: proper credits, copyright
+/*
+
+Autogenerating Music Exercises for education program "Muusika Kompositsiooniõpetus" https://et.wikibooks.org/wiki/Muusika_kompositsiooni%C3%B5petus/N%C3%84IDISKURSUS._G%C3%9CMNAASIUM
+Commissioned by Estonian Ministry of Education and Research, Tallinn University,  in the frame of Digital Learning Resources project DigiÕppeVaramu https://htk.tlu.ee/oppevara/
 
 
-// AKORD h 5  Viiulivõti/Bassivõti. Antud on helikõrgus ja akordi nimetus. Ehita akord üles/alla. (Column + MusGen)
+Copyright 2018, by Tarmo Johannes trmjhnns@gmail.com
+
+License: MIT
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
+
+// Original: AKORD h 5  Viiulivõti/Bassivõti. Antud on helikõrgus ja akordi nimetus. Ehita akord üles/alla. (Column + MusGen)
 
 
-// NoteClass defined in possible_notes.js -  must be included in main html
+// NoteClass defined in noteclass.js -  must be included in main html, also intervalclass.js
 
 function buildChord(clef, direction, containerNode, canvasClassName) { 
 	if (direction===undefined) direction = "up";
@@ -24,11 +38,7 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 	var notes = new NoteClass();
 	
 	var possibleChords = intervals.possibleChords;
-	
-	//TODO: move to IntervalClass
-	
-	
-	
+
 	
 	// set necessary methods in exercise
 	var exercise = new MusicExercise(this.containerNode, this.canvasClassName, 150,10,10,1.5); // bigger scale for note input
@@ -86,8 +96,7 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 	}
 	
 
-	document.body.addEventListener('keypress', function (e) { // TODO: how to remove when this function is not used? 
-		// TODO: redo on keypressed -  otherwise different reults in different browsers
+	document.body.addEventListener('keypress', function (e) { 
 		e = e || window.event;
 		var charCode = e.keyCode || e.which;		
 		if ( charCode === 45 && currentNoteIndex[activeNote] >= 0) { // minus key
@@ -120,7 +129,6 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 	'<input type="radio" class="firstButton"  name="activeNote" value="1" onclick="exercise.setActiveNote(this.value)" checked>2</input> ' +
 	'<input type="radio" name="activeNote" value="2" onclick="exercise.setActiveNote(this.value)">3</input> ' +
 	'<input type="radio" class="lastButton" name="activeNote" value="3" onclick="exercise.setActiveNote(this.value)">4</input> ';
-	//exercise.canvas.insertBefore(radioDiv, exercise.canvas.firstChild);
 	exercise.canvas.appendChild(radioDiv);
 	
 	exercise.generate = function() {
@@ -129,27 +137,19 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 		chordIndex = Math.floor(Math.random()* possibleChords.length);
 		
 		var baseNote = possibleBaseNotes[Math.floor(Math.random()* possibleBaseNotes.length)];
-		console.log("Basenote: ", baseNote);		
+		//console.log("Basenote: ", baseNote);		
 		
-		//find according noteIndex from possibleNotes: TODO: add this as function to possible_notes.js, that perhaps should be part of baseclass...
-		noteIndex = -1;
-		for (var i=0;i<possibleNotes.length;i++) {
-			if (possibleNotes[i].vtNote === baseNote) {
-				noteIndex = i;
-				break;
-			}
-		}
+		noteIndex = notes.findIndexByVtNote(baseNote, possibleNotes);
 		
-		if (noteIndex==-1) {
+		if (noteIndex==-1 || noteIndex===undefined) {
 			console.log("Generation failed. Could not find ", baseNote, "in possibleNotes");
 			return;
 		}
 		
 		chord[0] = possibleNotes[noteIndex]; 
 		
-		console.log("Selected: ", possibleChords[chordIndex].longName, "from ", possibleNotes[noteIndex].name);
+		//console.log("Selected: ", possibleChords[chordIndex].longName, "from ", possibleNotes[noteIndex].name);
 		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleChords[chordIndex].longName + " " + directionTranslation +  '</b>.<br>Kui oled noodid sisetanud noodijoonestikule, vajuta Vasta:' ;
-		
 		
 		exercise.notes = ":w " + possibleNotes[noteIndex].vtNote; // the note the interval is built from
 		currentNoteIndex = [-1, -1, -1, -1]; 
@@ -160,11 +160,9 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 			this.containerNode.getElementsByClassName("lastButton")[0].disabled = false;
 		}
 		activeNote = 1;
-		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
-	
+		answered = false; 
 	}
 	
-	// TOD: listener for active note UI -  when value changed, set activeNote to that
 	
 	exercise.clickActions = function(x,y) {
 		var line = exercise.artist.staves[0].note.getLineForY(y);		
@@ -215,7 +213,6 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 		var interval1 = intervals.getInterval(chord[0],chord[1]).interval; // ignore the direction, probably right
 		var interval2 = intervals.getInterval(chord[0],chord[2]).interval;
 		var interval3 = undefined;
-		// TODO: 4-note chords
 		if (currentNoteIndex[3] != -1 ) { // 4-note chord
 			var interval3 = intervals.getInterval(chord[0],chord[3]).interval;
 		}

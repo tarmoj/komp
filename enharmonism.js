@@ -1,8 +1,23 @@
-// Music exercises for "MUUSIKA KOMPOSITSIOONIÕPETUS"
-// TODO: proper credits, copyright
+/*
 
+Autogenerating Music Exercises for education program "Muusika Kompositsiooniõpetus" https://et.wikibooks.org/wiki/Muusika_kompositsiooni%C3%B5petus/N%C3%84IDISKURSUS._G%C3%9CMNAASIUM
+Commissioned by Estonian Ministry of Education and Research, Tallinn University,  in the frame of Digital Learning Resources project DigiÕppeVaramu https://htk.tlu.ee/oppevara/
+
+
+Copyright 2018, by Tarmo Johannes trmjhnns@gmail.com
+
+License: MIT
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
  
-// harjutus 1.2.2 "Helikõrgus 15 harjutus. Helikõrgus. Enharmonism. Antud on helikõrgus tähtnimetusega, silpnimetusega, noodijoonestikul. Kirjuta enharmoonilised helid 
+// Original exercise: Helikõrgus. Enharmonism. Antud on helikõrgus tähtnimetusega, silpnimetusega, noodijoonestikul. Kirjuta enharmoonilised helid 
+
 //  Find enharmonic notes, display one, ask other
 
 function enharmonism(nameOrSyllable, containerNode, canvasClassName) {		
@@ -28,8 +43,7 @@ function enharmonism(nameOrSyllable, containerNode, canvasClassName) {
 	var oldResponse = this.containerNode.getElementsByClassName("response")[0];
 	var response = document.createElement("input");
 	response.type = "text";
-	response.size = "4";
-	//response.innerHTML ='<input type="text" size=4"></input><br>';		
+	response.size = "6";
 	response.className = "response";
 	
 	if (oldResponse === null || oldResponse === undefined) {
@@ -48,7 +62,7 @@ function enharmonism(nameOrSyllable, containerNode, canvasClassName) {
 	
 	exercise.generate = function() {
 		var tryThis = enharmonicNotes[Math.floor(Math.random()*enharmonicNotes.length)];
-		while (tryThis === selectedNotes) { // to avoid getting the same duration twice in a row
+		while (tryThis[0] === selectedNotes[0]) { // to avoid getting the same duration twice in a row
 			//console.log("Got the same, retrying");
 			tryThis = enharmonicNotes[Math.floor(Math.random()*enharmonicNotes.length)];
 		}
@@ -61,28 +75,27 @@ function enharmonism(nameOrSyllable, containerNode, canvasClassName) {
 			selectedNotes = [tryThis[1], tryThis[0]];
 		}
 		
-		console.log("Selected notes: ", selectedNotes);
+		//console.log("Selected notes: ", selectedNotes);
 		
 		if (nameOrSyllable === "syllable") {
-			askFor = notes.findNoteByVtNote(selectedNotes[0], notes.violinClefNotes).syllable;
+			askFor = notes.findNoteByVtNote(selectedNotes[0], notes.violinClefNotes).syllable; // clef here hardcoded to be violin clef
 			correctAnswer = notes.findNoteByVtNote(selectedNotes[1], notes.violinClefNotes).syllable;
 		} else {
 			askFor = notes.findNoteByVtNote(selectedNotes[0], notes.violinClefNotes).name;
 			correctAnswer = notes.findNoteByVtNote(selectedNotes[1], notes.violinClefNotes).name;
 		}
-		askFor = notes.removeLastDigit(askFor); // remove octave number, if present
+		askFor = notes.removeLastDigit(askFor); // remove octave number, if present // if it were bass clef, also toLowerCase
 		correctAnswer = notes.removeLastDigit(correctAnswer);
 		
 		
-		console.log(askFor, correctAnswer);
+		//console.log(askFor, correctAnswer);
 		
 		this.containerNode.getElementsByClassName("question")[0].innerHTML = 'Noodile <b>' + askFor +
  		'</b> vastab enharmooniliselt: ' ;
 		
-		// TODO: kuva esimene noot
-		exercise.notes = ":4 " + selectedNotes[0];
+		exercise.notes = ":4 " + selectedNotes[0]; // display first note
 		
-		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
+		answered = false;
 	
 	}
 	

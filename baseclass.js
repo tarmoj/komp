@@ -1,6 +1,25 @@
-// Base class for self generating musical exercises of .... project
+/*
+
+Autogenerating Music Exercises for education program "Muusika Kompositsiooniõpetus" https://et.wikibooks.org/wiki/Muusika_kompositsiooni%C3%B5petus/N%C3%84IDISKURSUS._G%C3%9CMNAASIUM
+Commissioned by Estonian Ministry of Education and Research, Tallinn University,  in the frame of Digital Learning Resources project DigiÕppeVaramu https://htk.tlu.ee/oppevara/
+
+
+Copyright 2018, by Tarmo Johannes trmjhnns@gmail.com
+
+License: MIT
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
+
+
+// Base class for Music Exercises
 // uses VexTab / VexFlow for notation 
-// for audio playback
+// WebAudiofontPlayer for audio playback
 
 // the host webpage must load:
 // <script src="https://unpkg.com/vextab/releases/vextab-div.js"></script>
@@ -27,9 +46,8 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, ) {
 	this.canvasScale = scale === undefined ? 0.8 : scale;
 	
 	this.notes = ""; // notenames, durations  and octaves in vextab format like ":4 C/4" -  and other parts of VT notation
-	//this.vexFlowNotes = []; // including all parameters VF objects
 	this.numberOfVoices = 1;
-	this.currentVoice = 0; // index of voice/stave?
+	this.currentVoice = 0; // index of voice/stave
 	
 	
 	this.key = "C";
@@ -43,13 +61,15 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, ) {
 	this.score = 0;
 
     
-    // for test -------------
+    // for tests -------------
     this.timer = -1;
 	this.timeToThink = 15; // Could be also il levels:  slow/medium/fast
 	this.maxQuestions = 5; 
 	this.currentQuestion = 0; // should be local variables defined with var but this is not reachable from countdown() if it is executed from setTimeout callbaclk. javascript.....
 	this.countdownReference = NaN;
 	
+	
+	// main methods -----------------
 	this.createVexTabString = function() {
 		var startString = "options space=20\n stave \n "; // was tabstave before but this is not needed
 		var clefString = (this.clef.length>0) ? "clef="+this.clef+"\n" : "";
@@ -64,19 +84,10 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, ) {
 	this.clickActions = function(x,y){ console.log("clickactions", x,y)}; // you can define other things to be done connected to click event
 	
 	this.handleClick = function(event) {
-		//event.stopPropagation(); // not sure if this is necessary
-		if (event.target.parentElement.className.baseVal === "vf-notehead") {
-			console.log("This is notehead!")
-			event.target.setAttribute("fill", "blue"); // probably overdrawn somewhere
-			event.target.setAttribute("stroke", "blue");
-		}
-		
-		
 		var _x = event.layerX / _this.canvasScale; // This is not consistent. Requires handling in exercises (drawx= x-canvas.X). Think
-		var _y =  (event.layerY - _this.canvas.offsetTop) / _this.canvasScale; // was: clientX, clientY // TODO: test other browsers
+		var _y =  (event.layerY - _this.canvas.offsetTop) / _this.canvasScale; // was: clientX, clientY 
 		//console.log("Click coordinates: ",_x,_y, event);
-		_this.clickActions(_x,_y); // this workaround is necessary to be able to overload clickActions to reach this properties
-		
+		_this.clickActions(_x,_y); // this workaround is necessary to be able to overload clickActions to reach "this." properties
 	}
 
 	this.init = function() {
@@ -88,18 +99,17 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, ) {
 			this.containerNode.getElementsByClassName("attempts")[0].innerHTML = "0";
 			this.containerNode.getElementsByClassName("score")[0].innerHTML = "0";
 			this.containerNode.getElementsByClassName("testDiv")[0].style.visibility="hidden";
-			this.containerNode.getElementsByClassName("responseDiv")[0].innerHTML = ""; // take care that not elements inserted to tesDiv before creating the exercise object 
+			this.containerNode.getElementsByClassName("responseDiv")[0].innerHTML = ""; 
 			
 			// VexTab
 			if (this.canvasWidth>0) {
 				var vt = VexTabDiv;
-				var VexTab = vt.VexTab;// TODO: size from parameters, settings
+				var VexTab = vt.VexTab;
 				var Artist = vt.Artist;
 				var Renderer = Vex.Flow.Renderer;
-				this.renderer = new Renderer(this.canvas, Renderer.Backends.SVG); // was .CANVAS NB! SVG needs div element, not canvas to work
+				this.renderer = new Renderer(this.canvas, Renderer.Backends.SVG); 
 				this.artist = new Artist(this.canvasX, this.canvasY , this.canvasWidth, {scale: this.canvasScale}); 
 				this.vextab = new VexTab(this.artist);
-
 
 				//Audio renderer
 				this.selectedPreset=_tone_0000_JCLive_sf2_file;
@@ -107,21 +117,20 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, ) {
 				this.audioContext = new AudioContextFunc();
 				this.player=new WebAudioFontPlayer();
 				this.player.loader.decodeAfterLoading(this.audioContext, '_tone_0000_JCLive_sf2_file');
-				
-				
-				// add event listener for canvas clicks //TODO: should be SVG now
+								
+				// add event listener for canvas clicks (SVG)
 				this.renderer.getContext().svg.addEventListener('click',this.handleClick, false);
-				//this.canvas.addEventListener("click", this.clickOnCanvas, false);
 			} else {
 				console.log("Canvas width is 0, renderer and player not created.");
 			}
 
 	}
+	
 	this.init();
 
 	this.generate = function() {console.log("generate(). Implement in derived object.");}
 	
-	this.draw = function (string) { // this should or could be overdriven in base calsses
+	this.draw = function (string) { // if string is given (full vectab notation string), use that to generate notation from
 		try {
 			this.vextab.reset();
 			this.artist.reset();
@@ -133,7 +142,7 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, ) {
 		}
 	}
 	
-	this.renew = function() { // in some exercise you may need to ad more, like hide() or similar
+	this.renew = function() { // in some exercise you may need to add more functionality, like hide() or similar
 		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = "";
         this.generate();
         this.draw();
@@ -146,17 +155,13 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, ) {
 		}
 		return this.artist.staves[staff].note_notes;		
 	}
-	
-	//this.hide = function(noteIndex) {console.log("hide(). Implement in derived object.");}
-
-	this.answer = ""; // keep it string, convert in checkResponse()
-	
+		
 	this.responseFunction = function()  {console.log("Implement in derived object;")}
 	
 	this.checkResponse = function() {
 		this.responseFunction();
 		if (this.testIsRunning() ) {
-			this.nextQuestion(); // this also stops the countdown
+			this.nextQuestion(); // this also stops the countdown of test question
 		}
 	}
 
@@ -205,10 +210,10 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, ) {
 			this.currentQuestion++; 
 			this.containerNode.getElementsByClassName("questionNumber")[0].innerHTML = this.currentQuestion.toString();
 			exercise.renew();
-			this.timer = this.timeToThink
+			this.timer = this.timeToThink;
 			countdown();
 		} else {
-			console.log("Test läbi. Rohkem küsimusi ei saa esitada;")
+			console.log("Test finished")
 			this.stopTest();
 		}
 		
@@ -224,7 +229,7 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, ) {
     }
 	
 	
-	//audio
+	//audio -------------------------------------
 	this.volume = 0.3;
 	this.tempo = 60.0;
 	this.playNote = function(midiNote, start, duration) {
@@ -249,20 +254,15 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, ) {
 					var noteValue =Vex.Flow.Music.noteValues[noteName];
 					var midiNote = (24 + ((octave-1) * 12)) + noteValue.int_val
 					// get start from note, maybe 
-					console.log(midiNote, _start, _duration); // 
+					//console.log(midiNote, _start, _duration); // 
 					if (_note.noteType=="n") { 
 						this.playNote(midiNote, _start, _duration);
 					}
 				}
-				_start += _duration;  // TODO: what if rest?? see code of artist.coffee
-			
-				
+				_start += _duration;  
 			} 
 		}
 	}
-	
-	
-	
 }
 
  

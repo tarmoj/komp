@@ -1,16 +1,25 @@
-// Music exercises for "MUUSIKA KOMPOSITSIOONIÕPETUS"
-// TODO: proper credits, copyright
+/*
+
+Autogenerating Music Exercises for education program "Muusika Kompositsiooniõpetus" https://et.wikibooks.org/wiki/Muusika_kompositsiooni%C3%B5petus/N%C3%84IDISKURSUS._G%C3%9CMNAASIUM
+Commissioned by Estonian Ministry of Education and Research, Tallinn University,  in the frame of Digital Learning Resources project DigiÕppeVaramu https://htk.tlu.ee/oppevara/
 
 
-//10. harjutus. Helikõrgus. Viiulivõti. Antud on helikõrgus klaviatuuril. Kirjuta helikõrgus tähtnimetusega, silpnimetusega, noodijoonestikul. (Column + MusGen)
+Copyright 2018, by Tarmo Johannes trmjhnns@gmail.com
+
+License: MIT
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
+
+//Original exercise: 10. harjutus. Helikõrgus. Viiulivõti. Antud on helikõrgus klaviatuuril. Kirjuta helikõrgus tähtnimetusega, silpnimetusega, noodijoonestikul. (Column + MusGen)
 
 
-//var exercise; should it be declared in the script part of main html?? 
-
-
-// possibleNotes for treble and bass cled defined in possible_notes.js -  must be included in main html
-
-function noteFromKeyboard(clef, containerNode, canvasClassName) { // generates 2 bars in given time, hides barlines, on click draws a line an cecks if it is correct (between right notes)
+function noteFromKeyboard(clef, containerNode, canvasClassName) { 
 	
 	var answered = false;
 	var noteIndex = -1, currentNoteIndex = -1, selectedMidiNote = -1;
@@ -39,7 +48,7 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) { // generates 2
 	
 	// Create or set necessary HTML elements
 	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Helikõrgus klaviatuurilt: " + ( (clef==="bass") ? "Bassivõti." : " Viiulivõti." );
-	this.containerNode.getElementsByClassName("description")[0].innerHTML = " Antud on helikõrgus klaviatuuril. Kirjuta helikõrgus tähtnimetusega, silpnimetusega, noodijoonestikul.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
+	this.containerNode.getElementsByClassName("description")[0].innerHTML = " Antud on helikõrgus klaviatuuril. Kirjuta helikõrgus tähtnimetusega, silpnimetusega, noodijoonestikul.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vastavaid klahve arvutklaviatuuril."; 
 	//this.containerNode.getElementsByClassName("question")[0].innerHTML =	"See noot on silpnimetusega: / Kliki noodijoonestukul kohale, kus peaks asuma noot. Kasuta +/- nuppe, et lisada diees või bemoll";
 	
 	
@@ -64,8 +73,7 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) { // generates 2
 	}
 	
 
-	document.body.addEventListener('keypress', function (e) { // TODO: how to remove when this function is not used? 
-		// TODO: redo on keypressed -  otherwise different reults in different browsers
+	document.body.addEventListener('keypress', function (e) { 
 		e = e || window.event;
 		var charCode = e.keyCode || e.which;		
 		if ( charCode === 45 && currentNoteIndex >= 0) { // minus key
@@ -149,7 +157,6 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) { // generates 2
 	
 	exercise.clickActions = function(x,y) { // to draw a note on the staff
 		// console.log(x,y);		
-
 		var line = exercise.artist.staves[0].note.getLineForY(y);
 		
 		// find note by line
@@ -199,26 +206,26 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) { // generates 2
 		var noteIndex = 0;
 		
 		if ( correctNames.indexOf( this.containerNode.getElementsByClassName("noteName")[0].value) >= 0 ) { 
-			feedback += "Tähtnimetus õige! "
+			feedback += "Tähtnimetus <b>õige!</b> "
 			correct = true;
 		} else {
-			feedback += "Tähtnimetus vale! See on hoopis " + correctNames.join("/") + ". ";			
+			feedback += "Tähtnimetus <b>vale</b>! See on hoopis " + correctNames.join("/") + ". ";			
 			correct = false;
 		}
 		
 		if ( correctSyllables.indexOf( this.containerNode.getElementsByClassName("syllable")[0].value) >= 0 ) { 
-			feedback += "Silpnimetus õige! "
+			feedback += "Silpnimetus <b>õige!</b> "
 			correct = correct && true;
 		} else {
-			feedback += "Silpnimetus vale! See on hoopis " + correctSyllables.join("/") + ". ";			
+			feedback += "Silpnimetus <b>vale!</b> See on hoopis " + correctSyllables.join("/") + ". ";			
 			correct = correct && false;
 		}
 		
 		if (possibleNotes[currentNoteIndex].midiNote === selectedMidiNote) {
-			feedback += "Noot noodijoonestikul on õige! "
+			feedback += "Noot noodijoonestikul on <b>õige!</b> "
 			correct = correct && true;;
 		} else {
-			feedback += "Noot noodijoonestikul on vale! "; 
+			feedback += "Noot noodijoonestikul on <b>vale!</b> "; 
 			exercise.notes += " " + piano.findKeyByMidiNote(selectedMidiNote).dataset.vtnote;
 			exercise.draw(); // redraw with right note
 			correct = correct && false;

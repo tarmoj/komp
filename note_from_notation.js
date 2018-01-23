@@ -1,12 +1,23 @@
-// Music exercises for "MUUSIKA KOMPOSITSIOONIÕPETUS"
-// TODO: proper credits, copyright
+/*
+
+Autogenerating Music Exercises for education program "Muusika Kompositsiooniõpetus" https://et.wikibooks.org/wiki/Muusika_kompositsiooni%C3%B5petus/N%C3%84IDISKURSUS._G%C3%9CMNAASIUM
+Commissioned by Estonian Ministry of Education and Research, Tallinn University,  in the frame of Digital Learning Resources project DigiÕppeVaramu https://htk.tlu.ee/oppevara/
 
 
-// This is basically copy of drawNote() -  bad coding, there should be some inheritance of one base class or similar. Do it later.
-// check for classes in JS5 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes
+Copyright 2018, by Tarmo Johannes trmjhnns@gmail.com
+
+License: MIT
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
 
 
-// 1.3.9. harjutus. Helikõrgus. Viiulivõti. Antud on helikõrgus noodijoonestikul. Kirjuta helikõrgus tähtnimetusega, silpnimetusega, klaviatuuril. (Column + MusGen)
+// Original exercise: 1.3.9. harjutus. Helikõrgus. Viiulivõti. Antud on helikõrgus noodijoonestikul. Kirjuta helikõrgus tähtnimetusega, silpnimetusega, klaviatuuril. (Column + MusGen)
 
 
 
@@ -106,34 +117,32 @@ function noteFromNotation(clef, containerNode, canvasClassName) {
 		exercise.attempts += 1;
 		var feedback = "";
 		var correct = false;
-		
-		// TODO: eemalda silbilt oktavinumber
-		
+				
 		var syllable = notes.removeLastDigit(possibleNotes[noteIndex].syllable.toLowerCase());
 		var noteName = notes.removeLastDigit(possibleNotes[noteIndex].name.toLowerCase());
 		
 		if (this.containerNode.getElementsByClassName("noteName")[0].value === noteName ) { 
-			feedback += "Tähtnimetus õige! "
+			feedback += "Tähtnimetus <b>õige!</b> "
 			correct = true;
 		} else {
-			feedback += "Tähtnimetus vale! See on hoopis " + noteName + ". ";			
+			feedback += "Tähtnimetus <b>vale!</b> See on hoopis " + noteName + ". ";			
 			correct = false;
 		}
 		
 		if (this.containerNode.getElementsByClassName("syllable")[0].value === syllable ) { 
-			feedback += "Silpnimetus õige! "
+			feedback += "Silpnimetus <b>õige!</b> "
 			correct = true;
 		} else {
-			feedback += "Silpnimetus vale! See on hoopis " + syllable + ". ";			
+			feedback += "Silpnimetus <b>vale!</b> See on hoopis " + syllable + ". ";			
 			correct = false;
 		}
 		
 		if ( piano.pressedKey.dataset.midinote%12 === possibleNotes[noteIndex].midiNote%12) { // check pich class, igonre octave
-			feedback += "Noot klaviatuuril on õige! "
+			feedback += "Noot klaviatuuril on <b>õige!</b> "
 			piano.fillKey(piano.pressedKey, "green");
 			correct = correct && true;
 		} else {
-			feedback += "Noot klaviatuuril vale! "; 
+			feedback += "Noot klaviatuuril <b>vale!</b> "; 
 			piano.fillKey(piano.pressedKey, "red");
 			piano.fillKey(piano.findKeyByMidiNote(possibleNotes[noteIndex].midiNote%12), "blue")
 			correct = correct && false;

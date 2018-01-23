@@ -1,7 +1,22 @@
-// Music exercises for "MUUSIKA KOMPOSITSIOONIÕPETUS"
-// TODO: proper credits, copyright   
-    
-//    Harmoonia, harjutus 1.8.1  Antud on helistiku nimetus. Kirjuta võtmemärgid. Siin -  kuvatakse 6 märki, vali õige
+/*
+
+Autogenerating Music Exercises for education program "Muusika Kompositsiooniõpetus" https://et.wikibooks.org/wiki/Muusika_kompositsiooni%C3%B5petus/N%C3%84IDISKURSUS._G%C3%9CMNAASIUM
+Commissioned by Estonian Ministry of Education and Research, Tallinn University,  in the frame of Digital Learning Resources project DigiÕppeVaramu https://htk.tlu.ee/oppevara/
+
+
+Copyright 2018, by Tarmo Johannes trmjhnns@gmail.com
+
+License: MIT
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
+
+//    Original: Harmoonia, harjutus 1.8.1  Antud on helistiku nimetus. Kirjuta võtmemärgid. Siin -  kuvatakse 6 märki, vali õige
 
 var subExercise = [];
 	
@@ -58,7 +73,7 @@ function recognizeKeySignature(containerNode, canvasClassName) {
 	exercise.time = ""; // no time signature
 	
 	function checkResponse() { // must be separate function here since must be placed into object as listener's callback
-		console.log(selectedKey, this.key);
+		//console.log(selectedKey, this.key);
 		
 		if (answered) {
 			alert('Sa oled juba vastanud. Vajuta "Uuenda"');
@@ -68,14 +83,14 @@ function recognizeKeySignature(containerNode, canvasClassName) {
 		var feedback = "";
 		
 		if (this.key == keys[selectedKeyIndex].vtKey) {
-			feedback = "Õige!";
+			feedback = "<b>Õige!</b>";
 			exercise.score +=1;
 			//this.artist.staves[0].note.context.attributes.fill = "green";
 			this.renderer.ctx.attributes.fill = "green";
 		} else {
 			console.log("Is major: ", selectedKeysIsMajor);
 			var keyName = getKeyName(this.key, selectedKeysIsMajor);
-			feedback = "Vale! See on hoopis: " +   keyName;
+			feedback = "<b>Vale!</b> See on hoopis: " +   keyName;
 			this.artist.staves[0].note.context.attributes.fill = "red"
 		}
 		
@@ -92,7 +107,6 @@ function recognizeKeySignature(containerNode, canvasClassName) {
 	
 	}
 	
-	//var subExercise = [];
 	var container = [];
 	for (var i=0;i<keysToShow;i++) {
 		container[i] = document.createElement("span");
@@ -100,7 +114,6 @@ function recognizeKeySignature(containerNode, canvasClassName) {
 		container[i].className = className;
 		exercise.canvas.appendChild(container[i]);
 		subExercise[i] = new MusicExercise(this.containerNode,className, 150); 
-		//subExercise[i].index = i;
 		subExercise[i].time = "";
 		subExercise[i].clickActions = checkResponse; // this way it possible to use this.- properties in the function
 		
@@ -110,7 +123,6 @@ function recognizeKeySignature(containerNode, canvasClassName) {
 	exercise.generate = function() {		
 		var keyIndexes = []; // indexes
 		
-		// TODO: kindlusta, et kõik oleks erinevad!
 		for (i=0; i<keysToShow; i++) {
 			var index = Math.floor(Math.random()* keys.length)
 			while (keyIndexes.indexOf(index)>=0) { // avoid repeating of same key
@@ -125,14 +137,11 @@ function recognizeKeySignature(containerNode, canvasClassName) {
 		selectedKey = keys[selectedKeyIndex].vtKey;
 		console.log("Selected: ",selectedKey);
 		
-		// TODO: võimalda ka minoore, või siis
 		selectedKeysIsMajor = (Math.random()>0.5); // randomly 50-50
 		var keyName =  getKeyName(selectedKey, selectedKeysIsMajor);
 		this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Milline neist on: <b>" + keyName + "</b> (Klõpsa noodijoonestikul)";
 		
-		
-		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
-	
+		answered = false; 
 	}
 	
 	exercise.draw = function() {

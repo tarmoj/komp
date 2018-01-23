@@ -1,13 +1,23 @@
-// Music exercises for "MUUSIKA KOMPOSITSIOONIÕPETUS"
-// TODO: proper credits, copyright
+/*
+
+Autogenerating Music Exercises for education program "Muusika Kompositsiooniõpetus" https://et.wikibooks.org/wiki/Muusika_kompositsiooni%C3%B5petus/N%C3%84IDISKURSUS._G%C3%9CMNAASIUM
+Commissioned by Estonian Ministry of Education and Research, Tallinn University,  in the frame of Digital Learning Resources project DigiÕppeVaramu https://htk.tlu.ee/oppevara/
 
 
-// AKORD h 1. harjutus. Viiulivõti. Antud on helikõrgus ja intervalli nimetus. Ehita intervall üles 
+Copyright 2018, by Tarmo Johannes trmjhnns@gmail.com
 
-//var exercise; should it be declared in the script part of main html?? 
+License: MIT
 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-// possibleNotes for treble and bass cled defined in possible_notes.js -  must be included in main html
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
+
+// Original: AKORD h 1. harjutus. Viiulivõti. Antud on helikõrgus ja intervalli nimetus. Ehita intervall üles 
+
 
 function buildInterval(clef, direction, containerNode, canvasClassName) { 
 	if (direction===undefined) direction = "up";
@@ -32,10 +42,10 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 	var possibleIntervals = intervals.possibleIntervals;
 	var possibleNotes = [];
 	var possibleBaseNotes = [];
-	//var lowLimit= 10, highLimit = 35; // to set range from which to take the random note to build interval from
-	if (clef==="bass" ) { // && direction == "up"
+
+	if (clef==="bass" ) { 
 		exercise.clef ="bass"
-		possibleNotes = bassClefNotes;
+		possibleNotes = notes.bassClefNotes;
 		if (direction.toLowerCase()==="up") {
 			possibleBaseNotes =  ["F/2", "G/2", "A/2", "B/2", "C/3", "D/3"];
 		} else {
@@ -68,7 +78,7 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 			if (currentNoteIndex<0)
 				currentNoteIndex = 0;
 			console.log(currentNoteIndex, possibleNotes[currentNoteIndex].vtNote)
-			exercise.notes = ":w " + intervals, makeChord([possibleNotes[noteIndex], possibleNotes[currentNoteIndex]]);
+			exercise.notes = ":w " + intervals.makeChord([possibleNotes[noteIndex], possibleNotes[currentNoteIndex]]);
 			exercise.draw();
 			
 		} else {
@@ -78,8 +88,7 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 	}
 	
 
-	document.body.addEventListener('keypress', function (e) { // TODO: how to remove when this function is not used? 
-		// TODO: redo on keypressed -  otherwise different reults in different browsers
+	document.body.addEventListener('keypress', function (e) { 
 		e = e || window.event;
 		var charCode = e.keyCode || e.which;		
 		if ( charCode === 45 && currentNoteIndex >= 0) { // minus key
@@ -129,8 +138,7 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 		
 		exercise.notes = ":w " + possibleNotes[noteIndex].vtNote; // the note the interval is built from
 		currentNoteIndex = -1; 	
-		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
-	
+		answered = false; 
 	}
 	
 	

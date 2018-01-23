@@ -1,13 +1,24 @@
-// Music exercises for "MUUSIKA KOMPOSITSIOONIÕPETUS"
-// TODO: proper credits, copyright
+/*
+
+Autogenerating Music Exercises for education program "Muusika Kompositsiooniõpetus" https://et.wikibooks.org/wiki/Muusika_kompositsiooni%C3%B5petus/N%C3%84IDISKURSUS._G%C3%9CMNAASIUM
+Commissioned by Estonian Ministry of Education and Research, Tallinn University,  in the frame of Digital Learning Resources project DigiÕppeVaramu https://htk.tlu.ee/oppevara/
 
 
-// harjutus  1.3.7. Helikõrgus. Viiulivõti. Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul, klaviatuuril. 
+Copyright 2018, by Tarmo Johannes trmjhnns@gmail.com
 
-//var exercise; should it be declared in the script part of main html?? 
+License: MIT
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
 
 
-// possibleNotes for treble and bass cled defined in possible_notes.js -  must be included in main html
+// original exercise:  1.3.7. Helikõrgus. Viiulivõti. Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul, klaviatuuril. 
+
 
 function noteFromNoteName(clef, containerNode, canvasClassName) { 
 	var answered = false;
@@ -22,7 +33,6 @@ function noteFromNoteName(clef, containerNode, canvasClassName) {
  	exercise.key = "";
 	exercise.timeToThink = 30; // more time for doing the test
 	
-	
 	// set clef
 	var possibleNotes;
 	if (clef==="bass") {
@@ -36,8 +46,6 @@ function noteFromNoteName(clef, containerNode, canvasClassName) {
 	// Create or set necessary HTML elements
 	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Kirjuta helikõrgus tähtnime järgi. " + ( (clef==="bass") ? "Bassivõti." : " Viiulivõti." );
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul, klaviatuuril.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
-	
-	
 	
 	function handleAccidental(plusMinus) {  // -1 to lower half tone, +1 to raise halftone
 		console.log("handleAccidental", plusMinus, );
@@ -57,8 +65,7 @@ function noteFromNoteName(clef, containerNode, canvasClassName) {
 	}
 	
 
-	document.body.addEventListener('keypress', function (e) { // TODO: how to remove when this function is not used? 
-		// TODO: redo on keypressed -  otherwise different reults in different browsers
+	document.body.addEventListener('keypress', function (e) { 
 		e = e || window.event;
 		var charCode = e.keyCode || e.which;		
 		if ( charCode === 45 && currentNoteIndex >= 0) { // minus key
@@ -67,7 +74,6 @@ function noteFromNoteName(clef, containerNode, canvasClassName) {
 		if (charCode === 43 && currentNoteIndex >= 0 ) { // plus key
 			handleAccidental(1);
 		}
-		
 	}, false);
 	
 	var diesisButton = document.createElement("button");
@@ -88,10 +94,9 @@ function noteFromNoteName(clef, containerNode, canvasClassName) {
 	piano.createPiano();
 	
 	
-	exercise.generate = function() {
-				
+	exercise.generate = function() {		
 		noteIndex = Math.floor(Math.random()*possibleNotes.length); 
-		console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable);
+		console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable, noteIndex);
 		
 		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleNotes[noteIndex].name + '</b><br>Noot <b><big>' + notes.removeLastDigit(possibleNotes[noteIndex].name.toLowerCase())  + '</b></big> on silpnimetusega: <select class="syllable"><option>---</option></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
@@ -103,8 +108,6 @@ function noteFromNoteName(clef, containerNode, canvasClassName) {
 			option.value = syllable;
 			select.appendChild(option);
 		}
-		
-		
 		
 		exercise.notes = ""; // nothing drawn	
 		currentNoteIndex = -1; 	
@@ -126,15 +129,12 @@ function noteFromNoteName(clef, containerNode, canvasClassName) {
 				//console.log(i, possibleNotes[i].line, line)
 				if (possibleNotes[i].line === line) {
 					console.log("FOUND ", i, possibleNotes[i].vtNote);
-					// TODO: add # or bemoll, then check if correct note
 					exercise.notes =  possibleNotes[i].vtNote;
 					currentNoteIndex = i;
 					exercise.draw();
 					break;
-					
 				}
 			}
-			
 		}
 	}
 	
@@ -166,24 +166,22 @@ function noteFromNoteName(clef, containerNode, canvasClassName) {
 		exercise.attempts += 1;
 		var feedback = "";
 		var correct = false;
-		
-		// TODO: eemalda silbilt oktavinumber
-		
+				
 		var syllable = notes.removeLastDigit(possibleNotes[noteIndex].syllable.toLowerCase());
 		
 		if (this.containerNode.getElementsByClassName("syllable")[0].value === syllable ) { 
-			feedback += "Silpnimetus õige! "
+			feedback += "Silpnimetus <b>õige!</b> "
 			correct = true;
 		} else {
-			feedback += "Silpnimetus vale! See on hoopis " + syllable + ". ";			
+			feedback += "Silpnimetus <b>vale!</b> See on hoopis " + syllable + ". ";			
 			correct = false;
 		}
 		
 		if (currentNoteIndex === noteIndex) {
-			feedback += "Noot noodijoonestikul on õige! "
+			feedback += "Noot noodijoonestikul on <b>õige!</b> "
 			correct = correct && true;;
 		} else {
-			feedback += "Noot noodijoonestikul on vale! "; 
+			feedback += "Noot noodijoonestikul on <b>vale!</b> "; 
 			exercise.notes += " " + possibleNotes[noteIndex].vtNote;
 			exercise.draw(); // redraw with right note
 			correct = correct && false;
@@ -192,11 +190,11 @@ function noteFromNoteName(clef, containerNode, canvasClassName) {
 		console.log(piano.pressedKey.dataset.midinote, possibleNotes[noteIndex].midiNote)
 		
 		if ( piano.pressedKey.dataset.midinote%12 === possibleNotes[noteIndex].midiNote%12) { // check pich class, igonre octave
-			feedback += "Noot klaviatuuril on õige! "
+			feedback += "Noot klaviatuuril on <b>õige!</b> "
 			piano.fillKey(piano.pressedKey, "green");
 			correct = correct && true;
 		} else {
-			feedback += "Noot klaviatuuril vale! "; 
+			feedback += "Noot klaviatuuril <b>vale!</b> "; 
 			piano.fillKey(piano.pressedKey, "red");
 			piano.fillKey(piano.findKeyByMidiNote(possibleNotes[noteIndex].midiNote%12), "blue")
 			correct = correct && false;

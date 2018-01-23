@@ -1,14 +1,24 @@
-// Music exercises for "MUUSIKA KOMPOSITSIOONIÕPETUS"
-// TODO: proper credits, copyright
+/*
+
+Autogenerating Music Exercises for education program "Muusika Kompositsiooniõpetus" https://et.wikibooks.org/wiki/Muusika_kompositsiooni%C3%B5petus/N%C3%84IDISKURSUS._G%C3%9CMNAASIUM
+Commissioned by Estonian Ministry of Education and Research, Tallinn University,  in the frame of Digital Learning Resources project DigiÕppeVaramu https://htk.tlu.ee/oppevara/
 
 
-// 1.3.8. harjutus. Helikõrgus. Viiulivõti. Antud on helikõrgus silpnimetusega. Kirjuta helikõrgus tähtnimetusega, noodijoonestikul, klaviatuuril.
+Copyright 2018, by Tarmo Johannes trmjhnns@gmail.com
+
+License: MIT
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
+
+// Original exercise: 1.3.8. harjutus. Helikõrgus. Viiulivõti. Antud on helikõrgus silpnimetusega. Kirjuta helikõrgus tähtnimetusega, noodijoonestikul, klaviatuuril.
 
 
-//var exercise; should it be declared in the main html 
-
-
-// possibleNotes for treble and bass cled ared defined in possible_notes.js -  must be included in main html
 
 function noteFromSyllable(clef, containerNode, canvasClassName) { 
 	
@@ -40,7 +50,7 @@ function noteFromSyllable(clef, containerNode, canvasClassName) {
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helikõrgus silpnimetusega. Kirjuta helikõrgus tähtnimetusega, noodijoonestikul, klaviatuuril.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
 
 	
-	function handleAccidental(plusMinus) {  // -1 to lower half tone, +1 to raise halftone
+	function handleAccidental(plusMinus) {  // -1 to lower half tone, +1 to raise halftone (or to next enharmonic note)
 		console.log("handleAccidental", plusMinus );
 		if (currentNoteIndex > 0) {
 			currentNoteIndex += plusMinus;
@@ -59,7 +69,6 @@ function noteFromSyllable(clef, containerNode, canvasClassName) {
 	
 
 	document.body.addEventListener('keypress', function (e) { // TODO: how to remove when this function is not used? 
-		// TODO: redo on keypressed -  otherwise different reults in different browsers
 		e = e || window.event;
 		var charCode = e.keyCode || e.which;		
 		if ( charCode === 45 && currentNoteIndex >= 0) { // minus key
@@ -105,12 +114,9 @@ function noteFromSyllable(clef, containerNode, canvasClassName) {
 			select.appendChild(option);
 		}
 		
-		
-		
 		exercise.notes = ""; // nothing drawn	
 		currentNoteIndex = -1; 	
-		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
-	
+		answered = false; 
 	}
 	
 	
@@ -170,18 +176,18 @@ function noteFromSyllable(clef, containerNode, canvasClassName) {
 		var noteName = notes.removeLastDigit(possibleNotes[noteIndex].name.toLowerCase());
 		
 		if (this.containerNode.getElementsByClassName("noteName")[0].value === noteName ) { 
-			feedback += "Tähtnimetus õige! "
+			feedback += "Tähtnimetus <b>õige!</b> "
 			correct = true;
 		} else {
-			feedback += "Tähtnimetus vale! See on hoopis " + noteName + ". ";			
+			feedback += "Tähtnimetus <b>vale!</b> See on hoopis " + noteName + ". ";			
 			correct = false;
 		}
 		
 		if (currentNoteIndex === noteIndex) {
-			feedback += "Noot noodijoonestikul on õige! "
+			feedback += "Noot noodijoonestikul on <b>õige!</b> "
 			correct = correct && true;
 		} else {
-			feedback += "Noot noodijoonestikul on vale! "; 
+			feedback += "Noot noodijoonestikul on <b>vale!</b> "; 
 			exercise.notes += " " + possibleNotes[noteIndex].vtNote;
 			exercise.draw(); // redraw with right note
 			correct = correct && false;
@@ -190,11 +196,11 @@ function noteFromSyllable(clef, containerNode, canvasClassName) {
 		//console.log(piano.pressedKey.dataset.midinote, possibleNotes[noteIndex].midiNote)
 		
 		if ( piano.pressedKey.dataset.midinote%12 === possibleNotes[noteIndex].midiNote%12) { // check pich class, igonre octave
-			feedback += "Noot klaviatuuril on õige! "
+			feedback += "Noot klaviatuuril on <b>õige!</b> "
 			piano.fillKey(piano.pressedKey, "green");
 			correct = correct && true;
 		} else {
-			feedback += "Noot klaviatuuril vale! "; 
+			feedback += "Noot klaviatuuril <b>vale!</b> "; 
 			piano.fillKey(piano.pressedKey, "red");
 			piano.fillKey(piano.findKeyByMidiNote(possibleNotes[noteIndex].midiNote%12), "blue")
 			correct = correct && false;

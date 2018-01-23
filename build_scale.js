@@ -1,13 +1,23 @@
-// Music exercises for "MUUSIKA KOMPOSITSIOONIÕPETUS"
-// TODO: proper credits, copyright
+/*
+
+Autogenerating Music Exercises for education program "Muusika Kompositsiooniõpetus" https://et.wikibooks.org/wiki/Muusika_kompositsiooni%C3%B5petus/N%C3%84IDISKURSUS._G%C3%9CMNAASIUM
+Commissioned by Estonian Ministry of Education and Research, Tallinn University,  in the frame of Digital Learning Resources project DigiÕppeVaramu https://htk.tlu.ee/oppevara/
 
 
-// HARMOONIA h 4 harjutus. Kirjuta antud helist duur/loomulik moll/harmooniline moll / meloodiline moll-helirida üles. 
+Copyright 2018, by Tarmo Johannes trmjhnns@gmail.com
 
-//var exercise; should it be declared in the script part of main html?? 
+License: MIT
 
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-// possibleNotes for treble and bass cled defined in possible_notes.js -  must be included in main html
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
+
+// Original: HARMOONIA h 4 harjutus. Kirjuta antud helist duur/loomulik moll/harmooniline moll / meloodiline moll-helirida üles. 
+
 
 function buildScale(scale, containerNode, canvasClassName) { // scale: major|natural|harmonic|melodic 
 	if (scale===undefined) direction = "major";
@@ -123,20 +133,14 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 		console.log("Basenote: ", baseNote );
 		
 		//find according noteIndex from possibleNotes: TODO: add this as function to possible_notes.js, that perhaps should be part of baseclass...
-		noteIndex = -1;
-		for (var i=0;i<possibleNotes.length;i++) {
-			if (possibleNotes[i].vtNote === baseNote) {
-				noteIndex = i;
-				break;
-			}
-		}
+		noteIndex = notes.findIndexByVtNote(baseNote, notes.trebleClefNotes);
 		
 		if (noteIndex==-1) {
 			console.log("Generation failed. Could not find ", baseNote, "in possibleNotes");
 			return;
 		}
 		
-		console.log("Selected: ", possibleScales[scaleIndex].translation, "from ", possibleNotes[noteIndex].name);
+		//console.log("Selected: ", possibleScales[scaleIndex].translation, "from ", possibleNotes[noteIndex].name);
 		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleScales[scaleIndex].translation + " noodist "  +  possibleNotes[noteIndex].name  + ' üles </b>.<br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
 		
@@ -147,8 +151,7 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 		editNote = -1; lastActiveNote = -1;
 		currentNoteIndex[0] = noteIndex;
 		scaleNotes[0] = possibleNotes[noteIndex].vtNote;
-		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
-	
+		answered = false;
 	}
 	
 	
@@ -161,8 +164,7 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 		}
 	}
 	
-	exercise.handleClick2 = function(event) {
-		//event.stopPropagation(); // not sure if this is necessary
+	exercise.handleClick2 = function(event) { // custom function replaceing baseclass.handleClick & clickActions
 		if (event.target.parentElement.className.baseVal === "vf-notehead") {
 			console.log("This is notehead MINA MINA!")
 			// find which note it is:
@@ -185,9 +187,8 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 		}
 		
 		
-		var x = event.layerX / exercise.canvasScale; // This is not consistent. Requires handling in exercises (drawx= x-canvas.X). Think
-		var y =  (event.layerY - exercise.canvas.offsetTop) / exercise.canvasScale; // was: clientX, clientY // TODO: test other browsers
-		//console.log("Click coordinates: ",_x,_y, event);
+		var x = event.layerX / exercise.canvasScale; 
+		var y =  (event.layerY - exercise.canvas.offsetTop) / exercise.canvasScale; 
 		
 		if (editNote === -1) { // if no note is in edit mode, insert next note
 			activeNote += 1; 
@@ -209,7 +210,6 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 					currentNoteIndex[activeNote] = i;
 					scaleNotes[activeNote] = possibleNotes[i].vtNote
 					exercise.notes  = ":q "  + scaleNotes.join(" "); // TODO: find right position when
-					// use. scaleNotes[] <- vtNotes of inserted notes
 					exercise.draw();
 					if (editNote>=0)
 						markBlue(editNote);
@@ -222,10 +222,6 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 		if (editNote >= 0) { // keep active notehead blue
 			markBlue(editNote);
 		}
-		
-		
-		
-		
 	}
 	
 	exercise.renderer.getContext().svg.removeEventListener('click',exercise.handleClick, false);
@@ -234,10 +230,6 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 	exercise.renew();		
 	
 	exercise.responseFunction = function() {
-// 		if (currentNoteIndex < 0) {
-// 			alert("Sisesta noot noodijoonestikule!")
-// 			return;
-// 		}
 		
 		if (answered) {
 			alert('Sa oled juba vastanud. Vajuta "Uuenda"');

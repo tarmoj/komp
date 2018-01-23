@@ -1,8 +1,23 @@
-// Music exercises for "MUUSIKA KOMPOSITSIOONIÕPETUS"
-// TODO: proper credits, copyright
+/*
+
+Autogenerating Music Exercises for education program "Muusika Kompositsiooniõpetus" https://et.wikibooks.org/wiki/Muusika_kompositsiooni%C3%B5petus/N%C3%84IDISKURSUS._G%C3%9CMNAASIUM
+Commissioned by Estonian Ministry of Education and Research, Tallinn University,  in the frame of Digital Learning Resources project DigiÕppeVaramu https://htk.tlu.ee/oppevara/
+
+
+Copyright 2018, by Tarmo Johannes trmjhnns@gmail.com
+
+License: MIT
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+*/
 
  
-// harjutus 1.2.1 "Helivältus. Kirjuta helivältus noodikirja märgina. Antud on helivältuse (noot või paus) nimetus. Kirjuta helivältus noodikirja märgina. (Column + MusGen)"
+// Original exercise:  1.2.1 "Helivältus. Kirjuta helivältus noodikirja märgina. Antud on helivältuse (noot või paus) nimetus. Kirjuta helivältus noodikirja märgina. (Column + MusGen)"
 // since writing is difficult, display a choice of notation marks and let to pick the righ one
 
 function recognizeDuration(containerNode, canvasClassName) {		
@@ -38,7 +53,7 @@ function recognizeDuration(containerNode, canvasClassName) {
 	
 	var exercise = new MusicExercise(this.containerNode,this.canvasClassName, 0); // no music, no player
 	
-	// create table in the responce area
+	// create table in the response area
 	var oldResponse = this.containerNode.getElementsByClassName("response")[0];
 	var response = document.createElement("div");
 	response.className = "response"; 
@@ -46,22 +61,22 @@ function recognizeDuration(containerNode, canvasClassName) {
 	response.style.maximumWidth = "500px";
 	response.innerHTML ='<table> <tr class="tableRow"> </tr></table> ';
 	if (oldResponse === null || oldResponse === undefined) {
-		console.log("Creating new response element");
+		//console.log("Creating new response element");
 		this.containerNode.getElementsByClassName("responseDiv")[0]. appendChild(response)
 	} else {
-		console.log("Replacing response element");
+		//console.log("Replacing response element");
 		this.containerNode.getElementsByClassName("responseDiv")[0].replaceChild(response, oldResponse);
 	}
 	
 	exercise.generate = function() {
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
 		
-		//TODO: avoid twice the same
 		var tryThis = Math.floor(Math.random() * durationImages.length );
-		while (selectedIndex === tryThis) // avoid the same duration twice in a row
+		while (selectedIndex === tryThis) { // avoid the same duration twice in a row
 			selectedIndex = Math.floor(Math.random() * durationImages.length );
+		}
 		selectedIndex = tryThis;
-		console.log("Selected ", durationImages[selectedIndex].name);
+		//console.log("Selected ", durationImages[selectedIndex].name);
 		this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Milline neist on: <b>" + durationImages[selectedIndex].name + "</b> (Klõpsa noodijoonestikul)";
 		
 		indexArray = [];  // make array of pictures to show
@@ -87,7 +102,6 @@ function recognizeDuration(containerNode, canvasClassName) {
 	
 	exercise.draw = function() {
 		var tableRow = this.containerNode.getElementsByClassName("tableRow")[0];
-		//TODO: remove all children
 		tableRow.innerHTML = ""; // remove previous elements
 		var tempTable = durationImages.slice(); // temporary table to remove used items from
 		for (var i=0; i<durationsToShow; i++) {
@@ -96,7 +110,7 @@ function recognizeDuration(containerNode, canvasClassName) {
 			cell.style.width = "25%"; // TODO: dependante on durationsToShow
 			var image = document.createElement("img");
 			image.style.width = "80%"; 
-			image.src = folder + "/" + durationImages[index].src;//durationImages[index].src;
+			image.src = folder + "/" + durationImages[index].src;
 			image.className = durationImages[index].name; // pass the value for response function
 			image.onclick = function () {
 				clickedDuration = this.className;
@@ -104,12 +118,10 @@ function recognizeDuration(containerNode, canvasClassName) {
 			}
 			cell.appendChild(image);
 			tableRow.appendChild(cell);
-			//tempTable.splice(index,1); // remove to avoid doubles
 		}
 	}
 	
 	exercise.renew = function() {
-		console.log("Renew table")
 		exercise.generate();
 		exercise.draw();
 		answered = false;
