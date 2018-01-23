@@ -48,7 +48,7 @@ function noteFromNoteName(clef, containerNode, canvasClassName) {
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul, klaviatuuril.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
 	
 	function handleAccidental(plusMinus) {  // -1 to lower half tone, +1 to raise halftone
-		console.log("handleAccidental", plusMinus, );
+		//console.log("handleAccidental", plusMinus);
 		if (currentNoteIndex > 0) {
 			currentNoteIndex += plusMinus;
 			if (currentNoteIndex>=possibleNotes.length-1)

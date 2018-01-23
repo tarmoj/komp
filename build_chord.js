@@ -37,9 +37,6 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 	var intervals = new IntervalClass();
 	var notes = new NoteClass();
 	
-	var possibleChords = intervals.possibleChords;
-
-	
 	// set necessary methods in exercise
 	var exercise = new MusicExercise(this.containerNode, this.canvasClassName, 150,10,10,1.5); // bigger scale for note input
  	exercise.time = "";
@@ -212,9 +209,9 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 		
 		var interval1 = intervals.getInterval(chord[0],chord[1]).interval; // ignore the direction, probably right
 		var interval2 = intervals.getInterval(chord[0],chord[2]).interval;
-		var interval3 = undefined;
+		var interval3;
 		if (currentNoteIndex[3] != -1 ) { // 4-note chord
-			var interval3 = intervals.getInterval(chord[0],chord[3]).interval;
+			interval3 = intervals.getInterval(chord[0],chord[3]).interval;
 		}
 		
 		var rightIntervals = [];

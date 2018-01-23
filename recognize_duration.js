@@ -112,7 +112,7 @@ function recognizeDuration(containerNode, canvasClassName) {
 			image.style.width = "80%"; 
 			image.src = folder + "/" + durationImages[index].src;
 			image.className = durationImages[index].name; // pass the value for response function
-			image.onclick = function () {
+			image.onclick = function () { // NB jshint: Functions declared within loops referencing an outer scoped variable may lead to confusing semantics.
 				clickedDuration = this.className;
 				exercise.responseFunction();
 			}

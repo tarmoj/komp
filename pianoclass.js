@@ -45,21 +45,17 @@ function Piano(container, octaveBegin, octaves, width) {
         var boxX = this.octaves * octaveWidth
         
         var octaveBegin = this.octaveBegin
-        var html = `
-        <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            preserveAspectRatio="none" 
-            viewBox="0 0 ${boxX} ${height}" 
-            id="piano">
-			<g>`;
+        var html = ' <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" ' +
+					' viewBox="0 0 '  + boxX + " " + height + '" ' + 'id="piano">  ' 
+            
+		html += '<g>';
         for (i = 1; i <= this.octaves; i++) {  
             html += this.getTones(octaveBegin)
             octaveBegin++ 
         }
-        html += `
-            </g>
-		</svg>`
-        return html
+        html +=  ' </g> </svg> '
+            
+        return html;
     }
 
     this.getVextabNote = function(note, octave) {
@@ -92,12 +88,14 @@ function Piano(container, octaveBegin, octaves, width) {
         var octaveHTML = "";
         
         for (var i=0; i<7; i++) {
-			octaveHTML += ` <rect class="white" data-vtnote="${this.getVextabNote(whiteKeys[i], octave)}" data-midinote="${this.getMidiNote(whiteMidi[i], octave)}" width="${whiteWidth}" height="${height}" x="${this.getCurrentX(i*20)}" y="0" style="fill:white; stroke-width:1; stroke:grey" /> `;
-        
+// 			octaveHTML += ` <rect class="white" data-vtnote="${this.getVextabNote(whiteKeys[i], octave)}" data-midinote="${this.getMidiNote(whiteMidi[i], octave)}" width="${whiteWidth}" height="${height}" x="${this.getCurrentX(i*20)}" y="0" style="fill:white; stroke-width:1; stroke:grey" /> `;
+			
+			octaveHTML += ' <rect class="white" data-vtnote="' + this.getVextabNote(whiteKeys[i], octave) + '"  data-midinote="' + this.getMidiNote(whiteMidi[i], octave) + '" width="'+ whiteWidth + '" height="' + height + '" x="' + this.getCurrentX(i*20) + '" y="0" style="fill:white; stroke-width:1; stroke:grey" /> ';
+			
         }
         
-        for (var i=0; i<5; i++) {
-			octaveHTML += ` <rect class="black" data-vtnote="${this.getVextabNote(blackKeys[i], octave)}" data-midinote="${this.getMidiNote(blackMidi[i], octave)}" width="${blackWidth}" height="${blackHeight}" x="${this.getCurrentX(blackX[i])}" y="0" style="fill:black; stroke-width:1; stroke:black" /> `;
+        for (var j=0; j<5; j++) {
+			octaveHTML += ' <rect class="black" data-vtnote="' + this.getVextabNote(blackKeys[j], octave) + '"  data-midinote="' + this.getMidiNote(blackMidi[j], octave) + '" width="'+ blackWidth + '" height="' + blackHeight + '" x="' + this.getCurrentX(blackX[j]) + '" y="0" style="fill:black; stroke-width:1; stroke:black" /> ';
         
         }
             
