@@ -80,7 +80,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 			var parameters = searchString.split("&"); // remove ?
 			var type = parameters[0].split("=")[1];
 			console.log("you want to open exercise", type)
-			switch (exerciseNumber) {
+			switch (type) {
 				case "1.2.2" : nameDuration(); break;
 				case "1.2.3" : findMissingDuration(); break;
 				case "1.2.4" : drawBarlines(); break;
