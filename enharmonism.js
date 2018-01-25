@@ -41,10 +41,22 @@ function enharmonism(nameOrSyllable, containerNode, canvasClassName) {
 	var exercise = new MusicExercise(this.containerNode,this.canvasClassName, 150); // relatively narrow canvas 
 	
 	var oldResponse = this.containerNode.getElementsByClassName("response")[0];
-	var response = document.createElement("input");
-	response.type = "text";
-	response.size = "6";
+	var response = document.createElement("select");
 	response.className = "response";
+	var responseHTML = "<option>---</option>";
+	
+	for (var i = 0; i < 7*3; i++) {
+			var option;
+			if (nameOrSyllable === "syllable") {
+				option = notes.removeLastDigit(notes.bassClefNotes[i].syllable.toLowerCase()); // remove octave (1 or 2), if present. Bassnotes since they start from Ć
+			} else {
+				option = notes.removeLastDigit(notes.bassClefNotes[i].name.toLowerCase());
+			}
+			responseHTML += '<option value="' + option + '">' + option + '</option>'
+		}
+	
+	response.innerHTML = responseHTML;
+	
 	
 	if (oldResponse === null || oldResponse === undefined) {
 		console.log("Creating new response element");
@@ -57,7 +69,7 @@ function enharmonism(nameOrSyllable, containerNode, canvasClassName) {
 	// set necessary methods in exercise	
 	exercise.time = ""; // no time signature
 	
-	var enharmonicNotes = [ ["C/5","B#/4"], ["C@/5", "B/4"], ["E#/4", "F/4"], ["F@/4", "E/4"]]; // later find names and syllables by vtNote
+	var enharmonicNotes = [ ["C#/4","D@/4"], ["D#/4","E@/4"], ["F#/4","G@/4"], ["G#/4","A@/4"], ["A#/4","B@/4"],  ["C/5","B#/4"], ["C@/5", "B/4"], ["E#/4", "F/4"], ["F@/4", "E/4"]]; // later find names and syllables by vtNote
 	
 	
 	exercise.generate = function() {
