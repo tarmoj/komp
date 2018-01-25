@@ -34,9 +34,16 @@ function findTime(containerNode, canvasClassName) { // generates 1 bar, find sui
 	// Create or set necessary HTML elements
 	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Määra taktimõõt";
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on takt ja helivältused. Määra taktimõõt."; 
-	//TODO: luba ka pause, mitte ainult noodid -  kas vaja?
-	this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Sisesta taktimõõt (nt 3/8, 4/4 vms): " + 
-	'<input class="response" type="text" style="width:50px"></input>' ;
+	
+	//create innerHTML with options
+	var selectHTML = ' Taktimõõt on: <select class="response"><option value="">---</option> '; 
+	for (var a=0; a<possibleTimes.length; a++) {
+		selectHTML += '<option value="' + possibleTimes[a]
+ + '"> ' + 	possibleTimes[a] + '</option>';
+		
+	}
+	selectHTML += '</select>' ;
+	this.containerNode.getElementsByClassName("question")[0].innerHTML = selectHTML;
 	
 	// set necessary methods in exercise
 	var exercise = new MusicExercise(this.containerNode,this.canvasClassName);
@@ -85,6 +92,7 @@ function findTime(containerNode, canvasClassName) { // generates 1 bar, find sui
 				
 		exercise.time = ""; // no time signature shown
 		this.containerNode.getElementsByClassName("response")[0].value = ""; 
+		
 		
 		selectedTime = possibleTimes[Math.floor(Math.random()*possibleTimes.length)];
 		var numerator = selectedTime.split("/")[0];

@@ -29,8 +29,7 @@ function describeNote(clef, containerNode, canvasClassName) {
 	var translation = clef === "treble" ? "viiulivõti" : "bassivõti";
 	
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
-	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName
-
+	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
 	
 	// Create or set necessary HTML elements
 	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Kirjelda helikõrguse asukohta: " + translation;
@@ -104,7 +103,7 @@ function describeNote(clef, containerNode, canvasClassName) {
 				break;
 			} 
 		}
-		console.log("See noot asub: ", result);
+		//console.log("See noot asub: ", result);
 		return result;
 	}
 	
@@ -135,9 +134,30 @@ function describeNote(clef, containerNode, canvasClassName) {
 		'<option value="10">ülemisel abijoonel</option>' + // as a5,c6
 		'<option value="11">ülemise abijoone peal</option>' + // as b5
 	'</select>' + 	
-	'<br> Noodi nimi tähtnimetusega (kas c, d, e, f, g, a või h) <input type="text" class="noteName" size=4></input>, ' +
-	'silpnimetusega (kas do, re, mi, fa, sol, la või si) <input type="text" class="syllable" size=4></input><br>';
-
+	'<br> Noodi nimi tähtnimetusega <select class="noteName"><option>---</option></select>, ' +
+	'silpnimetusega <select class="syllable"><option>---</option></select><br>';
+	
+	
+	function fillOptions() { // fill select elements with note names and sullables
+		var select1 = this.containerNode.getElementsByClassName('noteName')[0];
+		for (var i = 0; i < 7; i++) { // use 7 steps from bassclefnotes since those begin with c
+			var option = document.createElement('option');
+			var noteName = bassClefNotes[i].name; 
+			option.innerHTML = noteName;
+			option.value = noteName;
+			select1.appendChild(option);
+		}
+		
+		
+		var select2 = this.containerNode.getElementsByClassName('syllable')[0];
+		for(var j = 0; j < 7; j++) {
+			var option2 = document.createElement('option');
+			var syllable = bassClefNotes[j].syllable; 
+			option2.innerHTML = syllable;
+			option2.value = syllable;
+			select2.appendChild(option2);
+		}
+	}	
 	
 	if (oldResponse === null || oldResponse===undefined) {
 		console.log("Creating new response element");
@@ -150,6 +170,7 @@ function describeNote(clef, containerNode, canvasClassName) {
 	
 	exercise.generate = function() {
 		
+		fillOptions(); // bad code: better form the innerHTML string in main scope but clearer this way and must be certain that the select elements are created. Not too much overhead, though.
 		selectedNoteIndex = Math.floor(Math.random()*notes.length );
 		
 		while (selectedNoteIndex === oldIndex) { // to avoid same value twice

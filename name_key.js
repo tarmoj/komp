@@ -28,16 +28,6 @@ function nameKey(majorMinor, containerNode, canvasClassName) {
 	this.majorMinor = majorMinor === undefined ?  "major" : majorMinor;
 	var translation = this.majorMinor === "major" ? "duur" : "moll";
 	
-	// Create or set necessary HTML elements
-	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Määra helistik";
-	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on võtmemärgid. Kirjuta <b>" + translation + "</b>-helirea nimetus"; 
-	
-	//TODO: check what happens if  response is already there from previous exercise...
-	var responseHTML = '<input type="text" class="response" size=4></input> ';
-	this.containerNode.getElementsByClassName("question")[0].innerHTML = "See on " + responseHTML +  " " + translation ;
-	
-	var exercise = new MusicExercise(this.containerNode,this.canvasClassName, 150); // relatively narrow canvas 
-	
 	
 	
 	var majorKeys = [  // up to how many accidentals?
@@ -80,7 +70,25 @@ function nameKey(majorMinor, containerNode, canvasClassName) {
 		
 	];
 	
-	var possibleKeys = this.majorMinor === "major" ? majorKeys : minorKeys;
+	var possibleKeys = (this.majorMinor === "major") ? majorKeys : minorKeys;
+	
+	
+	
+	// Create or set necessary HTML elements
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Määra helistik";
+	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on võtmemärgid. Kirjuta <b>" + translation + "</b>-helirea nimetus"; 
+	
+	//TODO: check what happens if  response is already there from previous exercise...
+	var responseHTML = 'See on <select class="response"> <option value="">---</option>';
+	for (var a=0; a<possibleKeys.length; a++) {
+		responseHTML += '<option value="' + possibleKeys[a].name + '">' + possibleKeys[a].name + '</option>'; 
+	}
+	
+	responseHTML += '</select> ' + translation;
+	this.containerNode.getElementsByClassName("question")[0].innerHTML = responseHTML;
+	
+	var exercise = new MusicExercise(this.containerNode,this.canvasClassName, 150); // relatively narrow canvas 
+	
 	
 	// set necessary methods in exercise	
 	exercise.time = ""; // no time signature	

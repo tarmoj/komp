@@ -62,7 +62,7 @@ function noteFromNotation(clef, containerNode, canvasClassName) {
 	exercise.generate = function() {
 				
 		noteIndex = Math.floor(Math.random()*possibleNotes.length); 
-		console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable);
+		//console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable);
 		
 		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'Noodijoonestikul kuvatud noodi tähtnimetus on: <select class="noteName"><option>---</option></select>,  silpnimetus: <select class="syllable"><option>---</option></select><br>Kui oled noodi leidnud ka klaviatuuril, vajuta Vasta:' ;
 		
