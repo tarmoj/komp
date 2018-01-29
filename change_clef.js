@@ -44,9 +44,10 @@ function changeClef(clef, containerNode, canvasClassName) {  // clef -  the clef
 	// TODO: create two staves, use exercise.draw(string) to set the vtString with two staves
 	// somehow enter notes only to the other stave
 	// ONLY white notes, 
-	var exercise = new MusicExercise(this.containerNode, this.canvasClassName, 150,10,10,1.5); // bigger scale for note input
+	var exercise = new MusicExercise(this.containerNode, this.canvasClassName, 0); // no rendere, create subexercises // was 150,10,10,1.5 bigger scale for note input
  	exercise.time = "";
 	exercise.timeToThink = 30; // more time for doing the test
+	
 	
 	// set clef
 	var possibleNotes; 
@@ -59,6 +60,15 @@ function changeClef(clef, containerNode, canvasClassName) {  // clef -  the clef
 		possibleNotes = notes.violinClefNotes;
 	}
 	
+	
+	
+	var subExercise1 = new MusicExercise(this.containerNode, this.canvasClassName, 150,10,10,1.5);	
+	var subExercise2 = new MusicExercise(this.containerNode, this.canvasClassName, 150,10,10,1.5);
+	subExercise1.time = "";
+	//subExercise1.clef = fromClef;
+	subExercise2.time = "";
+	subExercise2.clef = toClef;
+	
 	// Create or set necessary HTML elements
 	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Kirjuta helikõrgus tähtnime järgi. " + ( (clef==="bass") ? "Bassivõti." : " Viiulivõti." );
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul, klaviatuuril.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
@@ -68,6 +78,11 @@ function changeClef(clef, containerNode, canvasClassName) {  // clef -  the clef
 		exercise.draw(parseString);
 	}
 	
+	exercise.draw = function() {
+		console.log("Dummy draw")
+		subExercise1.draw();
+		subExercise2.draw();
+	}
 	
 	exercise.generate = function() {		
 		// would make sense to use vextab/fexflow objects
@@ -78,7 +93,9 @@ function changeClef(clef, containerNode, canvasClassName) {  // clef -  the clef
 		selectedVtNote =  noteNames[Math.floor(Math.random()*noteNames.length)] + "/" + octave.toString();
 		console.log("Selected: ", selectedVtNote );
 		
-		showStaves();
+		//subExercise1.notes = selectedVtNote; 
+		
+		//showStaves();
 		
 		noteIndex = Math.floor(Math.random()*possibleNotes.length); 
 		console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable, noteIndex);
@@ -96,7 +113,7 @@ function changeClef(clef, containerNode, canvasClassName) {  // clef -  the clef
 	exercise.clickActions = function(x,y) {
 		console.log(x,y);		
 
-		var line = exercise.artist.staves[1].note.getLineForY(y); //NB! staff=1 since second staff is for input
+		var line = subExercise2.artist.staves[0].note.getLineForY(y); //NB! staff=1 since second staff is for input
 		
 		// find note by line
 		line =  Math.round(line*2)/2; // round to neares 0.5
@@ -112,13 +129,6 @@ function changeClef(clef, containerNode, canvasClassName) {  // clef -  the clef
 				}
 			}
 		}
-	}
-	
-	
-	exercise.renew = function() {
-		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = "";
-        exercise.generate();
-        showStaves();
 	}
 	
 	exercise.renew();		
