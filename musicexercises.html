@@ -53,6 +53,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <script src="note_from_keyboard.js"></script>
     <script src="note_from_syllable.js"></script>
 	<script src="enharmonism.js"></script>
+	<script src="change_clef.js"></script>
 	
     <script src="build_interval.js"></script>
     <script src="build_chord.js"></script>
@@ -99,8 +100,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 				case "2.14" : exercise = noteFromKeyboard("bass"); break;
 				case "2.15" : exercise = enharmonism("name"); break;
 				case "2.16" : exercise = enharmonism("syllable"); break;
-				// TODO: 2.17, 2.18 bass-treble clef rewrite exercise
-				//case "" : exercise = ; break;
+				case "2.17" : exercise = changeClef("bass"); break;
+				case "2.18" : exercise = changeClef("treble"); break;
 				
 				case "3.1" : exercise = buildInterval("treble", "up"); break;
 				case "3.2" : exercise = buildInterval("treble", "down"); break;

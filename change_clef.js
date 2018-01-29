@@ -19,21 +19,22 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 // original exercise:  Antud noot ühes võtmes, kirjutada teises võtmes
 
-function noteFromNoteName(toClef, containerNode, canvasClassName) { 
+function changeClef(clef, containerNode, canvasClassName) {  // clef -  the clef to rewrite to
 	var answered = false;
 	var noteIndex = -1, currentNoteIndex = -1;
-	var selectedVtNote;
+	var selectedVtNote = "";
 	this.containerNode = containerNode===undefined ? document.body : containerNode;
 	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
 	var notes = new NoteClass();
 	var staff1="", staff2="";
+	var fromClef = "", toClef = ""; 
 	
-	if (toClef === "bass") {
-		this.fromClef = "treble";
-		this.toClef = "bass";
+	if (clef === "bass") {
+		fromClef = "treble";
+		toClef = "bass";
 	} else {
-		this.fromClef = "bass";
-		this.toClef = "treble";
+		fromClef = "bass";
+		toClef = "treble";
 
 	}
 	
@@ -45,11 +46,10 @@ function noteFromNoteName(toClef, containerNode, canvasClassName) {
 	// ONLY white notes, 
 	var exercise = new MusicExercise(this.containerNode, this.canvasClassName, 150,10,10,1.5); // bigger scale for note input
  	exercise.time = "";
- 	exercise.key = this;
 	exercise.timeToThink = 30; // more time for doing the test
 	
 	// set clef
-	var possibleVtNotes; 
+	var possibleNotes; 
 	
 	if (clef==="bass") {
 		exercise.clef ="bass"
@@ -64,12 +64,8 @@ function noteFromNoteName(toClef, containerNode, canvasClassName) {
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul, klaviatuuril.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
 	
 	function showStaves() {
-		// genereeri kaks noodirida (notestave); näita valitud noot algses võtmes
-		// vt1 = exercise.createVextabString();
-		// siis sea teine võti
-		// exerise.clef = toClef
-		// vt2 = exercise.createVextabString()
-		// exercise.draw()
+		var parseString = "stave \nclef=" + toClef + "\nnotes " + selectedVtNote + "\nstave \nclef=" + fromClef + "\n";
+		exercise.draw(parseString);
 	}
 	
 	
@@ -79,27 +75,17 @@ function noteFromNoteName(toClef, containerNode, canvasClassName) {
 		var noteNames = ["C","D","E", "F", "G","A","B" ];
 		var octave = (Math.random()>0.5) ? 3 : 4 ;
 		
-		selectedVtNote =  noteName[Math.floor(Math.random()*noteNames.length)] + "/" + octave.toString();
+		selectedVtNote =  noteNames[Math.floor(Math.random()*noteNames.length)] + "/" + octave.toString();
 		console.log("Selected: ", selectedVtNote );
 		
-		exercise.key = toClef;
-		exercise.notes = selectedVtNote;	
+		showStaves();
 		
 		noteIndex = Math.floor(Math.random()*possibleNotes.length); 
 		console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable, noteIndex);
 		
 		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleNotes[noteIndex].name + '</b><br>Noot <b><big>' + notes.removeLastDigit(possibleNotes[noteIndex].name.toLowerCase())  + '</b></big> on silpnimetusega: <select class="syllable"><option>---</option></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
-		var select = this.containerNode.getElementsByClassName('syllable')[0];
-		for(var i = 0; i < 7*3; i++) {
-			var option = document.createElement('option');
-			var syllable = notes.removeLastDigit(possibleNotes[i].syllable.toLowerCase()); // remove octave (1 or 2), if present
-			option.innerHTML = syllable;
-			option.value = syllable;
-			select.appendChild(option);
-		}
 		
-		exercise.notes = ""; // nothing drawn	
 		currentNoteIndex = -1; 	
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
 	
@@ -108,9 +94,9 @@ function noteFromNoteName(toClef, containerNode, canvasClassName) {
 	
 	
 	exercise.clickActions = function(x,y) {
-		// console.log(x,y);		
+		console.log(x,y);		
 
-		var line = exercise.artist.staves[0].note.getLineForY(y);
+		var line = exercise.artist.staves[1].note.getLineForY(y); //NB! staff=1 since second staff is for input
 		
 		// find note by line
 		line =  Math.round(line*2)/2; // round to neares 0.5
@@ -128,11 +114,11 @@ function noteFromNoteName(toClef, containerNode, canvasClassName) {
 		}
 	}
 	
+	
 	exercise.renew = function() {
 		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = "";
-		piano.deactivateAllKeys();
         exercise.generate();
-        exercise.draw();
+        showStaves();
 	}
 	
 	exercise.renew();		
@@ -140,11 +126,6 @@ function noteFromNoteName(toClef, containerNode, canvasClassName) {
 	exercise.responseFunction = function() {
 		if (currentNoteIndex < 0) {
 			alert("Sisesta noot noodijoonestikule!")
-			return;
-		}
-		
-		if (!piano.pressedKey.active) {
-			alert("Klahv klaviatuuril valimata!")
 			return;
 		}
 		
@@ -176,19 +157,8 @@ function noteFromNoteName(toClef, containerNode, canvasClassName) {
 			exercise.draw(); // redraw with right note
 			correct = correct && false;
 		}
+				
 		
-		console.log(piano.pressedKey.dataset.midinote, possibleNotes[noteIndex].midiNote)
-		
-		if ( piano.pressedKey.dataset.midinote%12 === possibleNotes[noteIndex].midiNote%12) { // check pich class, igonre octave
-			feedback += "Noot klaviatuuril on <b>õige!</b> "
-			piano.fillKey(piano.pressedKey, "green");
-			correct = correct && true;
-		} else {
-			feedback += "Noot klaviatuuril <b>vale!</b> "; 
-			piano.fillKey(piano.pressedKey, "red");
-			piano.fillKey(piano.findKeyByMidiNote(possibleNotes[noteIndex].midiNote%12), "blue")
-			correct = correct && false;
-		}
 		
 		if (correct) {
 			exercise.score += 1;
