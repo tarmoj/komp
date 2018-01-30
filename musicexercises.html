@@ -36,7 +36,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	<script src="pianoclass.js"></script>
 	<script src="noteclass.js"></script>
 	<script src="intervalclass.js"></script>
-<!--	<script src="possible_intervals.js"></script>-->
 	
 	<!--exercises-->
 	<script src="recognize_duration.js"></script>
@@ -44,7 +43,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	<script src="name_duration.js"></script>
     <script src="draw_barlines.js"></script>
     <script src="find_time.js"></script>
-    
+    <script src="generate_durations.js"></script>
 
     
     <script src="describe_note.js"></script>    
@@ -87,6 +86,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 				case "1.3" : exercise = findMissingDuration(); break;
 				case "1.4" : exercise = drawBarlines(); break;
 				case "1.5" : exercise = findTime(); break;
+				case "1.99" : exercise = generateDurations(); break;
 				
 				case "2.5" : exercise = describeNote("treble"); break;
 				case "2.6" : exercise = describeNote("bass"); break;
@@ -136,38 +136,37 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     
 	<body>
 	
-	<h1 id="title">MUUSIKA KOMPOSITSIOONIÕPETUS. Harjutused</h1>
+	<h1 class="title">MUUSIKA KOMPOSITSIOONIÕPETUS. Harjutused</h1>
 	
 	<a href=index.html>Sisukord</a><br>
 	<div id="exercise1">
 	
-	<h2 id="exerciseTitle" class="exerciseTitle">Harjutuse nimi</h2>
+	<h2 class="exerciseTitle">Harjutuse nimi</h2>
 	<br>
-	<p id="description" class="description">Ülesande kirjeldus.</p>
+	<p class="description">Ülesande kirjeldus.</p>
 	<br>
-	<button id="playButton" class="playButton" onclick="exercise.play();">Mängi</button>
-	<!-- for CANVAS backend: <canvas id="mainCanvas"></canvas>-->
-	<div id="mainCanvas" class="mainCanvas"></div>
+	<button class="playButton" onclick="exercise.play();">Mängi</button>
+	<div class="mainCanvas"></div>
 	<br>
-	<button id = "renewButton" class="renewButton" onclick='exercise.renew()'>Uuenda</button><br>
+	<buttonclass="renewButton" onclick='exercise.renew()'>Uuenda</button><br>
 	<br>
-	<span id="question" class="question">Küsimus</span>
+	<span class="question">Küsimus</span>
 	
-	<span id="responseDiv" class="responseDiv">	
+	<span class="responseDiv">	
 	</span>
-	<button id="replyButton" class="replyButton" onclick="exercise.checkResponse()">Vasta</button>
+	<button class="replyButton" onclick="exercise.checkResponse()">Vasta</button>
 	
-	<p id="feedback" class="feedback"></p>
-	Katseid: <label id="attempts" class="attempts">0</label>. Neist õigeid vastuseid: <label id="score" class="score">0</label> 
-	<button id="resetButton" class="resetButton" onclick='exercise.attempts=0;exercise.score=0;attempts.innerHTML="0"; score.innerHTML = "0" '>Nulli</button>
+	<p class="feedback"></p>
+	Katseid: <label class="attempts">0</label>. Neist õigeid vastuseid: <label class="score">0</label> 
+	<button  class="resetButton" onclick='exercise.attempts=0;exercise.score=0;attempts.innerHTML="0"; score.innerHTML = "0" '>Nulli</button>
 	<br>
 	<br>
-	Kui tunned, et oled valmis <b>testi sooritama</b>, vajuta: <button id="showTestButton"  class="showTestButton" onclick='testDiv.style.visibility="visible";'> Test</button> <br>
+	Kui tunned, et oled valmis <b>testi sooritama</b>, vajuta: <button  class="showTestButton" onclick='testDiv.style.visibility="visible";'> Test</button> <br>
 	
-	<div id="testDiv" class="testDiv" style="visibility:hidden">
-	Küsimus nr <b><label id="questionNumber" class="questionNumber" >0</label></b>. Aega on: <b><label id="timer" class="timer">0</label></b> sekundit.
-	<button id="startTest" class="startTest" onclick="exercise.startTest()">Alusta</button>
-	<button id="stopTest" class="stopTest" onclick="exercise.stopTest()">Peata</button>
+	<div class="testDiv" style="visibility:hidden">
+	Küsimus nr <b><label class="questionNumber" >0</label></b>. Aega on: <b><label  class="timer">0</label></b> sekundit.
+	<button class="startTest" onclick="exercise.startTest()">Alusta</button>
+	<button  class="stopTest" onclick="exercise.stopTest()">Peata</button>
 	<br>
 	<p><small>
 	Teile esitatkse 5 küsimust, mis tuleb ettemääratud aja jooksul vastata. Kui jõuate varem valmis, vajutage lihtsalt "Vasta". Uus küsimus kuvatakse peale eelmise vastamist või aja täitumisel.
