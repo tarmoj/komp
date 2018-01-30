@@ -28,58 +28,74 @@ function changeClef(clef, containerNode, canvasClassName) {  // clef -  the clef
 	var notes = new NoteClass();
 	var staff1="", staff2="";
 	var fromClef = "", toClef = ""; 
+	var possibleNotes, extraNotes, translation; 
 	
 	if (clef === "bass") {
 		fromClef = "treble";
 		toClef = "bass";
+		translation = "bassi";
+		possibleNotes = notes.bassClefNotes;
+		extraNotes = [ // higher than C4, without accidentals
+			{vtNote:"D/4", name:"d1", syllable:"re1", line: -1.5, midiNote: 62, degree: 1},
+			{vtNote:"E/4", name:"e1", syllable:"mi1", line: -2, midiNote: 64, degree: 2},
+			{vtNote:"F/4", name:"f1", syllable:"fa1", line: -2.5, midiNote: 65, degree: 3},
+			{vtNote:"G/4", name:"g1", syllable:"sol1", line: -3, midiNote: 67, degree: 4},
+			{vtNote:"A/4", name:"a1", syllable:"la1", line: -3.5, midiNote: 69, degree: 5},
+			{vtNote:"B/4", name:"h1", syllable:"si1", line: -4, midiNote: 71, degree: 6},
+			{vtNote:"C/5", name:"c2", syllable:"do2", line: -4.5, midiNote: 72, degree: 0},
+		];
 	} else {
 		fromClef = "bass";
 		toClef = "treble";
+		translation = "viiuli";
+		possibleNotes = notes.violinClefNotes;
+		extraNotes = [ // lower than C4, without accidentals
+			{vtNote:"B/3", name:"h", syllable:"si", line: 5.5, midiNote: 59, degree: 6},
+			{vtNote:"A/3", name:"a", syllable:"la", line: 6, midiNote: 57, degree: 5},
+			{vtNote:"G/3", name:"g", syllable:"sol", line: 6.5, midiNote: 55, degree: 4},
+			{vtNote:"F/3", name:"f", syllable:"fa", line: 7, midiNote: 53, degree: 3},
+			{vtNote:"E/3", name:"e", syllable:"mi", line: 7.5, midiNote: 52, degree: 2},
+			{vtNote:"D/3", name:"d", syllable:"re", line: 8, midiNote: 50, degree: 1},
+			{vtNote:"C/3", name:"c", syllable:"do", line: 8.5, midiNote: 48, degree: 0}
+		];
 
 	}
 	
+	possibleNotes = possibleNotes.concat(extraNotes);
 	
 
 	// set necessary methods in exercise
 	// TODO: create two staves, use exercise.draw(string) to set the vtString with two staves
 	// somehow enter notes only to the other stave
 	// ONLY white notes, 
-	var exercise = new MusicExercise(this.containerNode, this.canvasClassName, 0); // no rendere, create subexercises // was 150,10,10,1.5 bigger scale for note input
+	var exercise = new MusicExercise(this.containerNode, this.canvasClassName, 0); // no renderer, create subexercises 
  	exercise.time = "";
 	exercise.timeToThink = 30; // more time for doing the test
+		
+	// create 2 subexercises to show two differe staves with clefs
+	var span1 = document.createElement("span");
+	span1.className = "span1";
+	exercise.canvas.appendChild(span1);
+	var span2 = document.createElement("span");
+	span2.className = "span2";
+	span2.style.display = "inline-block"; // necessary to give hight of the parent to get y coordinate right
+	span2.style.height = "100%";
+	exercise.canvas.appendChild(span2);
 	
-	
-	// set clef
-	var possibleNotes; 
-	
-	if (clef==="bass") {
-		exercise.clef ="bass"
-		possibleNotes = notes.bassClefNotes;
-	} else {
-		exercise.clef = "treble"
-		possibleNotes = notes.violinClefNotes;
-	}
-	
-	
-	
-	var subExercise1 = new MusicExercise(this.containerNode, this.canvasClassName, 150,10,10,1.5);	
-	var subExercise2 = new MusicExercise(this.containerNode, this.canvasClassName, 150,10,10,1.5);
+	var subExercise1 = new MusicExercise(this.containerNode, "span1", 100,10,10,1.5);	
+	var subExercise2 = new MusicExercise(this.containerNode, "span2", 100,10,10,1.5);
 	subExercise1.time = "";
-	//subExercise1.clef = fromClef;
+	subExercise1.clef = fromClef;
 	subExercise2.time = "";
 	subExercise2.clef = toClef;
 	
 	// Create or set necessary HTML elements
-	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Kirjuta helikõrgus tähtnime järgi. " + ( (clef==="bass") ? "Bassivõti." : " Viiulivõti." );
-	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helikõrgus tähtnimetusega. Kirjuta helikõrgus silpnimetusega, noodijoonestikul, klaviatuuril.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vatavaid klahve arvutklaviatuuril."; 
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = (clef==="bass") ? "Viiulivõtmest bassivõtmesse" : "Bassivõtmest viiulivõtmesse.";
+	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helikõrgus noodijoonestikul "+ (clef==="bass" ? "viiulivõtmes" : "bassivõtmes") + ". Kirjuta helikõrgus noodijoonestikul " + (clef==="bass" ? "bassivõtmes" : "viiulivõtmes") + "."; 
 	
-	function showStaves() {
-		var parseString = "stave \nclef=" + toClef + "\nnotes " + selectedVtNote + "\nstave \nclef=" + fromClef + "\n";
-		exercise.draw(parseString);
-	}
+	
 	
 	exercise.draw = function() {
-		console.log("Dummy draw")
 		subExercise1.draw();
 		subExercise2.draw();
 	}
@@ -90,17 +106,18 @@ function changeClef(clef, containerNode, canvasClassName) {  // clef -  the clef
 		var noteNames = ["C","D","E", "F", "G","A","B" ];
 		var octave = (Math.random()>0.5) ? 3 : 4 ;
 		
-		selectedVtNote =  noteNames[Math.floor(Math.random()*noteNames.length)] + "/" + octave.toString();
+		var tryThis =  noteNames[Math.floor(Math.random()*noteNames.length)] + "/" + octave.toString();
+		while (tryThis===selectedVtNote) {
+			tryThis =  noteNames[Math.floor(Math.random()*noteNames.length)] + "/" + octave.toString();
+		}
+		selectedVtNote = tryThis;
+		
 		console.log("Selected: ", selectedVtNote );
 		
-		//subExercise1.notes = selectedVtNote; 
+		subExercise1.notes = selectedVtNote;
+		subExercise2.notes = "";
 		
-		//showStaves();
-		
-		noteIndex = Math.floor(Math.random()*possibleNotes.length); 
-		console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable, noteIndex);
-		
-		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleNotes[noteIndex].name + '</b><br>Noot <b><big>' + notes.removeLastDigit(possibleNotes[noteIndex].name.toLowerCase())  + '</b></big> on silpnimetusega: <select class="syllable"><option>---</option></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
+		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'Kirjuta kuvatud noot ' + translation + 'võtmes. Seejärel vajuta "Vasta".' ;
 		
 		
 		currentNoteIndex = -1; 	
@@ -110,7 +127,7 @@ function changeClef(clef, containerNode, canvasClassName) {  // clef -  the clef
 	
 	
 	
-	exercise.clickActions = function(x,y) {
+	subExercise2.clickActions = function(x,y) {
 		console.log(x,y);		
 
 		var line = subExercise2.artist.staves[0].note.getLineForY(y); //NB! staff=1 since second staff is for input
@@ -122,9 +139,9 @@ function changeClef(clef, containerNode, canvasClassName) {  // clef -  the clef
 				//console.log(i, possibleNotes[i].line, line)
 				if (possibleNotes[i].line === line) {
 					console.log("FOUND ", i, possibleNotes[i].vtNote);
-					exercise.notes =  possibleNotes[i].vtNote;
+					subExercise2.notes =  possibleNotes[i].vtNote;
 					currentNoteIndex = i;
-					exercise.draw();
+					subExercise2.draw();
 					break;
 				}
 			}
@@ -148,26 +165,17 @@ function changeClef(clef, containerNode, canvasClassName) {  // clef -  the clef
 		var feedback = "";
 		var correct = false;
 				
-		var syllable = notes.removeLastDigit(possibleNotes[noteIndex].syllable.toLowerCase());
+		var syllable = notes.removeLastDigit(possibleNotes[currentNoteIndex].syllable.toLowerCase());
 		
-		if (this.containerNode.getElementsByClassName("syllable")[0].value === syllable ) { 
-			feedback += "Silpnimetus <b>õige!</b> "
+		if ( possibleNotes[currentNoteIndex].vtNote === selectedVtNote ) { 
+			feedback += "<b>Õige!</b> "
 			correct = true;
 		} else {
-			feedback += "Silpnimetus <b>vale!</b> See on hoopis " + syllable + ". ";			
+			feedback += "<b>Vale!</b> Õige noot kuvatud sisetatud noodi kõrval.";
+			subExercise2.notes += selectedVtNote;
+			subExercise2.draw();
 			correct = false;
 		}
-		
-		if (currentNoteIndex === noteIndex) {
-			feedback += "Noot noodijoonestikul on <b>õige!</b> "
-			correct = correct && true;;
-		} else {
-			feedback += "Noot noodijoonestikul on <b>vale!</b> "; 
-			exercise.notes += " " + possibleNotes[noteIndex].vtNote;
-			exercise.draw(); // redraw with right note
-			correct = correct && false;
-		}
-				
 		
 		
 		if (correct) {
