@@ -23,13 +23,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <style></style>
     
     <!--dependencies-->
-    <!--<script src="https://unpkg.com/vextab/releases/vextab-div.js"></script>    
+    <script src="https://unpkg.com/vextab/releases/vextab-div.js"></script>    
     <script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
-    <script src='https://surikov.github.io/webaudiofontdata/sound/0000_JCLive_sf2_file.js'> </script>-->
+    <script src='https://surikov.github.io/webaudiofontdata/sound/0000_JCLive_sf2_file.js'> </script>
     
-    <script src="ext/vextab-div.js"></script>    
+    <!--<script src="ext/vextab-div.js"></script>    
     <script src='ext/WebAudioFontPlayer.js'></script>
-    <script src='ext/0000_JCLive_sf2_file.js'> </script>
+    <script src='ext/0000_JCLive_sf2_file.js'> </script>-->
 	
 	<!--common classes or data-->
 	<script src="baseclass.js"></script>
@@ -43,7 +43,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	<script src="name_duration.js"></script>
     <script src="draw_barlines.js"></script>
     <script src="find_time.js"></script>
-    <script src="generate_durations.js"></script>
+    <!--<script src="generate_durations.js"></script>-->
 
     
     <script src="describe_note.js"></script>    
@@ -86,7 +86,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 				case "1.3" : exercise = findMissingDuration(); break;
 				case "1.4" : exercise = drawBarlines(); break;
 				case "1.5" : exercise = findTime(); break;
-				case "1.99" : exercise = generateDurations(); break;
+				//case "1.99" : exercise = generateDurations(); break;
 				
 				case "2.5" : exercise = describeNote("treble"); break;
 				case "2.6" : exercise = describeNote("bass"); break;
