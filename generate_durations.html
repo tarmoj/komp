@@ -1,0 +1,115 @@
+<!--Autogenerating Music Exercises for education program "Muusika Kompositsiooniõpetus" https://et.wikibooks.org/wiki/Muusika_kompositsiooni%C3%B5petus/N%C3%84IDISKURSUS._G%C3%9CMNAASIUM
+Commissioned by Estonian Ministry of Education and Research, Tallinn University,  in the frame of Digital Learning Resources project DigiÕppeVaramu https://htk.tlu.ee/oppevara/
+
+
+Copyright 2018, by Tarmo Johannes trmjhnns@gmail.com
+
+License: MIT
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.-->
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Muusikaharjutused</title>
+    <meta content="">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1" />
+    <style></style>
+    
+    <!--dependencies-->
+    <!--<script src="https://unpkg.com/vextab/releases/vextab-div.js"></script>    
+    <script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
+    <script src='https://surikov.github.io/webaudiofontdata/sound/0000_JCLive_sf2_file.js'> </script>-->
+    
+    <script src="ext/vextab-div.js"></script>    
+    <script src='ext/WebAudioFontPlayer.js'></script>
+    <script src='ext/0000_JCLive_sf2_file.js'> </script>
+	
+	<!--common classes or data-->
+	<script src="baseclass.js"></script>
+
+	
+	<!--exercises-->
+    <script src="generate_durations.js"></script>    
+    
+    <!--main-->
+    <script>
+    
+	var exercise; 
+	
+    
+    // different exercises are defined as different functions in separate .js files
+
+    
+	window.onload = function() {
+		exercise = generateDurations();
+	}
+	
+    
+    </script>
+
+    </head>
+    
+	<body>
+	
+	<h1 id="title">MUUSIKA KOMPOSITSIOONIÕPETUS. Harjutused</h1>
+	
+	<a href=index.html>Sisukord</a><br>
+	<div id="exercise1">
+	
+	<h2 class="exerciseTitle">Genereeri jada helivältusi</h2>
+	<br>
+	<p id="description" class="description">Vali, millistest vältustest ning kui mitmest noodist koosnev jada koostada</p>
+	<br>
+	<button id="playButton" class="playButton" onclick="exercise.play();">Mängi</button>
+	<!-- for CANVAS backend: <canvas id="mainCanvas"></canvas>-->
+	<div id="mainCanvas" class="mainCanvas"></div>
+	<br>
+	
+	<br>
+	Mitmest noodist: <input type="number" class="durationsCount" value="10" min="8" max="30" style="width:50px"></input> <br>
+	Lubatud vältused: 
+		<input class="duration" type="checkbox" value="4">täisnoot</input>  
+		<input class="duration" type="checkbox" value="2" checked>poolnoot</input> 
+		<input class="duration" type="checkbox" value="1" checked>veerandnoot</input> 
+		<input class="duration" type="checkbox" value="0.5" checked>kaheksandiknoot</input> 
+		<input class="duration" type="checkbox" value="0.25">kuueteistkümnendiknoot</input> 
+		<input class="duration" type="checkbox" value="0.125">kolmekümnekahendiknoot</input> 
+		
+	<br>
+	<button id = "renewButton" class="renewButton" onclick='exercise.renew()'>Uuenda</button><br>
+	
+	
+	
+	
+	
+	
+	
+	<!--It is necessary to have these elements to have MusicExercise working properly. Just hide.-->
+	<div hidden>
+	<span class="responseDiv" >	
+	</span>
+	<button class="replyButton" onclick="exercise.checkResponse()">Vasta</button>
+	
+	<p class="feedback"></p>
+	Katseid: <label class="attempts">0</label>. Neist õigeid vastuseid: <label class="score">0</label> 
+	<button  class="resetButton" onclick='exercise.attempts=0;exercise.score=0;attempts.innerHTML="0"; score.innerHTML = "0" '>Nulli</button>
+	<br>
+	<br>
+	Kui tunned, et oled valmis <b>testi sooritama</b>, vajuta: <button  class="showTestButton" onclick='testDiv.style.visibility="visible";'> Test</button> <br>
+	
+	<div class="testDiv" style="visibility:hidden">
+	Küsimus nr <b><label class="questionNumber" >0</label></b>. Aega on: <b><label  class="timer">0</label></b> sekundit.
+	<button class="startTest" onclick="exercise.startTest()">Alusta</button>
+	<button  class="stopTest" onclick="exercise.stopTest()">Peata</button>
+	</div>
+	
+	
+	</body>
+</html>
