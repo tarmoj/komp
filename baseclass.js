@@ -26,7 +26,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 // <script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
 // <script src='https://surikov.github.io/webaudiofontdata/sound/0000_JCLive_sf2_file.js'></script> 
 
-function MusicExercise(containerNode, canvasClassName, width, x, y, scale ) {
+function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSound ) {
 	this.containerNode = containerNode===undefined ? document.body : containerNode; // to  make it independent and enable to use several exercises per page
 
 	if (canvasClassName === undefined) { // if not given, create div for canvas
@@ -35,6 +35,12 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale ) {
 		this.containerNode.appendChild(this.canvas);
 	} else {
 		this.canvas = this.containerNode.getElementsByClassName(canvasClassName)[0]; // but always try to give the element, to have it in certain place!
+	}
+	
+	if (noSound !== undefined) {
+		this.noSound = (noSound.toString().toLowerCase() === "nosound" || noSound===true); // set to true, if the exercise does not need sound
+	} else {
+		this.noSound = false;
 	}
 	
 	var _this = this;
@@ -112,15 +118,17 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale ) {
 				this.vextab = new VexTab(this.artist);
 
 				//Audio renderer
-				this.selectedPreset=_tone_0000_JCLive_sf2_file;
-				var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
-				this.audioContext = new AudioContextFunc();
-				this.player=new WebAudioFontPlayer();
-				this.player.loader.decodeAfterLoading(this.audioContext, '_tone_0000_JCLive_sf2_file');
-								
+				if (!this.noSound) {
+					this.selectedPreset=_tone_0000_JCLive_sf2_file;
+					var AudioContextFunc = window.AudioContext || window.webkitAudioContext;
+					this.audioContext = new AudioContextFunc();
+					this.player=new WebAudioFontPlayer();
+					this.player.loader.decodeAfterLoading(this.audioContext, '_tone_0000_JCLive_sf2_file');
+				}					
 				// add event listener for canvas clicks (SVG)
 				this.renderer.getContext().svg.addEventListener('click',this.handleClick, false);
 			} else {
+				this.noSound = true;
 				console.log("Canvas width is 0, renderer and player not created.");
 			}
 
@@ -238,6 +246,10 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale ) {
 	}
 
 	this.play = function() {
+		if (this.noSound) {
+			console.log("No sound enabled");
+			return;
+		}
 		var _start = 0, _duration = 1;
 		var notes = this.artist.staves[0].note_notes ;
 		console.log("notes: ", notes)

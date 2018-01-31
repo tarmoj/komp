@@ -87,7 +87,7 @@ function nameKey(majorMinor, containerNode, canvasClassName) {
 	responseHTML += '</select> ' + translation;
 	this.containerNode.getElementsByClassName("question")[0].innerHTML = responseHTML;
 	
-	var exercise = new MusicExercise(this.containerNode,this.canvasClassName, 150); // relatively narrow canvas 
+	var exercise = new MusicExercise(this.containerNode,this.canvasClassName, 150, undefined, undefined, undefined, "nosound"); // relatively narrow canvas 
 	
 	
 	// set necessary methods in exercise	

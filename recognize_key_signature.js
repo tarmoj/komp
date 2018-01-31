@@ -113,7 +113,7 @@ function recognizeKeySignature(containerNode, canvasClassName) {
 		var className = "key"+(i+1)
 		container[i].className = className;
 		exercise.canvas.appendChild(container[i]);
-		subExercise[i] = new MusicExercise(this.containerNode,className, 150); 
+		subExercise[i] = new MusicExercise(this.containerNode,className, 150, 0, 0, 0.8, "nosound"); 
 		subExercise[i].time = "";
 		subExercise[i].clickActions = checkResponse; // this way it possible to use this.- properties in the function
 		

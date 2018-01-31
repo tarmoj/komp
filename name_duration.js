@@ -28,11 +28,11 @@ function nameDuration(containerNode, canvasClassName) {
 	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName;
 	
 	// Create or set necessary HTML elements
-	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Vali sobiv helivältuse märk";
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Määra helivältus";
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helivältus noodikirja märgina (noot või paus). Leia,  mis vältus see on"; 
 	this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Mis vältus see on?";
 	
-	var exercise = new MusicExercise(this.containerNode,this.canvasClassName, 100); // relatively narrow canvas 
+	var exercise = new MusicExercise(this.containerNode,this.canvasClassName, 100, undefined, undefined, undefined, "nosound"); // relatively narrow canvas 
 	
 	var oldResponse = this.containerNode.getElementsByClassName("response")[0];
 	var response = document.createElement("select");
@@ -70,7 +70,7 @@ function nameDuration(containerNode, canvasClassName) {
 		var parseString = " :"+flexDuration ;
 		parseString += (isRest) ?  " ##" : " B/4"; // add rest or note (B) 
 		
-		console.log("Generated notes: ", parseString);
+		//console.log("Generated notes: ", parseString);
 		exercise.notes = parseString;
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
 	
