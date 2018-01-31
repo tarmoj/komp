@@ -238,7 +238,7 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 		var text = 'Muusikaharjutuste testi tulemus\n\n' + 
 			+ 'Harjutus: ' + title +  '\nAeg: ' + date + '\nNimi: ' + name  + '\nTulemus: ' + result;
 		doc.text(text, 10, 30)
-		var filename = "test_result.pdf";
+		var filename = document.getElementsByClassName("pdfFile")[0];
 		//TODO: save dialog, exercise, name, time in the title
 		doc.save('test_result.pdf')
 	}

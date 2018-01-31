@@ -165,6 +165,14 @@ https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js
 	Kui tunned, et oled valmis <b>testi sooritama</b>, vajuta: <button  class="showTestButton" onclick='testDiv.style.visibility="visible";'> Test</button> <br>
 	
 	<div id="testDiv" class="testDiv" style="visibility:hidden">
+	Kas soovite tulemuse salvestada pdf faili(nt. esitamiseks õpetajale)? 
+	<button class="makePdfButton" onclick='pdfDiv.style.visibility="visible"; exercise.saveToPdf = true;'>Jah</button>
+	<button class="hidePdfButton" onclick='pdfDiv.style.visibility="hidden"; exercise.saveToPdf = false;'>Ei</button>
+	<div id="pdfDiv" class="pdfDiv" style="visibility:hidden">
+	Nimi: <input class="name" type="text" size=12>
+	Salvestatava faili nimi: <input type="file" class="pdfFile" name="pdfFile">
+	</div>
+	
 	Küsimus nr <b><label class="questionNumber" >0</label></b>. Aega on: <b><label  class="timer">0</label></b> sekundit.
 	<button class="startTest" onclick="exercise.startTest()">Alusta</button>
 	<button  class="stopTest" onclick="exercise.stopTest()">Peata</button>
