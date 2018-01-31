@@ -227,6 +227,22 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 		
 	}
     
+    this.makePDF = function() {
+		// very initial state, just for testing
+		var doc = new jsPDF();
+		var title, date, name, result;
+		title = this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML;
+		date = Date();
+		name = "Peetr Suur";
+		result = this.attempts + " katsest " + this.score + " õiget."
+		var text = 'Muusikaharjutuste testi tulemus\n\n' + 
+			+ 'Harjutus: ' + title +  '\nAeg: ' + date + '\nNimi: ' + name  + '\nTulemus: ' + result;
+		doc.text(text, 10, 30)
+		var filename = "test_result.pdf";
+		//TODO: save dialog, exercise, name, time in the title
+		doc.save('test_result.pdf')
+	}
+    
     this.stopTest= function() {
         console.log("Stop");
         clearTimeout(_this.countdownReference);

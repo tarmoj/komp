@@ -26,6 +26,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <script src="https://unpkg.com/vextab/releases/vextab-div.js"></script>    
     <script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
     <script src='https://surikov.github.io/webaudiofontdata/sound/0000_JCLive_sf2_file.js'> </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js'></script>
     
     <!--<script src="ext/vextab-div.js"></script>    
     <script src='ext/WebAudioFontPlayer.js'></script>
@@ -44,7 +45,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <script src="draw_barlines.js"></script>
     <script src="find_time.js"></script>
     <!--<script src="generate_durations.js"></script>-->
-
+https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js
     
     <script src="describe_note.js"></script>    
     <script src="note_from_notename.js"></script>
@@ -163,7 +164,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	<br>
 	Kui tunned, et oled valmis <b>testi sooritama</b>, vajuta: <button  class="showTestButton" onclick='testDiv.style.visibility="visible";'> Test</button> <br>
 	
-	<div class="testDiv" style="visibility:hidden">
+	<div id="testDiv" class="testDiv" style="visibility:hidden">
 	Küsimus nr <b><label class="questionNumber" >0</label></b>. Aega on: <b><label  class="timer">0</label></b> sekundit.
 	<button class="startTest" onclick="exercise.startTest()">Alusta</button>
 	<button  class="stopTest" onclick="exercise.stopTest()">Peata</button>
