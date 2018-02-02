@@ -73,6 +73,7 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 	this.maxQuestions = 5; 
 	this.currentQuestion = 0; // should be local variables defined with var but this is not reachable from countdown() if it is executed from setTimeout callbaclk. javascript.....
 	this.countdownReference = NaN;
+	this.saveToPdf = false;
 	
 	
 	// main methods -----------------
@@ -203,6 +204,12 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 	this.startTest = function() {	
         this.attempts=0; this.score=0;
         this.containerNode.getElementsByClassName("attempts")[0].innerHTML="0"; this.containerNode.getElementsByClassName("score")[0].innerHTML = "0";
+        if (this.saveToPdf) {
+			if (!Boolean(document.getElementsByClassName("name")[0].value)) { // do not let to start if name is not entered but wants to store the result
+				alert("Testi salvestamiseks peab sisestama nime.");
+				return;
+			}
+		}
         this.timer = this.timeToThink;
 		this.currentQuestion = 0;
 		this.nextQuestion();		
@@ -222,6 +229,9 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 			countdown();
 		} else {
 			console.log("Test finished")
+			if (this.saveToPdf) {
+				this.makePDF();
+			}
 			this.stopTest();
 		}
 		
@@ -231,16 +241,18 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 		// very initial state, just for testing
 		var doc = new jsPDF();
 		var title, date, name, result;
-		title = this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML;
-		date = Date();
-		name = "Peetr Suur";
+		title = this.containerNode.getElementsByClassName("exerciseTitle")[0].innerText;
+		date = new Date();
+		name = document.getElementsByClassName("name")[0].value; // check that name may not be empty!
 		result = this.attempts + " katsest " + this.score + " õiget."
-		var text = 'Muusikaharjutuste testi tulemus\n\n' + 
-			+ 'Harjutus: ' + title +  '\nAeg: ' + date + '\nNimi: ' + name  + '\nTulemus: ' + result;
-		doc.text(text, 10, 30)
-		var filename = document.getElementsByClassName("pdfFile")[0];
-		//TODO: save dialog, exercise, name, time in the title
-		doc.save('test_result.pdf')
+		var content = document.createElement("div");
+		
+		content.innerHTML = '<h1>Muusikaharjutuste testi tulemus</h1>' +  '<br><b>Harjutus:</b> ' + title +  '<br><b>Soortitatud:</b> ' + date.toLocaleString() + '<br><b>Nimi:</b> ' + name  + '<br><b>Tulemus:</b> ' + result;
+		doc.fromHTML(content, 20, 30);
+		// construct filename
+		var fileName = name + "_" + title + ".pdf";
+		fileName = fileName.replace(/\s+/g, '_').toLowerCase(); // replace spaces and to lowercase
+		doc.save(fileName);
 	}
     
     this.stopTest= function() {

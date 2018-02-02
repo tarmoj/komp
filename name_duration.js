@@ -40,8 +40,8 @@ function nameDuration(containerNode, canvasClassName) {
 	response.innerHTML ='<option value="0" selected>----</option>' +
 		'<option value="2">Poolnoot/-paus</option>' +
 		'<option value="1">Veerandnoot/-paus</option>' +
-		'<option value="0.5">Kaheksandik/-paus</option>' +
-		'<option value="0.25">Kuueteistkümnendik/-paus</option>';		
+		'<option value="0.5">Kaheksandiknoot/-paus</option>' +
+		'<option value="0.25">Kuueteistkümnendiknoot/-paus</option>';		
 	if (oldResponse === null || oldResponse === undefined) {
 		console.log("Creating new response element");
 		this.containerNode.getElementsByClassName("responseDiv")[0]. appendChild(response)
