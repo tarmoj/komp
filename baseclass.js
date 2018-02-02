@@ -236,10 +236,7 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 			this.timer = this.timeToThink;
 			countdown();
 		} else {
-			console.log("Test finished")
-			if (this.saveToPdf) {
-				this.makePDF();
-			}
+			console.log("Test finished");
 			this.stopTest();
 		}
 		
@@ -255,7 +252,13 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 		result = this.attempts + " katsest " + this.score + " õiget."
 		var content = document.createElement("div");
 		
-		content.innerHTML = '<h1>Muusikaharjutuste testi tulemus</h1>' +  '<br><b>Harjutus:</b> ' + title +  '<br><b>Soortitatud:</b> ' + date.toLocaleString() + '<br><b>Nimi:</b> ' + name  + '<br><b>Tulemus:</b> ' + result;
+		content.innerHTML = '<h1>Muusikaharjutuste testi tulemus</h1>' +
+			'<br><b>Nimi:</b> ' +  name  + 
+			'<br><b>Harjutus:</b> ' + title +  
+			'<br><b>Soortitatud:</b> ' + date.toLocaleString() + 
+			'<br><b>Tulemus:</b> ' + result + 
+			'<br><b>Aega kulus:</b> ' + this.totalTestTime.toString() + ' sekundit.';
+		console.log("Testtime ", this.totalTestTime, this.totalTestTime.toString);
 		doc.fromHTML(content, 20, 30);
 		// construct filename
 		var fileName = name + "_" + title + ".pdf";
@@ -267,6 +270,12 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
         console.log("Stop");
         clearTimeout(_this.countdownReference);
 		this.timer = -1;
+		this.totalTestTime =  (Date.now() - startTime)/1000.0 ; // check the end time;
+		this.containerNode.getElementsByClassName("totalTestTime")[0].innerHTML = this.totalTestTime.toString();
+		startTime = 0; 
+		if (this.saveToPdf) {
+				this.makePDF();
+		}
         this.currentQuestion = 0;
 		this.containerNode.getElementsByClassName("questionNumber")[0].innerHTML = "0";
 		this.containerNode.getElementsByClassName("timer")[0].innerHTML = "0";
