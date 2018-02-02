@@ -70,7 +70,8 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
     // for tests -------------
     this.timer = -1;
 	this.timeToThink = 15; // Could be also il levels:  slow/medium/fast
-	this.maxQuestions = 5; 
+	this.maxQuestions = 5;
+	this.totalTestTime = 0; 
 	this.currentQuestion = 0; // should be local variables defined with var but this is not reachable from countdown() if it is executed from setTimeout callbaclk. javascript.....
 	this.countdownReference = NaN;
 	this.saveToPdf = false;
@@ -179,9 +180,13 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 	
 	// TODO: add timeSpent + feedback "Testi tegemiseks kulus aega: "+ this.timeSpent
 	
+	var startTime = 0;
+	
 	function countdown() {		
         //console.log(_this.timer);
         this.containerNode.getElementsByClassName("timer")[0].innerHTML = _this.timer.toString();
+		this.totalTestTime = (Date.now() - startTime) / 1000.0;
+		this.containerNode.getElementsByClassName("totalTestTime")[0].innerHTML = this.totalTestTime.toString();
 		if (_this.timer>0) { 
             _this.timer--;
             _this.countdownReference = setTimeout(function(){countdown();}, 1000); // recursive
@@ -203,7 +208,9 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 	
 	this.startTest = function() {	
         this.attempts=0; this.score=0;
-        this.containerNode.getElementsByClassName("attempts")[0].innerHTML="0"; this.containerNode.getElementsByClassName("score")[0].innerHTML = "0";
+        this.containerNode.getElementsByClassName("attempts")[0].innerHTML="0"; 
+        this.containerNode.getElementsByClassName("score")[0].innerHTML = "0";
+        this.containerNode.getElementsByClassName("totalTestTime")[0].innerHTML = "0";
         if (this.saveToPdf) {
 			if (!Boolean(document.getElementsByClassName("name")[0].value)) { // do not let to start if name is not entered but wants to store the result
 				alert("Testi salvestamiseks peab sisestama nime.");
@@ -211,6 +218,7 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 			}
 		}
         this.timer = this.timeToThink;
+		startTime = Date.now();
 		this.currentQuestion = 0;
 		this.nextQuestion();		
 	}
