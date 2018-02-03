@@ -117,11 +117,15 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 	var diesisButton = document.createElement("button");
     diesisButton.innerHTML = "+";
     diesisButton.onclick = function(){handleAccidental(1)};
+    diesisButton.style.position = "relative"; // raise it to the height of staff
+	diesisButton.style.top = "-150px";
     exercise.canvas.appendChild(diesisButton);
 	
 	var bemolleButton = document.createElement("button");
     bemolleButton.innerHTML = "-";
     bemolleButton.onclick = function(){handleAccidental(-1)};
+    bemolleButton.style.position = "relative";
+	bemolleButton.style.top = "-150px";
     exercise.canvas.appendChild(bemolleButton);
 	
 	

@@ -83,11 +83,15 @@ function noteFromSyllable(clef, containerNode, canvasClassName) {
 	var diesisButton = document.createElement("button");
     diesisButton.innerHTML = "+";
     diesisButton.onclick = function(){handleAccidental(1)};
+    diesisButton.style.position = "relative"; // raise it to the height of staff
+	diesisButton.style.top = "-150px";
     exercise.canvas.appendChild(diesisButton);
 	
 	var bemolleButton = document.createElement("button");
     bemolleButton.innerHTML = "-";
     bemolleButton.onclick = function(){handleAccidental(-1)};
+    bemolleButton.style.position = "relative";
+	bemolleButton.style.top = "-150px";
     exercise.canvas.appendChild(bemolleButton);
 	
 	var pianoDiv = document.createElement("div"); // piano keyboard
@@ -100,10 +104,31 @@ function noteFromSyllable(clef, containerNode, canvasClassName) {
 	
 	exercise.generate = function() {
 				
-		noteIndex = Math.floor(Math.random()*possibleNotes.length); 
-		console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable);
+		var tryThis = Math.floor(Math.random()*possibleNotes.length);
+		while (tryThis === noteIndex) { // avoid twice the same
+			tryThis = Math.floor(Math.random()*possibleNotes.length);
+		}
+		noteIndex = tryThis; 
+		//console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable);
 		
-		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleNotes[noteIndex].syllable + '</b><br>Noot <b><big>' + notes.removeLastDigit(possibleNotes[noteIndex].syllable.toLowerCase())  + '</b></big> on tähtnimetusega: <select class="noteName"><option>---</option></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
+		var octave = parseInt(possibleNotes[noteIndex].vtNote.split("/")[1]);
+		var octaveString = "";
+		switch (octave) {
+			case 0: octaveString = " subkontraoktavis"; break;
+			case 1: octaveString = " kontraoktavis"; break;
+			case 2: octaveString = " suures oktavis"; break;
+			case 3: octaveString = " väikses oktavis"; break;
+			case 4: octaveString = " esimeses oktavis"; break;
+			case 5: octaveString = " teises oktavis"; break;
+			case 6: octaveString = " kolmandas oktavis"; break;
+			case 7: octaveString = " neljandas oktavis"; break;
+			case 8: octaveString = " viiendas oktavis"; break;
+			default: octaveString = " tundmatus oktavis"; break;
+		}
+		
+		var syllable = notes.removeLastDigit(possibleNotes[noteIndex].syllable.toLowerCase());
+		
+		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' + syllable + octaveString + '</b><br>Noot <b>' + notes.removeLastDigit(possibleNotes[noteIndex].syllable.toLowerCase())  + '</b> on tähtnimetusega: <select class="noteName"><option>---</option></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
 		var select = this.containerNode.getElementsByClassName('noteName')[0];
 		for(var i = 0; i < 7*3; i++) {

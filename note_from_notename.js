@@ -99,10 +99,32 @@ function noteFromNoteName(clef, containerNode, canvasClassName) {
 	
 	
 	exercise.generate = function() {		
-		noteIndex = Math.floor(Math.random()*possibleNotes.length); 
-		console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable, noteIndex);
 		
-		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleNotes[noteIndex].name + '</b><br>Noot <b><big>' + notes.removeLastDigit(possibleNotes[noteIndex].name.toLowerCase())  + '</b></big> on silpnimetusega: <select class="syllable"><option>---</option></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
+		var tryThis = Math.floor(Math.random()*possibleNotes.length);
+		while (tryThis === noteIndex) { // avoid twice the same
+			tryThis = Math.floor(Math.random()*possibleNotes.length);
+		}
+		noteIndex = tryThis;
+		//console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable, noteIndex);
+		
+		var octave = parseInt(possibleNotes[noteIndex].vtNote.split("/")[1]);
+		var octaveString = "";
+		switch (octave) {
+			case 0: octaveString = " subkontraoktavis"; break;
+			case 1: octaveString = " kontraoktavis"; break;
+			case 2: octaveString = " suures oktavis"; break;
+			case 3: octaveString = " väikses oktavis"; break;
+			case 4: octaveString = " esimeses oktavis"; break;
+			case 5: octaveString = " teises oktavis"; break;
+			case 6: octaveString = " kolmandas oktavis"; break;
+			case 7: octaveString = " neljandas oktavis"; break;
+			case 8: octaveString = " viiendas oktavis"; break;
+			default: octaveString = " tundmatus oktavis"; break;
+		}
+		
+		var noteName = notes.removeLastDigit(possibleNotes[noteIndex].name.toLowerCase());
+		
+		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +noteName + octaveString + '</b><br>Noot <b>' + noteName  + '</b> on silpnimetusega: <select class="syllable"><option>---</option></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
 		var select = this.containerNode.getElementsByClassName('syllable')[0];
 		for(var i = 0; i < 7*3; i++) {
