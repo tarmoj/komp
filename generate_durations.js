@@ -62,10 +62,15 @@ function generateDurations(containerNode, canvasClassName) { // generated given 
 		// create VexFlow string of notes
 		
 		var parseString = "";
-		for (var i=0; i<durations.length; i++) {
-			var flexDuration = (4/durations[i]).toString();
+		for (var k=0; k<durations.length; k++) {
+			var flexDuration = (4/durations[k]).toString();
 			//console.log(_duration,flexDuration);
-			parseString += " :"+flexDuration + " B/4 ";
+			parseString += " :"+flexDuration ;
+			var isRest = 0;
+			if ( this.containerNode.getElementsByClassName("useRests")[0].checked) { // use also rests
+				isRest = ( Math.random() >=0.5 ); // 50/50% if note or rest
+			}
+			parseString += (isRest) ?  " ##" : " B/4"; // add rest or note (B) 
 		}
 		//console.log("Generated notes: ", parseString);
 		exercise.notes = parseString;

@@ -62,8 +62,8 @@ function nameDuration(containerNode, canvasClassName) {
 		}
 		duration = tryThis; 
 		var flexDuration = (4/duration).toString();
-		var isRest = ( Math.random() >=0.5 ); // 50/50% if notr or rest
-		console.log("show rest: ", isRest);
+		var isRest = ( Math.random() >=0.5 ); // 50/50% if note or rest
+		//console.log("show rest: ", isRest);
 		
 		// create VexFlow string of notes
 		
