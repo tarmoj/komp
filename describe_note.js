@@ -133,31 +133,23 @@ function describeNote(clef, containerNode, canvasClassName) {
 		'<option value="-11">alumise abijoone all</option>' + // as b3
 		'<option value="10">ülemisel abijoonel</option>' + // as a5,c6
 		'<option value="11">ülemise abijoone peal</option>' + // as b5
-	'</select>' + 	
-	'<br> Noodi nimi tähtnimetusega <select class="noteName"><option>---</option></select>, ' +
-	'silpnimetusega <select class="syllable"><option>---</option></select><br>';
+	'</select>'; 
 	
-	
-	function fillOptions() { // fill select elements with note names and sullables
-		var select1 = this.containerNode.getElementsByClassName('noteName')[0];
-		for (var i = 0; i < 7; i++) { // use 7 steps from bassclefnotes since those begin with c
-			var option = document.createElement('option');
-			var noteName = bassClefNotes[i].name; 
-			option.innerHTML = noteName;
-			option.value = noteName;
-			select1.appendChild(option);
-		}
-		
-		
-		var select2 = this.containerNode.getElementsByClassName('syllable')[0];
-		for(var j = 0; j < 7; j++) {
-			var option2 = document.createElement('option');
-			var syllable = bassClefNotes[j].syllable; 
-			option2.innerHTML = syllable;
-			option2.value = syllable;
-			select2.appendChild(option2);
-		}
+	// generate options of notenames and syllables
+	var select1HTML = "<option>---</option>";
+	for (var i = 0; i < 7; i++) { // use 7 steps from bassclefnotes since those begin with c
+		var noteName = bassClefNotes[i].name; 
+		select1HTML += '<option value="' + noteName + '">' + noteName + '</option>';
 	}	
+	
+	var select2HTML = "<option>---</option>";
+	for(var j = 0; j < 7; j++) {
+		var syllable = bassClefNotes[j].syllable; 
+		select2HTML += '<option value="' + syllable + '">' + syllable + '</option>';
+	}	
+	
+	response.innerHTML += '<br> Noodi nimi tähtnimetusega <select class="noteName">'  + select1HTML + '</select>, ' +
+		'silpnimetusega <select class="syllable">' +  select2HTML + '</select><br>';
 	
 	if (oldResponse === null || oldResponse===undefined) {
 		console.log("Creating new response element");
@@ -169,8 +161,7 @@ function describeNote(clef, containerNode, canvasClassName) {
 	
 	
 	exercise.generate = function() {
-		
-		fillOptions(); // bad code: better form the innerHTML string in main scope but clearer this way and must be certain that the select elements are created. Not too much overhead, though.
+	
 		selectedNoteIndex = Math.floor(Math.random()*notes.length );
 		
 		while (selectedNoteIndex === oldIndex) { // to avoid same value twice
