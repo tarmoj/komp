@@ -59,6 +59,17 @@ function noteFromNotation(clef, containerNode, canvasClassName) {
 	var piano = new Piano(pianoDiv); // 1 octava from middle C by default
 	piano.createPiano();
 	
+	// construct innerHTML for options
+	var select1HTML = "<option>---</option>", select2HTML = "<option>---</option>";
+	for (var i = 0; i < 7*3; i++) {
+		var noteName = notes.removeLastDigit(notes.bassClefNotes[i].name.toLowerCase());
+		var syllable = notes.removeLastDigit(possibleNotes[i].syllable.toLowerCase()); // remove octave (1 or 2), if present
+		select1HTML += '<option value="' + noteName + '">' + noteName + '</option>';
+		select2HTML += '<option value="' + syllable + '">' + syllable + '</option>';
+	}
+	
+	this.containerNode.getElementsByClassName("question")[0].innerHTML =	'Noodijoonestikul kuvatud noodi tähtnimetus on: <select class="noteName">' + select1HTML + '</select>,  silpnimetus: <select class="syllable">' + select2HTML + '</select><br>Kui oled noodi leidnud ka klaviatuuril, vajuta Vasta:' ;
+		
 	exercise.generate = function() {
 				
 		var tryThis = Math.floor(Math.random()*possibleNotes.length);
@@ -67,29 +78,6 @@ function noteFromNotation(clef, containerNode, canvasClassName) {
 		}
 		noteIndex = tryThis;
 		//console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable);
-		
-		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'Noodijoonestikul kuvatud noodi tähtnimetus on: <select class="noteName"><option>---</option></select>,  silpnimetus: <select class="syllable"><option>---</option></select><br>Kui oled noodi leidnud ka klaviatuuril, vajuta Vasta:' ;
-		
-		var select1 = this.containerNode.getElementsByClassName('noteName')[0];
-		for (var i = 0; i < 7*3; i++) {
-			var option = document.createElement('option');
-			var noteName = notes.removeLastDigit(possibleNotes[i].name.toLowerCase()); // remove octave (1 or 2), if present
-			option.innerHTML = noteName;
-			option.value = noteName;
-			select1.appendChild(option);
-		}
-		
-		
-		var select2 = this.containerNode.getElementsByClassName('syllable')[0];
-		for(var j = 0; j < 7*3; j++) {
-			var option2 = document.createElement('option');
-			var syllable = notes.removeLastDigit(possibleNotes[j].syllable.toLowerCase()); // remove octave (1 or 2), if present
-			option2.innerHTML = syllable;
-			option2.value = syllable;
-			select2.appendChild(option2);
-		}
-		
-		
 		
 		exercise.notes = possibleNotes[noteIndex].vtNote; 
 		currentNoteIndex = -1; 	

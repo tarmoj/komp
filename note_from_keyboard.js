@@ -50,10 +50,10 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) {
 	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Helikõrgus klaviatuurilt: " + ( (clef==="bass") ? "Bassivõti." : " Viiulivõti." );
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = " Antud on helikõrgus klaviatuuril. Kirjuta helikõrgus tähtnimetusega, silpnimetusega, noodijoonestikul.<br>Alteratsioonimärkide lisamiseks vajuta + või - nupule või kasuta vastavaid klahve arvutklaviatuuril."; 
 	//this.containerNode.getElementsByClassName("question")[0].innerHTML =	"See noot on silpnimetusega: / Kliki noodijoonestukul kohale, kus peaks asuma noot. Kasuta +/- nuppe, et lisada diees või bemoll";
+
 	
-	
-	
-	// add diesis and bemoll button to mainCanvas
+	// add diesis and bemoll button to mainCanvas 
+	// TODO: - better if in independent class, but leave for now..
 	
 	function handleAccidental(plusMinus) {  // -1 to lower half tone, +1 to raise halftone
 		//console.log("handleAccidental", plusMinus);
@@ -109,7 +109,16 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) {
 	var lowestKey = (clef==="bass") ? 36 : 60;
 	var highestKey = (clef==="bass") ? 59 : 83;
 	
+	// construct innerHTML for options
+	var select1HTML = "<option>---</option>", select2HTML = "<option>---</option>";
+	for (var i = 0; i < 7*3; i++) {
+		var noteName = notes.removeLastDigit(notes.bassClefNotes[i].name.toLowerCase());
+		var syllable = notes.removeLastDigit(possibleNotes[i].syllable.toLowerCase()); // remove octave (1 or 2), if present
+		select1HTML += '<option value="' + noteName + '">' + noteName + '</option>';
+		select2HTML += '<option value="' + syllable + '">' + syllable + '</option>';
+	}
 	
+	this.containerNode.getElementsByClassName("question")[0].innerHTML =	'Noodijoonestikul kuvatud noodi tähtnimetus on: <select class="noteName">' + select1HTML + '</select>,  silpnimetus: <select class="syllable">' + select2HTML + '</select><br>Kui oled noodi leidnud ka klaviatuuril, vajuta Vasta:' ;
 	
 	exercise.generate = function() {
 		
@@ -128,29 +137,8 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) {
 				correctSyllables.push ( notes.removeLastDigit(possibleNotes[i].syllable.toLowerCase()) )
 			}
 		}
-		console.log("Found ", correctNames.length, " matching notes.")
-		
-		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'Klaviatuuril märgitud noodi tähtnimetus on: <select class="noteName"><option>---</option></select>,  silpnimetus: <select class="syllable"><option>---</option></select><br>Kui oled noodi kirjutanud ka noodijoonestikule, vajuta Vasta:' ;
-		
-		var select1 = this.containerNode.getElementsByClassName('noteName')[0];
-		for(var ii = 0; ii < 7*3; ii++) {
-			var option = document.createElement('option');
-			var noteName = notes.removeLastDigit(possibleNotes[ii].name.toLowerCase()); // remove octave (1 or 2), if present
-			option.innerHTML = noteName;
-			option.value = noteName;
-			select1.appendChild(option);
-		}
-		
-		
-		var select2 = this.containerNode.getElementsByClassName('syllable')[0];
-		for(var j = 0; j < 7*3; j++) {
-			var option2 = document.createElement('option');
-			var syllable = notes.removeLastDigit(possibleNotes[j].syllable.toLowerCase()); // remove octave (1 or 2), if present
-			option2.innerHTML = syllable;
-			option2.value = syllable;
-			select2.appendChild(option2);
-		}
-		
+		//console.log("Found ", correctNames.length, " matching notes.")
+
 		exercise.notes = ""; // nothing drawn	
 		currentNoteIndex = -1; 	
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
@@ -174,7 +162,6 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) {
 					currentNoteIndex = i;
 					exercise.draw();
 					break;
-					
 				}
 			}
 			

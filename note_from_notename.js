@@ -124,6 +124,7 @@ function noteFromNoteName(clef, containerNode, canvasClassName) {
 		
 		var noteName = notes.removeLastDigit(possibleNotes[noteIndex].name.toLowerCase());
 		
+		// it is OK to regenerate it every time here since noteName and octaveString always new and must be displayed
 		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +noteName + octaveString + '</b><br>Noot <b>' + noteName  + '</b> on silpnimetusega: <select class="syllable"><option>---</option></select><br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
 		var select = this.containerNode.getElementsByClassName('syllable')[0];

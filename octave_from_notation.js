@@ -53,7 +53,19 @@ function octaveFromNotation(clef, containerNode, canvasClassName) {
 	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Mis oktavis see noot on? " + ( (clef==="bass") ? "Bassivõti." : " Viiulivõti." );
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helikõrgus noodijoonestikul. Kirjuta helikõrgus tähtnimetusega ja oktavi nimetus"; 
 	
-	this.containerNode.getElementsByClassName("question")[0].innerHTML =	'Noodijoonestikul kuvatud noodi tähtnimetus on: <select class="noteName"><option>---</option></select>,  oktav: <select class="octave"><option>---</option></select> ' ;
+	var optionsHTML = "<option>---</option>";
+	var octavesHTML = "<option>---</option>";
+	
+	for (var i = 0; i < 7*3; i++) {
+		var option = notes.removeLastDigit(notes.bassClefNotes[i].name.toLowerCase());
+		optionsHTML += '<option value="' + option + '">' + option + '</option>'
+	}
+	
+	for (var j=0; j< possibleOctaves.length; j++) {
+		octavesHTML += '<option value="' + possibleOctaves[j] + '">' + possibleOctaves[j] + '</option>'
+	}
+	
+	this.containerNode.getElementsByClassName("question")[0].innerHTML =	'Noodijoonestikul kuvatud noodi tähtnimetus on: <select class="noteName">' + optionsHTML +  '</select>,  oktav: <select class="octave">' + octavesHTML  + '</select> ' ;
 	
 	exercise.generate = function() {
 				
@@ -63,28 +75,6 @@ function octaveFromNotation(clef, containerNode, canvasClassName) {
 		}
 		noteIndex = tryThis;
 		//console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable);
-		
-		//TODO: not so good code - better to do it not every time in generate but costruct the innerHTML
-		var select1 = this.containerNode.getElementsByClassName('noteName')[0];
-		for (var i = 0; i < 7*3; i++) {
-			var option = document.createElement('option');
-			var noteName = notes.removeLastDigit(possibleNotes[i].name.toLowerCase()); // remove octave (1 or 2), if present
-			option.innerHTML = noteName;
-			option.value = noteName;
-			select1.appendChild(option);
-		}
-		
-		
-		var select2 = this.containerNode.getElementsByClassName('octave')[0];
-		for(var j = 0; j < possibleOctaves.length; j++) {
-			var option2 = document.createElement('option');
-			var oct = possibleOctaves[j]; 
-			option2.innerHTML = oct;
-			option2.value = oct;
-			select2.appendChild(option2);
-		}
-		
-		
 		
 		exercise.notes = possibleNotes[noteIndex].vtNote; 
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
