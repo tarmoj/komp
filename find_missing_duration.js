@@ -27,8 +27,8 @@ function findMissingDuration(containerNode, canvasClassName) {
 	this.canvasClassName = canvasClassName === undefined ? "mainCanvas" : canvasClassName
 	
 	// Create or set necessary HTML elements
-	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Lisa puuduv helivältus";
-	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on teatud taktimõõdus takt, milles on peidetud üks helivältus (noot või paus). Lisa puuduv helivältus (noot või paus) // VÕI: arva ära peidetud vältus."; 
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Leia puuduv helivältus";
+	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on teatud taktimõõdus takt, milles on peidetud üks helivältus. Leia puuduv vältus."; 
 	//TODO: luba ka pause, mitte ainult noodid -  kas vaja?
 	this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Mis on peidetud noodi vältus?";
 

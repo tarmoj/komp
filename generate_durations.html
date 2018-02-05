@@ -20,16 +20,26 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     <meta content="">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=1" />
-    <style></style>
+    <style>
+	@media print{
+		.noprint{
+			display:none;
+		}
+	}
+    
+    </style>
     
     <!--dependencies-->
     <script src="https://unpkg.com/vextab/releases/vextab-div.js"></script>    
     <script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
     <script src='https://surikov.github.io/webaudiofontdata/sound/0000_JCLive_sf2_file.js'> </script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js'></script>
     
-    <!--<script src="ext/vextab-div.js"></script>    
+    <!-- or download the libraries and put to ./ext subfolder 
+    <script src="ext/vextab-div.js"></script>    
     <script src='ext/WebAudioFontPlayer.js'></script>
-    <script src='ext/0000_JCLive_sf2_file.js'> </script>-->
+    <script src='ext/0000_JCLive_sf2_file.js'> </script>
+    <script src='ext/jspdf.min.js> -->
 	
 	<!--common classes or data-->
 	<script src="baseclass.js"></script>
@@ -58,21 +68,23 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
     
 	<body>
 	
-	<h1 id="title">MUUSIKA KOMPOSITSIOONIÕPETUS. Harjutused</h1>
+	<h1 id="title" class="noprint">MUUSIKA KOMPOSITSIOONIÕPETUS. Harjutused</h1>
 	
-	<a href=index.html>Sisukord</a><br>
+	<a href=index.html class="noprint">Sisukord</a><br>
 	<div id="exercise1">
 	
-	<h2 class="exerciseTitle">Genereeri jada helivältusi</h2>
-	<br>
-	<p id="description" class="description">Vali, millistest vältustest ning kui mitmest noodist koosnev jada koostada</p>
+	<div class="noprint">
+	<h2 class="exerciseTitle">Genereeri helivältuste järgnevus</h2>
+	<p id="description" class="description">Vali, millistest vältustest ning kui mitmest noodist koosnev jada koostada. Rühmita see vastavalt määratud taktimõõdule (paberil). Vihje: vajadusel kasuta pidekaari. </p>
 	<br>
 	<button id="playButton" class="playButton" onclick="exercise.play();">Mängi</button>
+	</div>
 	<!-- for CANVAS backend: <canvas id="mainCanvas"></canvas>-->
 	<div id="mainCanvas" class="mainCanvas"></div>
 	<br>
 	
 	<br>
+	<div class="noprint">
 	Mitmest noodist: <input type="number" class="durationsCount" value="10" min="8" max="30" style="width:50px"></input> 
 	Kasuta ka pause: <input class="useRests" type="checkbox" checked></input>
 	<br>
@@ -85,8 +97,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 		<input class="duration" type="checkbox" value="0.125">kolmekümnekahendiknoot</input> 
 		
 	<br>
-	<button id = "renewButton" class="renewButton" onclick='exercise.renew()'>Uuenda</button><br>
+	<button id = "renewButton" class="renewButton" onclick='exercise.renew()'>Uuenda</button> 
+	<button id = "printButton" class="printButton" onclick='window.print()'>Prindi</button><br>
 	
+	</div>
 	
 	
 	

@@ -25,6 +25,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 // <script src="https://unpkg.com/vextab/releases/vextab-div.js"></script>
 // <script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
 // <script src='https://surikov.github.io/webaudiofontdata/sound/0000_JCLive_sf2_file.js'></script> 
+//
 
 function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSound ) {
 	this.containerNode = containerNode===undefined ? document.body : containerNode; // to  make it independent and enable to use several exercises per page
