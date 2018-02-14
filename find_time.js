@@ -125,8 +125,13 @@ function findTime(containerNode, canvasClassName) { // generates 1 bar, find sui
 		this.containerNode.getElementsByClassName("score")[0].innerHTML = exercise.score;
 		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 
 		exercise.time = selectedTime; // show right time
-		exercise.draw(); // redraw without rectangle
+		exercise.draw(); 
 		answered = true;
+		
+		if (exercise.testIsRunning) { // add info to test report
+			exercise.testReport +=  exercise.currentQuestion.toString() +  '. Küsitud: '    + selectedTime  + '. Vastus: '  + response;
+			exercise.testReport += "<br>Tagasiside: " + feedback + "<br>";	
+		}
 	}
 	
 	return exercise;

@@ -136,7 +136,7 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 			return;
 		}
 		
-		console.log("Selected: ", possibleIntervals[intervalIndex].longName, "from ", possibleNotes[noteIndex].name);
+		//console.log("Selected: ", possibleIntervals[intervalIndex].longName, "from ", possibleNotes[noteIndex].name);
 		this.containerNode.getElementsByClassName("question")[0].innerHTML =	'<br>Sisesta noodijoonestikule <b>' +possibleIntervals[intervalIndex].longName + " " + directionTranslation +  '</b>.<br>Kui oled noodi sisetanud noodijoonestikule, vajuta Vasta:' ;
 		
 		
@@ -207,6 +207,11 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 		this.containerNode.getElementsByClassName("score")[0].innerHTML = exercise.score;
 		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 		
 		answered = true;
+		
+		if (exercise.testIsRunning) { // add info to test report
+			exercise.testReport +=  exercise.currentQuestion.toString() +  '. Küsitud intervall: ' + possibleIntervals[intervalIndex].longName + '. Sisestatud intervall: ' + currentInterval.interval.longName;
+			exercise.testReport += ".<br>Tagasiside: " + feedback + "<br>";	
+		}
 		
 	}
 	

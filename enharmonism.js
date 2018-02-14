@@ -132,8 +132,13 @@ function enharmonism(nameOrSyllable, containerNode, canvasClassName) {
 		this.containerNode.getElementsByClassName("score")[0].innerHTML = exercise.score;
 		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 
 		exercise.notes += " :4 " + selectedNotes[1]; // show also the other
-		exercise.draw(); // redraw without rectangle
-		answered = true;	
+		exercise.draw(); 
+		answered = true;
+		
+		if (exercise.testIsRunning) { // add info to test report
+			exercise.testReport +=  exercise.currentQuestion.toString() +  '. Küsitud noot: '    + askFor  + '. Vastus: '  + answer;
+			exercise.testReport += ".<br>Tagasiside: " + feedback + "<br>";	
+		}	
 	}
 	
 	return exercise;

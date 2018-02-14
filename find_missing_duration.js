@@ -126,18 +126,18 @@ function findMissingDuration(containerNode, canvasClassName) {
 		}
 		exercise.attempts += 1;
 		var feedback = "";
+		var durationString = "";
+		switch (hiddenDuration) {
+			case 2:  durationString = "Poolnoot"; break;
+			case 1:  durationString = "Veerandnoot"; break;
+			case 0.5:  durationString = "Kaheksandiknoot"; break;
+			case 0.25:  durationString = "Kuueteistkümnendiknoot"; break;
+			default: durationString = "?"; break;
+		}
 		if (parseFloat(this.containerNode.getElementsByClassName("response")[0].value) === hiddenDuration) {
 			feedback = "<b>Õige!</b>"
 			exercise.score += 1;
 		} else {
-			var durationString = "";
-			switch (hiddenDuration) {
-				case 2:  durationString = "Poolnoot"; break;
-				case 1:  durationString = "Veerandnoot"; break;
-				case 0.5:  durationString = "Kaheksandiknoot"; break;
-				case 0.25:  durationString = "Kuueteistkümnendiknoot"; break;
-				default: durationString = "?"; break;
-			}
 			feedback = "<b>Vale!</b> Õige oli: "+durationString; 
 		}
 		
@@ -146,6 +146,11 @@ function findMissingDuration(containerNode, canvasClassName) {
 		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 
 		exercise.draw(); // redraw without rectangle
 		answered = true;
+		
+		if (exercise.testIsRunning) { // add info to test report
+			exercise.testReport +=  exercise.currentQuestion.toString() +  '. Peidetud vältus: '    + durationString  + '. Vastus (löökides): '  + this.containerNode.getElementsByClassName("response")[0].value;
+			exercise.testReport += "<br>Tagasiside: " + feedback + "<br>";	
+		}
 	
 	}
 	

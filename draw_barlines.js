@@ -124,8 +124,11 @@ function drawBarlines(containerNode, canvasClassName) { // generates 2 bars in g
 		answered = true;
 		
 		if (exercise.testIsRunning() ) {
+			// add info to test report
+			exercise.testReport +=  exercise.currentQuestion.toString() +  " Tagasiside: " + feedback + "<br>";	
 			exercise.nextQuestion(); 
 		}
+		
 	}
 	
 	exercise.renew();		
@@ -137,7 +140,6 @@ function drawBarlines(containerNode, canvasClassName) { // generates 2 bars in g
 		} else {
 			alert("Kliki noodijoonestikul kohele, kus peaks olema taktijoon");
 		}
-	
 	}
 	
 	return exercise;

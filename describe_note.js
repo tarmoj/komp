@@ -217,8 +217,18 @@ function describeNote(clef, containerNode, canvasClassName) {
 		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = exercise.attempts;
 		this.containerNode.getElementsByClassName("score")[0].innerHTML = exercise.score;
 		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 
-		//exercise.draw(); 
 		answered = true;
+		
+		if (exercise.testIsRunning) { // add info to test report
+			exercise.testReport +=  exercise.currentQuestion.toString() +  '. Küsitud noot: '    + notes[selectedNoteIndex].name  + '. Vastus: '  
+				// leave out the position since very troublesome to construct the correct string
+				//+ this.containerNode.getElementsByClassName("lineOrSpace")[0].value + " "
+				//+ this.containerNode.getElementsByClassName("position")[0].value  + " "
+				+ this.containerNode.getElementsByClassName("noteName")[0].value + " "
+				+ this.containerNode.getElementsByClassName("syllable")[0].value;
+			
+			exercise.testReport += ".<br>Tagasiside: " + feedback + "<br>";	
+		}
 	
 	}
 	

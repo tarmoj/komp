@@ -125,7 +125,13 @@ function nameKey(majorMinor, containerNode, canvasClassName) {
 		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = exercise.attempts;
 		this.containerNode.getElementsByClassName("score")[0].innerHTML = exercise.score;
 		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 
-		answered = true;	
+		answered = true;
+		
+		if (exercise.testIsRunning) { // add info to test report
+			exercise.testReport +=  exercise.currentQuestion.toString() +  '. Küsitud: '    + possibleKeys[keyIndex].name + " " + translation  
+			+ '. Vastus: '  + this.containerNode.getElementsByClassName("response")[0].value;
+			exercise.testReport += "<br>Tagasiside: " + feedback + "<br>";	
+		}	
 	}
 	
 	return exercise;

@@ -278,6 +278,12 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 		
 		answered = true;
 		
+		if (exercise.testIsRunning) { // add info to test report
+			exercise.testReport +=  exercise.currentQuestion.toString() +  '. Küsitud helirida: ' + possibleScales[scaleIndex].translation  + " noodist "+ notes.removeLastDigit(firstNote.name)   + '.<br>Sisestatud noodid (VexTab notatasioon): '  + scaleNotes.join(" ");
+			
+			exercise.testReport += ".<br>Tagasiside: " + feedback + "<br>";	
+		}
+		
 	}
 	
 	return exercise;

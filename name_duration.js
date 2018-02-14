@@ -85,26 +85,31 @@ function nameDuration(containerNode, canvasClassName) {
 		}
 		exercise.attempts += 1;
 		var feedback = "";
+		var durationString = "";
+		switch (duration) {
+			case 2:  durationString = "Poolnoot"; break;
+			case 1:  durationString = "Veerandnoot"; break;
+			case 0.5:  durationString = "Kaheksandik"; break;
+			case 0.25:  durationString = "Kuueteistkümnendik"; break;
+			default: durationString = "?"; break;
+		}
 		if (parseFloat(this.containerNode.getElementsByClassName("response")[0].value)===duration) {
-			feedback = "Õige!"
+			feedback = "<b>Õige!</b>"
 			exercise.score += 1;
 		} else {
-			var durationString = "";
-			switch (duration) {
-				case 2:  durationString = "Poolnoot"; break;
-				case 1:  durationString = "Veerandnoot"; break;
-				case 0.5:  durationString = "Kaheksandik"; break;
-				case 0.25:  durationString = "Kuueteistkümnendik"; break;
-				default: durationString = "?"; break;
-			}
-			feedback = "Vale! Õige oli: "+durationString; 
+			feedback = "<b>Vale!</b> Õige oli: "+durationString; 
 		}
 		
 		this.containerNode.getElementsByClassName("attempts")[0].innerHTML = exercise.attempts;
 		this.containerNode.getElementsByClassName("score")[0].innerHTML = exercise.score;
 		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 
 		exercise.draw(); // redraw without rectangle
-		answered = true;	
+		answered = true;
+		
+		if (exercise.testIsRunning) { // add info to test report
+			exercise.testReport +=  exercise.currentQuestion.toString() +  '. Küsitud: '    + durationString  + '. Vastus (löökides): '  + this.containerNode.getElementsByClassName("response")[0].value;
+			exercise.testReport += "<br>Tagasiside: " + feedback + "<br>";	
+		}	
 	}
 	
 	return exercise;
