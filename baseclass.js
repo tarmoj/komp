@@ -76,6 +76,7 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 	this.currentQuestion = 0; // should be local variables defined with var but this is not reachable from countdown() if it is executed from setTimeout callbaclk. javascript.....
 	this.countdownReference = NaN;
 	this.saveToPdf = false;
+	this.testReport = ""; // string containing info about all responses in test. in HTML format;
 	
 	
 	// main methods -----------------
@@ -209,6 +210,7 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 	
 	this.startTest = function() {	
         this.attempts=0; this.score=0;
+        this.testReport = "";
         this.containerNode.getElementsByClassName("attempts")[0].innerHTML="0"; 
         this.containerNode.getElementsByClassName("score")[0].innerHTML = "0";
         this.containerNode.getElementsByClassName("totalTestTime")[0].innerHTML = "0";
@@ -233,7 +235,7 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 		if (this.currentQuestion<this.maxQuestions) {
 			this.currentQuestion++; 
 			this.containerNode.getElementsByClassName("questionNumber")[0].innerHTML = this.currentQuestion.toString();
-			exercise.renew();
+			this.renew();
 			this.timer = this.timeToThink;
 			countdown();
 		} else {
@@ -258,7 +260,9 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 			'<br><b>Harjutus:</b> ' + title +  
 			'<br><b>Soortitatud:</b> ' + date.toLocaleString() + 
 			'<br><b>Tulemus:</b> ' + result + 
-			'<br><b>Aega kulus:</b> ' + this.totalTestTime.toString() + ' sekundit.';
+			'<br><b>Aega kulus:</b> ' + this.totalTestTime.toString() + ' sekundit.' + 
+			'<br>Vastused:<br>' + this.testReport;
+			
 		console.log("Testtime ", this.totalTestTime, this.totalTestTime.toString);
 		doc.fromHTML(content, 20, 30);
 		// construct filename
@@ -273,6 +277,7 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 		this.timer = -1;
 		this.totalTestTime =  (Date.now() - startTime)/1000.0 ; // check the end time;
 		this.containerNode.getElementsByClassName("totalTestTime")[0].innerHTML = this.totalTestTime.toString();
+		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = "Vastused:<br>" + this.testReport;
 		startTime = 0; 
 		if (this.saveToPdf) {
 				this.makePDF();

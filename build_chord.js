@@ -259,6 +259,14 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 		
 		answered = true;
 		
+		if (exercise.testIsRunning) { // add info to test report
+			exercise.testReport +=  exercise.currentQuestion.toString() +  '. Küsitud akord: ' + possibleChords[chordIndex].longName + '. Sisestatud noodid: ';
+			for (var ii=0; ii<=possibleChords[chordIndex].intervalsUp.length; ii++) {
+				exercise.testReport += chord[ii].name + " ";
+			}
+			exercise.testReport += ".<br>Tagasiside: " + feedback + "<br>";	
+		}
+		
 	}
 	
 	return exercise;
