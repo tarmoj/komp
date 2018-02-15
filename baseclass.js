@@ -214,6 +214,7 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
         this.containerNode.getElementsByClassName("attempts")[0].innerHTML="0"; 
         this.containerNode.getElementsByClassName("score")[0].innerHTML = "0";
         this.containerNode.getElementsByClassName("totalTestTime")[0].innerHTML = "0";
+        this.containerNode.getElementsByClassName("feedback")[0].innerHTML = "";
         if (this.saveToPdf) {
 			if (!Boolean(document.getElementsByClassName("name")[0].value)) { // do not let to start if name is not entered but wants to store the result
 				alert("Testi salvestamiseks peab sisestama nime.");

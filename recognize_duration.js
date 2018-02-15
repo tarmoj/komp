@@ -139,7 +139,7 @@ function recognizeDuration(containerNode, canvasClassName) {
 		exercise.attempts += 1;
 		var feedback = "";
 		
-		var clickedImage = this.containerNode.getElementsByClassName(clickedDuration)[0]
+		var clickedImage = this.containerNode.getElementsByClassName(clickedDuration)[0];
 		if (clickedDuration === durationImages[selectedIndex].name) {
 			feedback = "<b>Õige</b>";
 			exercise.score +=1;
@@ -161,6 +161,10 @@ function recognizeDuration(containerNode, canvasClassName) {
 		answered = true;
 		
 		if (this.testIsRunning() ) {
+			// add info to test report			
+			exercise.testReport +=  exercise.currentQuestion.toString() +  '. Küsitud noodikirjamärk: ' + durationImages[selectedIndex].name   
+			+ '. Sisestatud: ' + clickedDuration;
+			exercise.testReport += ".<br>Tagasiside: " + feedback + "<br>";	
 			this.nextQuestion(); // this also stops the countdown
 		}
 	}

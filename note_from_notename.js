@@ -236,6 +236,12 @@ function noteFromNoteName(clef, containerNode, canvasClassName) {
 		this.containerNode.getElementsByClassName("feedback")[0].innerHTML = feedback; 		
 		answered = true;
 		
+		if (exercise.testIsRunning) { // add info to test report
+			exercise.testReport +=  exercise.currentQuestion.toString() +  '. Küsitud noot: ' + possibleNotes[noteIndex].name   
+			+ '. Sisestatud: ' + this.containerNode.getElementsByClassName("syllable")[0].value;
+			exercise.testReport += ".<br>Tagasiside: " + feedback + "<br>";	
+		}
+		
 	}
 	
 	return exercise;
