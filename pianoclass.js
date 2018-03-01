@@ -78,7 +78,7 @@ function Piano(container, octaveBegin, octaves, width) {
     }
 
     this.getTones = function (octave) {
-		var whiteKeys = ["C","D", "E", "V","G", "A", "B"];
+		var whiteKeys = ["C","D", "E", "F","G", "A", "B"];
 		var whiteMidi = [0,2,4,5,7,9,11]; // relative to octave
 		var blackKeys = ["C#","D#","F#","G#","A#"];
         var blackMidi = [1,3, 6,8,10];
