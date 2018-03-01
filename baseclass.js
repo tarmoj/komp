@@ -66,7 +66,7 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 	//results and feedback
 	this.attempts = 0;
 	this.score = 0;
-
+	this.questions = []; // array to contain last asked question if normal mode or all questions of a test, if test mode
     
     // for tests -------------
     this.timer = -1;
@@ -139,7 +139,17 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 	}
 	
 	this.init();
-
+	
+	this.isNewQuestion = function(question) {
+		var isNew = true;
+		for (var i=0; i<this.questions.length; i++ ) {
+			if (this.questions[i]===question) {
+				isNew = false;
+			}
+		}
+		return isNew;
+	}
+	
 	this.generate = function() {console.log("generate(). Implement in derived object.");}
 	
 	this.draw = function (string) { // if string is given (full vectab notation string), use that to generate notation from
@@ -211,6 +221,7 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
 	this.startTest = function() {	
         this.attempts=0; this.score=0;
         this.testReport = "";
+        this.questions = [];
         this.containerNode.getElementsByClassName("attempts")[0].innerHTML="0"; 
         this.containerNode.getElementsByClassName("score")[0].innerHTML = "0";
         this.containerNode.getElementsByClassName("totalTestTime")[0].innerHTML = "0";
@@ -286,6 +297,7 @@ function MusicExercise(containerNode, canvasClassName, width, x, y, scale, noSou
         this.currentQuestion = 0;
 		this.containerNode.getElementsByClassName("questionNumber")[0].innerHTML = "0";
 		this.containerNode.getElementsByClassName("timer")[0].innerHTML = "0";
+		this.questions = [];
     }
 	
 	

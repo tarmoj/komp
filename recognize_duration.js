@@ -47,7 +47,7 @@ function recognizeDuration(containerNode, canvasClassName) {
 	];
 	
 	// Create or set necessary HTML elements
-	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Leia helivältus";
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Vali sobiv helivältuse märk";
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helivältus, vali milline noodikirja märk sellele vastab."; 
 	this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Leia õige vältus (klõpsa pildil)";
 	
@@ -71,11 +71,19 @@ function recognizeDuration(containerNode, canvasClassName) {
 	exercise.generate = function() {
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
 		
-		var tryThis = Math.floor(Math.random() * durationImages.length );
-		while (selectedIndex === tryThis) { // avoid the same duration twice in a row
+		selectedIndex = Math.floor(Math.random() * durationImages.length );
+				
+		while (!exercise.isNewQuestion(selectedIndex)) {
 			selectedIndex = Math.floor(Math.random() * durationImages.length );
+			console.log("Found this amoung questions already! Taking new.");
 		}
-		selectedIndex = tryThis;
+		if (exercise.testIsRunning()) {
+			exercise.questions.push(selectedIndex); 
+		} else {
+			exercise.questions[0] = selectedIndex;
+		}
+		
+		
 		//console.log("Selected ", durationImages[selectedIndex].name);
 		this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Milline neist on: <b>" + durationImages[selectedIndex].name + "</b> (Klõpsa noodijoonestikul)";
 		

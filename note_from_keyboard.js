@@ -122,13 +122,19 @@ function noteFromKeyboard(clef, containerNode, canvasClassName) {
 	
 	exercise.generate = function() {
 		
-		var randomNote = lowestKey + Math.round(Math.random()*(highestKey-lowestKey));
-		while (randomNote == selectedMidiNote) { // avoid getting the same
-			randomNote = lowestKey + Math.round(Math.random()*(highestKey-lowestKey));
+		selectedMidiNote = lowestKey + Math.round(Math.random()*(highestKey-lowestKey));
+		while (!exercise.isNewQuestion(selectedMidiNote)) {
+			selectedMidiNote = lowestKey + Math.round(Math.random()*(highestKey-lowestKey));
+			console.log("Found this amoung questions already! Taking new.");
 		}
-		selectedMidiNote = randomNote;
+		if (exercise.testIsRunning()) {
+			exercise.questions.push(selectedMidiNote); 
+		} else {
+			exercise.questions[0] = selectedMidiNote;
+		}
+		
 		piano.activateKey(piano.findKeyByMidiNote(selectedMidiNote));
-		console.log("Selected MIDI note: ", selectedMidiNote)
+		//console.log("Selected MIDI note: ", selectedMidiNote)
 		correctNames = []; correctSyllables = [];
 		
 		for (var i=0;i<possibleNotes.length;i++) {

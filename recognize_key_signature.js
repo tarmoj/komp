@@ -138,7 +138,17 @@ function recognizeKeySignature(containerNode, canvasClassName) {
 			keyIndexes[i] = index;
 		}
 		
+		
 		selectedKeyIndex = keyIndexes[Math.floor(Math.random()*keyIndexes.length)]; // one of the keys shown
+		while (!exercise.isNewQuestion(selectedKeyIndex)) {
+			selectedKeyIndex = keyIndexes[Math.floor(Math.random()*keyIndexes.length)];
+			console.log("Found this amoung questions already! Taking new.");
+		}
+		if (exercise.testIsRunning()) {
+			exercise.questions.push(selectedKeyIndex); 
+		} else {
+			exercise.questions[0] = selectedKeyIndex;
+		}
 		selectedKey = keys[selectedKeyIndex].vtKey;
 		console.log("Selected: ",selectedKey);
 		

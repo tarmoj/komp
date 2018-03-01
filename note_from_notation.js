@@ -72,11 +72,16 @@ function noteFromNotation(clef, containerNode, canvasClassName) {
 		
 	exercise.generate = function() {
 				
-		var tryThis = Math.floor(Math.random()*possibleNotes.length);
-		while (tryThis === noteIndex) { // avoid twice the same
-			tryThis = Math.floor(Math.random()*possibleNotes.length);
+		noteIndex = Math.floor(Math.random()*possibleNotes.length);; 
+		while (!exercise.isNewQuestion(noteIndex)) {
+			noteIndex = Math.floor(Math.random()*possibleNotes.length);
+			console.log("Found this amoung questions already! Taking new.");
 		}
-		noteIndex = tryThis;
+		if (exercise.testIsRunning()) {
+			exercise.questions.push(noteIndex); 
+		} else {
+			exercise.questions[0] = noteIndex;
+		}
 		//console.log("Selected", possibleNotes[noteIndex].name, possibleNotes[noteIndex].syllable);
 		
 		exercise.notes = possibleNotes[noteIndex].vtNote; 
