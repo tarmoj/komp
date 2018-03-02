@@ -83,6 +83,9 @@ function findMissingDuration(containerNode, canvasClassName) {
 		
 		// create VexFlow string of notes
 		hiddenNote = Math.floor(Math.random()*durations.length);
+		
+		// Do not do repetition check here for tests -  bars most likey different anyway
+		
 		hiddenDuration = durations[hiddenNote];
 		//console.log("Hide the note (index), with duration", hiddenNote, hiddenDuration);
 		var parseString = "";

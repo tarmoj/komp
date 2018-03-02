@@ -132,9 +132,24 @@ function buildScale(scale, containerNode, canvasClassName) { // scale: major|nat
 	exercise.generate = function() {
 				
 		scaleIndex = Math.floor(Math.random()* possibleScales.length);
-		
+						
 		var baseNote = possibleBaseNotes[Math.floor(Math.random()* possibleBaseNotes.length)];
 		console.log("Basenote: ", baseNote );
+		
+		var question = [scaleIndex, baseNote];
+		
+		while (!exercise.isNewQuestion(question)) {
+			scaleIndex = Math.floor(Math.random()* possibleScales.length);
+			baseNote = possibleBaseNotes[Math.floor(Math.random()* possibleBaseNotes.length)];
+			question = [scaleIndex, baseNote];
+			console.log("Found this amoung questions already! Taking new.");
+		}
+		if (exercise.testIsRunning()) {
+			exercise.questions.push(question); 
+		} else {
+			exercise.questions[0] = question;
+		}
+		
 		
 		//find according noteIndex from possibleNotes: TODO: add this as function to possible_notes.js, that perhaps should be part of baseclass...
 		noteIndex = notes.findIndexByVtNote(baseNote, notes.trebleClefNotes);

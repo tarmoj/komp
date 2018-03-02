@@ -1,5 +1,7 @@
 Current version:
 
+v.0.99-2 - added check not to include same question twice in a test. 
+
 v.0.99-1  - added test Reports to page and pdf to all exercises + some more small improvements.
 
 Previous:

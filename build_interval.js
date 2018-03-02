@@ -118,9 +118,23 @@ function buildInterval(clef, direction, containerNode, canvasClassName) {
 	exercise.generate = function() {
 				
 		intervalIndex = Math.floor(Math.random()* possibleIntervals.length);
-		
 		var baseNote = possibleBaseNotes[Math.floor(Math.random()* possibleBaseNotes.length)];
 		console.log("Basenote: ", baseNote );
+		var question = [intervalIndex, baseNote];
+		
+		while (!exercise.isNewQuestion(question)) {
+			intervalIndex = Math.floor(Math.random()* possibleIntervals.length);
+			baseNote = possibleBaseNotes[Math.floor(Math.random()* possibleBaseNotes.length)];
+			question = [intervalIndex, baseNote];
+			console.log("Found this amoung questions already! Taking new.");
+		}
+		
+		if (exercise.testIsRunning()) {
+			exercise.questions.push(question); 
+		} else {
+			exercise.questions[0] = question;
+		}
+		
 		
 		//find according noteIndex from possibleNotes: TODO: add this as function to possible_notes.js, that perhaps should be part of baseclass...
 		noteIndex = -1;

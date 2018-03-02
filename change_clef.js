@@ -106,13 +106,20 @@ function changeClef(clef, containerNode, canvasClassName) {  // clef -  the clef
 		var noteNames = ["C","D","E", "F", "G","A","B" ];
 		var octave = (Math.random()>0.5) ? 3 : 4 ;
 		
-		var tryThis =  noteNames[Math.floor(Math.random()*noteNames.length)] + "/" + octave.toString();
-		while (tryThis===selectedVtNote) {
-			tryThis =  noteNames[Math.floor(Math.random()*noteNames.length)] + "/" + octave.toString();
+		selectedVtNote =  noteNames[Math.floor(Math.random()*noteNames.length)] + "/" + octave.toString();
+						
+		while (!exercise.isNewQuestion(selectedVtNote)) {
+			selectedVtNote =  noteNames[Math.floor(Math.random()*noteNames.length)] + "/" + octave.toString();
+			console.log("Found this amoung questions already! Taking new.");
 		}
-		selectedVtNote = tryThis;
+		if (exercise.testIsRunning()) {
+			exercise.questions.push(selectedVtNote); 
+		} else {
+			exercise.questions[0] = selectedVtNote;
+		}
 		
-		console.log("Selected: ", selectedVtNote );
+		
+		//console.log("Selected: ", selectedVtNote );
 		
 		subExercise1.notes = selectedVtNote;
 		subExercise2.notes = "";

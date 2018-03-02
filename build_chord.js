@@ -139,6 +139,21 @@ function buildChord(clef, direction, containerNode, canvasClassName) {
 		
 		var baseNote = possibleBaseNotes[Math.floor(Math.random()* possibleBaseNotes.length)];
 		//console.log("Basenote: ", baseNote);		
+		var question = [chordIndex, baseNote];
+		
+		while (!exercise.isNewQuestion(question)) {
+			chordIndex = Math.floor(Math.random()* possibleChords.length);
+			baseNote = possibleBaseNotes[Math.floor(Math.random()* possibleBaseNotes.length)];
+			question = [chordIndex, baseNote];
+			console.log("Found this amoung questions already! Taking new.");
+		}
+		
+		if (exercise.testIsRunning()) {
+			exercise.questions.push(question); 
+		} else {
+			exercise.questions[0] = question;
+		}
+		
 		
 		noteIndex = notes.findIndexByVtNote(baseNote, possibleNotes);
 		

@@ -36,7 +36,6 @@ function describeNote(clef, containerNode, canvasClassName) {
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on helikõrgus noodijoonestikul. Kirjelda helikõrguse asukohta noodijoonestikul (mitmendal joonel või mitmendas vahes) ja anna helikõrguse tähtnimetus ja silpnimetus."; 
 	this.containerNode.getElementsByClassName("question")[0].innerHTML =	"Kirjelda noodi asukohta. Mis noot see on?";
 	
-	var oldIndex = -1; // to check that same random value is not used twice in a row
 	var answerString = "";
 	var positions = [ // array to describe the note posistions as strings (in Estonian now)
 		{position:0,positionString:"joonel"}, 
@@ -163,11 +162,17 @@ function describeNote(clef, containerNode, canvasClassName) {
 	exercise.generate = function() {
 	
 		selectedNoteIndex = Math.floor(Math.random()*notes.length );
-		
-		while (selectedNoteIndex === oldIndex) { // to avoid same value twice
+				
+		while (!exercise.isNewQuestion(selectedNoteIndex)) {
 			selectedNoteIndex = Math.floor(Math.random()*notes.length );
+			console.log("Found this amoung questions already! Taking new.");
 		}
-		oldIndex = selectedNoteIndex;
+		if (exercise.testIsRunning()) {
+			exercise.questions.push(selectedNoteIndex); 
+		} else {
+			exercise.questions[0] = selectedNoteIndex;
+		}
+		
 		exercise.notes = notes[selectedNoteIndex].vtNote;
 		getPositionString(selectedNoteIndex); // late to checkResponse
 		

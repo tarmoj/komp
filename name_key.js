@@ -32,41 +32,38 @@ function nameKey(majorMinor, containerNode, canvasClassName) {
 	
 	var majorKeys = [  // up to how many accidentals?
 		{vtKey:"C", name: "C", type: "major"},
-		{vtKey:"G", name: "G", type: "major"},
 		{vtKey:"D", name: "D", type: "major"},
-		{vtKey:"A", name: "A", type: "major"},
 		{vtKey:"E", name: "E", type: "major"},
-		{vtKey:"B", name: "H", type: "major"},
-		{vtKey:"F#", name: "Fis", type: "major"},
-		{vtKey:"C#", name: "Cis", type: "major"},
-		
 		{vtKey:"F", name: "F", type: "major"},
-		{vtKey:"Bb", name: "B", type: "major"},
-		{vtKey:"Eb", name: "Es", type: "major"},
-		{vtKey:"Ab", name: "As", type: "major"},
+		{vtKey:"G", name: "G", type: "major"},
+		{vtKey:"A", name: "A", type: "major"},
+		{vtKey:"B", name: "H", type: "major"},
+		{vtKey:"C#", name: "Cis", type: "major"},
+		{vtKey:"F#", name: "Fis", type: "major"},		
+		{vtKey:"Cb", name: "Ces", type: "major"},
 		{vtKey:"Db", name: "Des", type: "major"},
+		{vtKey:"Eb", name: "Es", type: "major"},
 		{vtKey:"Gb", name: "Ges", type: "major"},
-		{vtKey:"Cb", name: "Ces", type: "major"}
-		
+		{vtKey:"Ab", name: "As", type: "major"},
+		{vtKey:"Bb", name: "B", type: "major"}
 	];
 	
 	var minorKeys = [  // up to how many accidentals?
-		{vtKey:"C", name: "a", type: "minor"},
-		{vtKey:"G", name: "e", type: "minor"},
-		{vtKey:"D", name: "h", type: "minor"},
-		{vtKey:"A", name: "fis", type: "minor"},
-		{vtKey:"E", name: "cis", type: "minor"},
-		{vtKey:"B", name: "gis", type: "minor"},
-		{vtKey:"F#", name: "dis", type: "minor"},
-		{vtKey:"C#", name: "ais", type: "minor"},
-		
-		{vtKey:"F", name: "d", type: "minor"},
-		{vtKey:"Bb", name: "g", type: "minor"},
 		{vtKey:"Eb", name: "c", type: "minor"},
+		{vtKey:"F", name: "d", type: "minor"},
+		{vtKey:"G", name: "e", type: "minor"},
 		{vtKey:"Ab", name: "f", type: "minor"},
-		{vtKey:"Db", name: "b", type: "minor"},
+		{vtKey:"Bb", name: "g", type: "minor"},
+		{vtKey:"C", name: "a", type: "minor"},
+		{vtKey:"D", name: "h", type: "minor"},
+		{vtKey:"E", name: "cis", type: "minor"},
+		{vtKey:"F#", name: "dis", type: "minor"},
+		{vtKey:"A", name: "fis", type: "minor"},
+		{vtKey:"B", name: "gis", type: "minor"},
+		{vtKey:"C#", name: "ais", type: "minor"},		
 		{vtKey:"Gb", name: "es", type: "minor"},
-		{vtKey:"Cb", name: "as", type: "minor"}
+		{vtKey:"Cb", name: "as", type: "minor"},
+		{vtKey:"Db", name: "b", type: "minor"}
 		
 	];
 	
@@ -75,7 +72,7 @@ function nameKey(majorMinor, containerNode, canvasClassName) {
 	
 	
 	// Create or set necessary HTML elements
-	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Määra helistik";
+	this.containerNode.getElementsByClassName("exerciseTitle")[0].innerHTML = "Kirjuta " + translation + "-helirea nimetus";
 	this.containerNode.getElementsByClassName("description")[0].innerHTML = "Antud on võtmemärgid. Kirjuta <b>" + translation + "</b>-helirea nimetus"; 
 	
 	//TODO: check what happens if  response is already there from previous exercise...
@@ -95,12 +92,18 @@ function nameKey(majorMinor, containerNode, canvasClassName) {
 	
 	exercise.generate = function() {
 		
-		var tryThis = Math.floor(Math.random()*possibleKeys.length);
-		while (tryThis===keyIndex)  {// avoid repeating
-			tryThis = Math.floor(Math.random()*possibleKeys.length);
+		keyIndex = Math.floor(Math.random()*possibleKeys.length);
+		while (!exercise.isNewQuestion(keyIndex)) {
+			keyIndex = Math.floor(Math.random()*possibleKeys.length);
+			console.log("Found this amoung questions already! Taking new.");
 		}
-		keyIndex = tryThis;
-		console.log("Selected key: ", possibleKeys[keyIndex].name);
+		if (exercise.testIsRunning()) {
+			exercise.questions.push(keyIndex); 
+		} else {
+			exercise.questions[0] = keyIndex;
+		}
+		
+		//console.log("Selected key: ", possibleKeys[keyIndex].name);
 		
 		exercise.key = possibleKeys[keyIndex].vtKey;
 		answered = false; 

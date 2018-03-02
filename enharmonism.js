@@ -86,6 +86,31 @@ function enharmonism(nameOrSyllable, containerNode, canvasClassName) {
 		} else {
 			selectedNotes = [tryThis[1], tryThis[0]];
 		}
+
+		
+		while (!exercise.isNewQuestion(selectedNotes[0])) {
+			tryThis = enharmonicNotes[Math.floor(Math.random()*enharmonicNotes.length)];
+			while (tryThis[0] === selectedNotes[0]) { // to avoid getting the same duration twice in a row
+				//console.log("Got the same, retrying");
+				tryThis = enharmonicNotes[Math.floor(Math.random()*enharmonicNotes.length)];
+			}
+			
+					
+			var dice = Math.random(); // which one of those to display first
+			if (dice>0.5) {
+				selectedNotes = [tryThis[0], tryThis[1]]; // randomize the order
+			} else {
+				selectedNotes = [tryThis[1], tryThis[0]];
+			}
+			
+			console.log("Found this amoung questions already! Taking new.");
+		}
+		if (exercise.testIsRunning()) {
+			exercise.questions.push(selectedNotes[0]); 
+		} else {
+			exercise.questions[0] = selectedNotes[0];
+		}
+		
 		
 		//console.log("Selected notes: ", selectedNotes);
 		

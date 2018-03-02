@@ -55,12 +55,22 @@ function nameDuration(containerNode, canvasClassName) {
 	
 	exercise.generate = function() {
 		var allowedDurations = [2, 1, 0.5, 0.25];
-		var tryThis = allowedDurations[Math.floor(Math.random()*allowedDurations.length)];
-		while (tryThis === duration) { // to avoid getting the same duration twice in a row
-			//console.log("Got the same, retrying");
-			tryThis = allowedDurations[Math.floor(Math.random()*allowedDurations.length)];
+		
+		var counter = 0; // here we must care not to get into endless loop since there is 4 different variants but 5 questions
+		duration = allowedDurations[Math.floor(Math.random()*allowedDurations.length)];
+		while (!exercise.isNewQuestion(duration) && counter <= allowedDurations.length) {
+			counter += 1;
+
+			duration = allowedDurations[Math.floor(Math.random()*allowedDurations.length)];
+			console.log("Found this amoung questions already! Taking new.");
 		}
-		duration = tryThis; 
+		if (exercise.testIsRunning()) {
+			exercise.questions.push(duration); 
+		} else {
+			exercise.questions[0] = duration;
+		}
+		
+		
 		var flexDuration = (4/duration).toString();
 		var isRest = ( Math.random() >=0.5 ); // 50/50% if note or rest
 		//console.log("show rest: ", isRest);

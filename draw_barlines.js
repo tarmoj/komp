@@ -31,6 +31,8 @@ function drawBarlines(containerNode, canvasClassName) { // generates 2 bars in g
 		var barLength = numerator/denomenator * 4; // barLength in beats, 6/8 -> 3 beats
 		var durations;
 		
+		// don't do isNewQuestion check here -  nars anyway different
+		
 		do {  // create a rhythm that equals to barLength
 			totalDuration = 0;
 			durations = [];

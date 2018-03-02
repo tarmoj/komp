@@ -53,7 +53,7 @@ function findTime(containerNode, canvasClassName) { // generates 1 bar, find sui
 
 		var totalDuration = 0; 
 		var barLength = numerator/denomenator * 4; // barLength in beats, 6/8 -> 3 beats, grouping like in 6/8 not possible
-		console.log(numerator, denomenator, barLength);
+		//console.log(numerator, denomenator, barLength);
 		var durations;
 		
 		do {  // create a rhythm that equals to barLength
@@ -95,6 +95,17 @@ function findTime(containerNode, canvasClassName) { // generates 1 bar, find sui
 		
 		
 		selectedTime = possibleTimes[Math.floor(Math.random()*possibleTimes.length)];
+		
+		while (!exercise.isNewQuestion(selectedTime)) {
+			selectedTime = possibleTimes[Math.floor(Math.random()*possibleTimes.length)];
+			console.log("Found this amoung questions already! Taking new.");
+		}
+		if (exercise.testIsRunning()) {
+			exercise.questions.push(selectedTime); 
+		} else {
+			exercise.questions[0] = selectedTime;
+		}
+		
 		var numerator = selectedTime.split("/")[0];
 		var denomenator =  selectedTime.split("/")[1];
 		
