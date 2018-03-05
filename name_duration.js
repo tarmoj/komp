@@ -38,10 +38,16 @@ function nameDuration(containerNode, canvasClassName) {
 	var response = document.createElement("select");
 	response.className = "response";
 	response.innerHTML ='<option value="0" selected>----</option>' +
-		'<option value="2">Poolnoot/-paus</option>' +
-		'<option value="1">Veerandnoot/-paus</option>' +
-		'<option value="0.5">Kaheksandiknoot/-paus</option>' +
-		'<option value="0.25">Kuueteistkümnendiknoot/-paus</option>';		
+		'<option value="4">Täisnoot</option>' +
+		'<option value="2">Poolnoot</option>' +
+		'<option value="1">Veerandnoot</option>' +
+		'<option value="0.5">Kaheksandiknoot</option>' +
+		'<option value="0.25">Kuueteistkümnendiknoot</option>' +
+		'<option value="-4">Täispaus</option>' +
+		'<option value="-2">Poolpaus</option>' +
+		'<option value="-1">Veerandpaus</option>' +
+		'<option value="-0.5">Kaheksandikpaus</option>' +
+		'<option value="-0.25">Kuueteistkümnendikpaus</option>';		
 	if (oldResponse === null || oldResponse === undefined) {
 		console.log("Creating new response element");
 		this.containerNode.getElementsByClassName("responseDiv")[0]. appendChild(response)
@@ -54,11 +60,15 @@ function nameDuration(containerNode, canvasClassName) {
 	exercise.time = ""; // no time signature	
 	
 	exercise.generate = function() {
-		var allowedDurations = [2, 1, 0.5, 0.25];
+		var allowedDurations = [4, 2, 1, 0.5, 0.25];
 		
 		var counter = 0; // here we must care not to get into endless loop since there is 4 different variants but 5 questions
+		var isRest = ( Math.random() >=0.5 ); // 50/50% if note or rest
 		duration = allowedDurations[Math.floor(Math.random()*allowedDurations.length)];
-		while (!exercise.isNewQuestion(duration) && counter <= allowedDurations.length) {
+		if (isRest) {
+			duration = -duration;
+		}
+		while (!exercise.isNewQuestion(duration) ) { // && counter <= allowedDurations.length -  not necessary, now rests add to the variants
 			counter += 1;
 
 			duration = allowedDurations[Math.floor(Math.random()*allowedDurations.length)];
@@ -71,8 +81,7 @@ function nameDuration(containerNode, canvasClassName) {
 		}
 		
 		
-		var flexDuration = (4/duration).toString();
-		var isRest = ( Math.random() >=0.5 ); // 50/50% if note or rest
+		var flexDuration = (4/Math.abs(duration)).toString(); // negative value marks rest
 		//console.log("show rest: ", isRest);
 		
 		// create VexFlow string of notes
@@ -80,7 +89,7 @@ function nameDuration(containerNode, canvasClassName) {
 		var parseString = " :"+flexDuration ;
 		parseString += (isRest) ?  " ##" : " B/4"; // add rest or note (B) 
 		
-		//console.log("Generated notes: ", parseString);
+		console.log("Generated notes: ", parseString);
 		exercise.notes = parseString;
 		answered = false; // necessary to set a flag to check if the quetion has answered already in checkResponse
 	
@@ -97,10 +106,16 @@ function nameDuration(containerNode, canvasClassName) {
 		var feedback = "";
 		var durationString = "";
 		switch (duration) {
+			case 4:  durationString = "Täisnoot"; break;
 			case 2:  durationString = "Poolnoot"; break;
 			case 1:  durationString = "Veerandnoot"; break;
-			case 0.5:  durationString = "Kaheksandik"; break;
-			case 0.25:  durationString = "Kuueteistkümnendik"; break;
+			case 0.5:  durationString = "Kaheksandiknoot"; break;
+			case 0.25:  durationString = "Kuueteistkümnendiknoot"; break;
+			case -4:  durationString = "Täispaus"; break;
+			case -2:  durationString = "Poolpaus"; break;
+			case -1:  durationString = "Veerandpaus"; break;
+			case -0.5:  durationString = "Kaheksandikpaus"; break;
+			case -0.25:  durationString = "Kuueteistkümnendikpaus"; break;
 			default: durationString = "?"; break;
 		}
 		if (parseFloat(this.containerNode.getElementsByClassName("response")[0].value)===duration) {
