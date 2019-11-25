@@ -58,6 +58,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	<script src="octave_from_notation.js"></script>
 	
     <script src="build_interval.js"></script>
+    <script src="build_interval_melodic.js"></script>
     <script src="build_chord.js"></script>
 	
 	<script src="recognize_key_signature.js"></script>
@@ -111,8 +112,14 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 				
 				case "3.1" : exercise = buildInterval("treble", "up"); break;
 				case "3.2" : exercise = buildInterval("treble", "down"); break;
+				case "3.9" : exercise = buildIntervalMelodic("treble", "up"); break;
+				case "3.10" : exercise = buildIntervalMelodic("treble", "down"); break;
 				case "3.3" : exercise = buildInterval("bass", "up"); break;
 				case "3.4" : exercise = buildInterval("bass", "down"); break;
+				case "3.11" : exercise = buildIntervalMelodic("bass", "up"); break;
+				case "3.12" : exercise = buildIntervalMelodic("bass", "down"); break;
+				
+				
 				case "3.5" : exercise = buildChord("treble", "up"); break;
 				case "3.6" : exercise = buildChord("treble", "down"); break;
 				case "3.7" : exercise = buildChord("bass", "up"); break;
